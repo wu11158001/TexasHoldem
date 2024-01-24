@@ -6,15 +6,7 @@ using UnityEngine.Events;
 
 public class ABManager : UnitySingleton<ABManager>
 {
-    private const string resUrl = "http://127.0.0.1:8080/TexasHoldem/";
-    private string GetMainName
-    {
-        get
-        {
-            return "TexasHoldem";
-        }
-    }
-
+    private const string resUrl = "http://127.0.0.1:8080/TexasHoldem/AB/";
 
     //紀錄AB資源
     private Dictionary<string, AssetBundle> abDic = new Dictionary<string, AssetBundle>();
@@ -33,7 +25,7 @@ public class ABManager : UnitySingleton<ABManager>
     /// <returns></returns>
     private IEnumerator ILoadAB(string abName)
     {
-        UnityWebRequest webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + GetMainName);
+        UnityWebRequest webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + "AB");
         yield return webRequest.SendWebRequest();
 
         if (webRequest.result != UnityWebRequest.Result.Success)

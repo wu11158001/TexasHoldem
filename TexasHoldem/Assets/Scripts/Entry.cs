@@ -8,7 +8,13 @@ public class Entry : UnitySingleton<Entry>
     {
         base.Awake();
 
+        gameObject.AddComponent<ILRuntimeManager>();
         gameObject.AddComponent<ABManager>();
         gameObject.AddComponent<UIManager>();
+    }
+
+    private void Start()
+    {
+        UIManager.Instance.CreatePanel(PanelType.LoginPanel);
     }
 }
