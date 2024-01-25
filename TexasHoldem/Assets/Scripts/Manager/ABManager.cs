@@ -19,6 +19,36 @@ public class ABManager : UnitySingleton<ABManager>
     }
 
     /// <summary>
+    /// 獲取AB資源
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="abName"></param>
+    /// <param name="resName"></param>
+    /// <param name="callBack"></param>
+    public void GetABRes<T>(string abName, string resName, UnityAction<T> callBack) where T: Object
+    {
+        StartCoroutine(ILoadResAsync<T>(abName, resName, callBack));
+    }
+
+    /// <summary>
+    /// 加載資源
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="abName"></param>
+    /// <param name="resName"></param>
+    /// <param name="callBack"></param>
+    /// <returns></returns>
+    private IEnumerator ILoadResAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : Object
+    {
+        yield return ILoadAB(abName);
+
+        AssetBundleRequest abr = abDic[abName].LoadAssetAsync<T>(resName);
+        yield return abr;
+
+        callBack(abr.asset as T);
+    }
+
+    /// <summary>
     /// 加載AB資源
     /// </summary>
     /// <param name="abName"></param>
@@ -77,35 +107,5 @@ public class ABManager : UnitySingleton<ABManager>
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// 獲取AB資源
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="abName"></param>
-    /// <param name="resName"></param>
-    /// <param name="callBack"></param>
-    public void GetABRes<T>(string abName, string resName, UnityAction<T> callBack) where T: Object
-    {
-        StartCoroutine(ILoadResAsync<T>(abName, resName, callBack));
-    }
-
-    /// <summary>
-    /// 加載資源
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="abName"></param>
-    /// <param name="resName"></param>
-    /// <param name="callBack"></param>
-    /// <returns></returns>
-    private IEnumerator ILoadResAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : Object
-    {
-        yield return ILoadAB(abName);
-
-        AssetBundleRequest abr = abDic[abName].LoadAssetAsync<T>(resName);
-        yield return abr;
-
-        callBack(abr.asset as T);
     }
 }

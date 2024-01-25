@@ -20,14 +20,22 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 
         appdomain = new AppDomain();
 
-        StartCoroutine(ICheckHotUpdate());
+        LoadHotHif();
     }
 
     /// <summary>
-    /// 檢查熱更
+    /// 載入熱更
+    /// </summary>
+    public void LoadHotHif()
+    {
+        StartCoroutine(ILoadingHotUpdate());
+    }
+
+    /// <summary>
+    /// 下載熱更
     /// </summary>
     /// <returns></returns>
-    private IEnumerator ICheckHotUpdate()
+    private IEnumerator ILoadingHotUpdate()
     {
         byte[] dll = null;
         byte[] pdb = null;
