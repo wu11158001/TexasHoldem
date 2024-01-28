@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -19,11 +19,13 @@ public class CLRRedirectionDemo : MonoBehaviour
     System.IO.MemoryStream fs;
     System.IO.MemoryStream p;
 
+    [System.Obsolete]
     void Start()
     {
         StartCoroutine(LoadHotFixAssembly());
     }
 
+    [System.Obsolete]
     IEnumerator LoadHotFixAssembly()
     {
         //首先实例化ILRuntime的AppDomain，AppDomain是一个应用程序域，每个AppDomain都是一个独立的沙盒
@@ -73,6 +75,7 @@ public class CLRRedirectionDemo : MonoBehaviour
         OnHotFixLoaded();
     }
 
+    [System.Obsolete]
     unsafe void InitializeILRuntime()
     {
 #if DEBUG && (UNITY_EDITOR || UNITY_ANDROID || UNITY_IPHONE)
@@ -100,6 +103,7 @@ public class CLRRedirectionDemo : MonoBehaviour
 
     //编写重定向方法对于刚接触ILRuntime的朋友可能比较困难，比较简单的方式是通过CLR绑定生成绑定代码，然后在这个基础上改，比如下面这个代码是从UnityEngine_Debug_Binding里面复制来改的
     //如何使用CLR绑定请看相关教程和文档
+    [System.Obsolete]
     unsafe static StackObject* Log_11(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
     {
         //ILRuntime的调用约定为被调用者清理堆栈，因此执行这个函数后需要将参数从堆栈清理干净，并把返回值放在栈顶，具体请看ILRuntime实现原理文档

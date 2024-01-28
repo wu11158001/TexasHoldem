@@ -15,7 +15,7 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 #if DEBUG && UNITY_EDITOR
             return "file:///" + Application.streamingAssetsPath + "/HotFix/HotFix_Project.dll";
 #else
-            return "http://127.0.0.1:8080//TexasHoldem/HotFix/HotFix_Project.dll";
+            return "http://192.168.1.172:8080//TexasHoldem/HotFix/HotFix_Project.dll";
 #endif
         }
     }
@@ -27,7 +27,7 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 #if DEBUG && UNITY_EDITOR
             return "file:///" + Application.streamingAssetsPath + "/HotFix/HotFix_Project.pdb";
 #else
-            return "http://127.0.0.1:8080//TexasHoldem/HotFix/HotFix_Project.pdb";
+            return "http://192.168.1.172:8080//TexasHoldem/HotFix/HotFix_Project.pdb";
 #endif
         }
     }
@@ -88,7 +88,7 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
         }
 #endif
 
-        LoadHotFixAssembly(dll, pdb);
+        LoadHotFixAssembly(dll, null);
 
         yield return null;
     }
@@ -101,7 +101,9 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
     private void LoadHotFixAssembly(byte[] dll, byte[] pdb)
     {
         msDll = new MemoryStream(dll);
+#if DEBUG && UNITY_EDITOR
         msPdb = new MemoryStream(pdb);
+#endif
 
         try
         {
@@ -115,12 +117,13 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 
         HotFixAdapter();
 
+
 #if DEBUG && UNITY_EDITOR
         appdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
 
         appdomain.Invoke("HotFix_Project.Main", "Init", null, null);
-        Entry.Instance.StartConnect();        
+        Entry.Instance.StartConnect();
     }
 
     /// <summary>

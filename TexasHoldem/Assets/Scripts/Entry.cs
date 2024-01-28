@@ -28,6 +28,14 @@ public class Entry : UnitySingleton<Entry>
         await UIManager.Instance.ShowView(ViewType.LoginView);
     }
 
+    async private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            await UIManager.Instance.ShowView(ViewType.LoginView);
+        }
+    }
+
     private void OnDestroy()
     {
         clientManager.OnDestroy();
