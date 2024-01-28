@@ -92,7 +92,7 @@ namespace TexasHoldemServer.Servers
         /// <param name="pack"></param>
         public void Send(MainPack pack)
         {
-            Console.WriteLine($"{this.UserInfo.Account} : 發送消息:{pack.ActionCode}");
+            Console.WriteLine($"{this.UserInfo.Account}: 發送消息:{pack.ActionCode}");
 
             socket.Send(Message.PackData(pack));
         }
@@ -113,7 +113,7 @@ namespace TexasHoldemServer.Servers
             server.RemoveClient(this);
             socket.Close();
             mySqlConnection.Close();
-            Console.WriteLine(this.UserInfo.Account + ":已斷開連接");
+            Console.WriteLine(this.UserInfo.Account + ": 已斷開連接");
         }
     }
 }

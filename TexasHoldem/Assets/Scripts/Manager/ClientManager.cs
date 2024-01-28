@@ -29,14 +29,15 @@ public class ClientManager : UnitySingleton<ClientManager>
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         try
         {
+            Debug.Log("連接成功");
+
             socket.Connect(ip, port);
             //開始接收訊息
             StartReceive();
-            Entry.Instance.ShowTip("連接成功");
         }
         catch (Exception e)
         {
-            Debug.LogWarning("連接失敗:" + e);
+            Debug.LogError("連接失敗:" + e);
         }
     }
 

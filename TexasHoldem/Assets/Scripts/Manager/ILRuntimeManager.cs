@@ -4,13 +4,35 @@ using System.IO;
 using UnityEngine;
 using ILRuntime.Runtime.Enviorment;
 using UnityEngine.Networking;
+using UnityEditor;
 
 public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 {
-    private const string dllUrl = "http://127.0.0.1:8080//TexasHoldem/HotFix/HotFix_Project.dll";
-    private const string pdbUrl = "http://127.0.0.1:8080//TexasHoldem/HotFix/HotFix_Project.pdb";
+    private string DllUrl 
+    {
+        get
+        {
+#if DEBUG && UNITY_EDITOR
+            return "file:///" + Application.streamingAssetsPath + "/HotFix/HotFix_Project.dll";
+#else
+            return "http://127.0.0.1:8080//TexasHoldem/HotFix/HotFix_Project.dll";
+#endif
+        }
+    }
 
-    private AppDomain appdomain;
+    private string PdbUrl
+    {
+        get
+        {
+#if DEBUG && UNITY_EDITOR
+            return "file:///" + Application.streamingAssetsPath + "/HotFix/HotFix_Project.pdb";
+#else
+            return "http://127.0.0.1:8080//TexasHoldem/HotFix/HotFix_Project.pdb";
+#endif
+        }
+    }
+
+    public AppDomain appdomain;
     private MemoryStream msDll;
     private MemoryStream msPdb;
 
@@ -39,8 +61,8 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
     {
         byte[] dll = null;
         byte[] pdb = null;
-
-        UnityWebRequest webRequest = UnityWebRequest.Get(dllUrl);
+        
+        UnityWebRequest webRequest = UnityWebRequest.Get(DllUrl);
         yield return webRequest.SendWebRequest();
 
         if (webRequest.result != UnityWebRequest.Result.Success)
@@ -53,7 +75,7 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
         }
 
 #if DEBUG && UNITY_EDITOR
-        webRequest = UnityWebRequest.Get(pdbUrl);
+        webRequest = UnityWebRequest.Get(PdbUrl);
         yield return webRequest.SendWebRequest();
 
         if (webRequest.result != UnityWebRequest.Result.Success)
@@ -91,10 +113,44 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
             return;
         }
 
+        HotFixAdapter();
+
 #if DEBUG && UNITY_EDITOR
         appdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
 
         appdomain.Invoke("HotFix_Project.Main", "Init", null, null);
+        Entry.Instance.StartConnect();        
+    }
+
+    /// <summary>
+    /// 添加熱更適配器
+    /// </summary>
+    private void HotFixAdapter()
+    {
+        appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction>((act) =>
+        {
+            return new UnityEngine.Events.UnityAction(() =>
+            {
+                ((System.Action)act)();
+            });
+        });
+
+        appdomain.DelegateManager.RegisterMethodDelegate<TexasHoldemProtobuf.MainPack>();
+        appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<TexasHoldemProtobuf.MainPack>>((act) =>
+        {
+            return new UnityEngine.Events.UnityAction<TexasHoldemProtobuf.MainPack>((arg0) =>
+            {
+                ((System.Action<TexasHoldemProtobuf.MainPack>)act)(arg0);
+            });
+        });
+
+        appdomain.DelegateManager.RegisterDelegateConvertor<System.Action<BaseView, GameObject>>((act) =>
+        {
+            return new System.Action<BaseView, GameObject>((arg1, arg2) =>
+            {
+                ((System.Action<BaseView, GameObject>)act)(arg1, arg2);
+            });
+        });
     }
 }

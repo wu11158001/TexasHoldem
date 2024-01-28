@@ -6,27 +6,26 @@ using TexasHoldemProtobuf;
 public class Entry : UnitySingleton<Entry>
 {
     ClientManager clientManager = null;
-    RequestManager requestManager = null;
 
     public override void Awake()
     {
         base.Awake();
 
-        /*gameObject.AddComponent<ILRuntimeManager>();
+        gameObject.AddComponent<ILRuntimeManager>();
         gameObject.AddComponent<ABManager>();
-        gameObject.AddComponent<UIManager>();*/
-        clientManager = gameObject.AddComponent<ClientManager>();
-        requestManager = gameObject.AddComponent<RequestManager>();
+        gameObject.AddComponent<UIManager>();
     }
 
     /// <summary>
-    /// 顯示提示文本
+    /// 開始連線
     /// </summary>
-    /// <param name="str">文本內容</param>
-    public void ShowTip(string str)
+    async public void StartConnect()
     {
-        Debug.Log($"提示:{str}");
-        //uiManager.ShowTip(str);
+        Debug.Log("開始連線...");
+        clientManager = gameObject.AddComponent<ClientManager>();
+        gameObject.AddComponent<RequestManager>();
+
+        await UIManager.Instance.ShowView(ViewType.LoginView);
     }
 
     private void OnDestroy()

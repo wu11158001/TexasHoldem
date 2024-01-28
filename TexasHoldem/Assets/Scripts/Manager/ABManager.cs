@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class ABManager : UnitySingleton<ABManager>
 {
-    private const string resUrl = "http://127.0.0.1:8080/TexasHoldem/AB/";
+    private string resUrl = "http://127.0.0.1:8080/TexasHoldem/AB/";
 
     //紀錄AB資源
     private Dictionary<string, AssetBundle> abDic = new Dictionary<string, AssetBundle>();
@@ -64,9 +64,12 @@ public class ABManager : UnitySingleton<ABManager>
         }
         else
         {
-            //加載主包
-            mainAB = DownloadHandlerAssetBundle.GetContent(webRequest);
-            manifest = mainAB.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+            if (mainAB == null)
+            {
+                //加載主包
+                mainAB = DownloadHandlerAssetBundle.GetContent(webRequest);
+                manifest = mainAB.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+            }            
 
             //獲取依賴包
             AssetBundle ab = null;
