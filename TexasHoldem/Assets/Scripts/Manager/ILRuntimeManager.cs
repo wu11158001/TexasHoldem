@@ -88,7 +88,7 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
         }
 #endif
 
-        LoadHotFixAssembly(dll, null);
+        LoadHotFixAssembly(dll, pdb);
 
         yield return null;
     }
@@ -101,7 +101,7 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
     private void LoadHotFixAssembly(byte[] dll, byte[] pdb)
     {
         msDll = new MemoryStream(dll);
-#if DEBUG && UNITY_EDITOR
+#if  UNITY_EDITOR
         msPdb = new MemoryStream(pdb);
 #endif
 
@@ -140,6 +140,7 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
         });
 
         appdomain.DelegateManager.RegisterMethodDelegate<TexasHoldemProtobuf.MainPack>();
+
         appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<TexasHoldemProtobuf.MainPack>>((act) =>
         {
             return new UnityEngine.Events.UnityAction<TexasHoldemProtobuf.MainPack>((arg0) =>

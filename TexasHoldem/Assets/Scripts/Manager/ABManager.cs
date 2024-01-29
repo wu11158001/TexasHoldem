@@ -105,8 +105,17 @@ public class ABManager : UnitySingleton<ABManager>
                 }
                 else
                 {
-                    ab = DownloadHandlerAssetBundle.GetContent(webRequest);
-                    abDic.Add(abName, ab);
+                    try
+                    {
+                        ab = DownloadHandlerAssetBundle.GetContent(webRequest);
+                        abDic.Add(abName, ab);
+                    }
+                    catch (System.Exception)
+                    {
+                        Debug.LogError("加載資源失敗:" + abName);
+                        throw;
+                    }
+                    
                 }
             }
         }

@@ -9,11 +9,8 @@ using TexasHoldemProtobuf;
 
 namespace HotFix_Project.View
 {
-    class FX_LoginView
+    class FX_LoginView : FX_BaseView
     {
-        private static BaseView view = null;
-        private static GameObject obj = null;
-
         private static Text Title_Txt, Send_Txt;
         private static InputField Acc_IF, Psw_IF;
         private static Button Send_Btn, Switch_Btn;
@@ -28,10 +25,9 @@ namespace HotFix_Project.View
         }
         private static ModeType currentMode;
 
-        public static void Init(BaseView baseView, GameObject viewObj)
+        private static void Init(BaseView baseView, GameObject viewObj)
         {
-            view = baseView;
-            obj = viewObj;
+            new FX_BaseView().SetObj(baseView, viewObj);
 
             Title_Txt = FindConponent.FindObj<Text>(view.transform, "Title_Txt");
             Send_Txt = FindConponent.FindObj<Text>(view.transform, "Send_Txt");
@@ -41,17 +37,17 @@ namespace HotFix_Project.View
             Switch_Btn = FindConponent.FindObj<Button>(view.transform, "Switch_Btn");
         }
 
-        public static void Awake()
+        private static void Awake()
         {
             SwichMode(ModeType.login);
         }
 
-        public static void Start()
+        private static void Start()
         {
             //發送按鈕
             Send_Btn.onClick.AddListener(() =>
             {
-                if(string.IsNullOrEmpty(Acc_IF.text) || string.IsNullOrEmpty(Acc_IF.text))
+                if(string.IsNullOrEmpty(Acc_IF.text) || string.IsNullOrEmpty(Psw_IF.text))
                 {
                     UIManager.Instance.ShowTip("帳號/密碼 不可為空!");
                     return;
@@ -66,7 +62,7 @@ namespace HotFix_Project.View
                 loginPack.Password = Psw_IF.text;
 
                 pack.LoginPack = loginPack;
-                RequestManager.Instance.Send(pack, ReviceLogin);
+                view.SendRequest(pack);
             });
 
             //切換按鈕
@@ -104,21 +100,42 @@ namespace HotFix_Project.View
         }
 
         /// <summary>
-        /// 協議接收-登入
+        /// 處理接收
         /// </summary>
         /// <param name="pack"></param>
-        private static void ReviceLogin(MainPack pack)
+        private static void HandleRequest(MainPack pack)
         {
-            Debug.Log("登入" + pack.ReturnCode);
-        }
-
-        /// <summary>
-        /// 協議接收-註冊
-        /// </summary>
-        /// <param name="pack"></param>
-        private static void ReviceLogon(MainPack pack)
-        {
-            Debug.Log("註冊" + pack.ReturnCode);
+            if (pack.ReturnCode == ReturnCode.Succeed)
+            {
+                if (pack.ActionCode == ActionCode.Login)
+                {
+                    Debug.LogError("登入");
+                    //登入
+                    UIManager.Instance.ShowLoadingView(ViewType.LobbyView);
+                }
+                else if (pack.ActionCode == ActionCode.Logon)
+                {
+                    //註冊
+                    UIManager.Instance.ShowTip("註冊完成。進入遊戲...");
+                    AsyncFunc.DelayFunc(3000, () =>
+                    {
+                        UIManager.Instance.ShowLoadingView(ViewType.LobbyView);
+                    });                    
+                }
+            }
+            else if (pack.ReturnCode == ReturnCode.DuplicateLogin)
+            {
+                if (pack.ActionCode == ActionCode.Login)
+                {
+                    //登入
+                    UIManager.Instance.ShowTip("帳號已登入!!!");
+                }
+            }
+            else
+            {
+                string tipStr = pack.ActionCode == ActionCode.Login ? "登入失敗!!!" : "註冊失敗!!!";
+                UIManager.Instance.ShowTip(tipStr);
+            }
         }
     }
 }

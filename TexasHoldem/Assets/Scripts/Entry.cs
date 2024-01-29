@@ -25,15 +25,8 @@ public class Entry : UnitySingleton<Entry>
         clientManager = gameObject.AddComponent<ClientManager>();
         gameObject.AddComponent<RequestManager>();
 
+        await UIManager.Instance.CreateToolsView();
         await UIManager.Instance.ShowView(ViewType.LoginView);
-    }
-
-    async private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            await UIManager.Instance.ShowView(ViewType.LoginView);
-        }
     }
 
     private void OnDestroy()

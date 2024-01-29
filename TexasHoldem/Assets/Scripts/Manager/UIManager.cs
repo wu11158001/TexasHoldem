@@ -10,8 +10,14 @@ public class UIManager : UnitySingleton<UIManager>
     private Dictionary<ViewType, BaseView> viewDic = new Dictionary<ViewType, BaseView>();
     private Stack<BaseView> viewStack = new Stack<BaseView>();
 
-    //提示View
-    private BaseView tipView;
+    //工具類View
+    private ViewType[] toolsViewType = new ViewType[] 
+    {
+        ViewType.TipView, 
+        ViewType.LoadingView,
+        ViewType.WaitView
+    };
+    private Dictionary<ViewType, BaseView> toolsViewDic = new Dictionary<ViewType, BaseView>();
 
     public override void Awake()
     {
@@ -21,21 +27,62 @@ public class UIManager : UnitySingleton<UIManager>
     }
 
     /// <summary>
+    /// 創建工具View
+    /// </summary>
+    async public Task CreateToolsView()
+    {
+        for (int i = 0; i < toolsViewType.Length; i++)
+        {
+            BaseView view = await CreatePanel(toolsViewType[i]);
+            InitView(view, toolsViewType[i]);
+            toolsViewDic.Add(toolsViewType[i], view);
+
+            await Task.Delay(1);
+        }
+    }
+
+    /// <summary>
+    /// 顯示工具View
+    /// </summary>
+    /// <param name="viewType"></param>
+    /// <returns></returns>
+    private BaseView ShowToolView(ViewType viewType)
+    {
+        BaseView view = null;
+        if (toolsViewDic.ContainsKey(viewType))
+        {
+            view = toolsViewDic[viewType];
+            view.gameObject.SetActive(true);
+            view.gameObject.transform.SetSiblingIndex(100);
+        }
+
+        return view;
+    }
+
+    /// <summary>
     /// 顯示提示
     /// </summary>
     /// <param name="str"></param>
-    async public void ShowTip(string str)
+    public void ShowTip(string str)
     {
-        if (tipView == null)
+        BaseView view = ShowToolView(ViewType.TipView);
+        if (view != null)
         {
-            tipView = await CreatePanel(ViewType.TipView);
-            InitView(tipView, ViewType.TipView);
-            ((TipView)tipView).ShowTip(str);
+            ((TipView)view).ShowTip(str);
+        }      
+    }
+
+    /// <summary>
+    /// 顯示載入畫面
+    /// </summary>
+    /// <param name="nextView"></param>
+    public void ShowLoadingView(ViewType nextView)
+    {
+        BaseView view = ShowToolView(ViewType.LoadingView);
+        if (view != null)
+        {
+            ((LoadingView)view).SetNextView(nextView);
         }
-        else
-        {
-            ((TipView)tipView).ShowTip(str);
-        }        
     }
 
     /// <summary>
@@ -45,26 +92,28 @@ public class UIManager : UnitySingleton<UIManager>
     /// <returns></returns>
     async public Task<BaseView> ShowView(ViewType viewType)
     {
+        BaseView view = null;
         if (viewDic.ContainsKey(viewType))
         {
-            ViewStackPeek();
-            BaseView view = viewDic[viewType];
-            return view;
+            ViewStackPop();
+            view = viewDic[viewType];
         }
         else
         {
-            ViewStackPeek();
-            BaseView view = await CreatePanel(viewType);
+            ViewStackPop();
+            view = await CreatePanel(viewType);
             InitView(view, viewType);
-            return view;
-        }      
+        }
+
+        view.gameObject.SetActive(true);
+        viewStack.Push(view);
+        return view;
     }
 
     //初始化View
     private void InitView(BaseView view, ViewType viewType)
     {
-        viewStack.Push(view);
-        view.gameObject.SetActive(true);
+        view.gameObject.SetActive(false);
         view.name = viewType.ToString();
         RectTransform rt = view.GetComponent<RectTransform>();
         rt.anchoredPosition = Vector2.zero;
@@ -106,11 +155,11 @@ public class UIManager : UnitySingleton<UIManager>
     /// <summary>
     /// 關閉前個View
     /// </summary>
-    private void ViewStackPeek()
+    private void ViewStackPop()
     {
         if (viewStack.Count > 0)
         {
-            BaseView topPanel = viewStack.Peek();
+            BaseView topPanel = viewStack.Pop();
             topPanel.gameObject.SetActive(false);
         }
     }

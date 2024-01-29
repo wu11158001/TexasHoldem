@@ -19,8 +19,6 @@ public class TipView : BaseView
     /// <param name="str"></param>
     public void ShowTip(string str)
     {
-        gameObject.SetActive(true);
-
         TipContentView tipContentView = null;
         if (tipList.Count == 0)
         {
