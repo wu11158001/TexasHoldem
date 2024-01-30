@@ -46,12 +46,14 @@ namespace HotFix_Project.View
         {
             //發送按鈕
             Send_Btn.onClick.AddListener(() =>
-            {
+            {               
                 if(string.IsNullOrEmpty(Acc_IF.text) || string.IsNullOrEmpty(Psw_IF.text))
                 {
                     UIManager.Instance.ShowTip("帳號/密碼 不可為空!");
                     return;
                 }
+
+                UIManager.Instance.SwitchWaitView(true);
 
                 MainPack pack = new MainPack();
                 pack.ActionCode = currentMode == ModeType.login ? ActionCode.Login : ActionCode.Logon;
@@ -105,21 +107,25 @@ namespace HotFix_Project.View
         /// <param name="pack"></param>
         private static void HandleRequest(MainPack pack)
         {
+            UIManager.Instance.SwitchWaitView(false);
+
             if (pack.ReturnCode == ReturnCode.Succeed)
             {
                 if (pack.ActionCode == ActionCode.Login)
                 {
-                    Debug.LogError("登入");
+                    Debug.Log("登入");
                     //登入
-                    UIManager.Instance.ShowLoadingView(ViewType.LobbyView);
+                    UIManager.Instance.ShowLoadingView(ViewType.ModeView);
                 }
                 else if (pack.ActionCode == ActionCode.Logon)
                 {
                     //註冊
+                    UIManager.Instance.SwitchWaitView(true);
                     UIManager.Instance.ShowTip("註冊完成。進入遊戲...");
                     AsyncFunc.DelayFunc(3000, () =>
                     {
-                        UIManager.Instance.ShowLoadingView(ViewType.LobbyView);
+                        UIManager.Instance.ShowLoadingView(ViewType.ModeView);
+                        UIManager.Instance.SwitchWaitView(false);
                     });                    
                 }
             }
@@ -132,7 +138,7 @@ namespace HotFix_Project.View
                 }
             }
             else
-            {
+            {             
                 string tipStr = pack.ActionCode == ActionCode.Login ? "登入失敗!!!" : "註冊失敗!!!";
                 UIManager.Instance.ShowTip(tipStr);
             }

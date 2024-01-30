@@ -86,6 +86,16 @@ public class UIManager : UnitySingleton<UIManager>
     }
 
     /// <summary>
+    /// 等待畫面開關
+    /// </summary>
+    /// <param name=""></param>
+    public void SwitchWaitView(bool isOpen)
+    {
+        BaseView view = ShowToolView(ViewType.WaitView);
+        ((WaitView)view).gameObject.SetActive(isOpen);
+    }
+
+    /// <summary>
     /// 顯示View
     /// </summary>
     /// <param name="viewType"></param>
