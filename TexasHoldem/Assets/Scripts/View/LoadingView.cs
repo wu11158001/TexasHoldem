@@ -9,22 +9,17 @@ public class LoadingView : BaseView
         base.Awake();
     }
 
-    public override void OnEnable()
-    {
-        base.OnEnable();
-    }
-
     public override void Update()
     {
         base.Update();
     }
 
     /// <summary>
-    /// 設定下個View
+    /// 開啟載入
     /// </summary>
     /// <param name="nextView"></param>
-    public void SetNextView(ViewType nextView)
+    public void OpenLoading(ViewType nextView)
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "SetNextView", null, nextView);
+        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "OpenLoading", null, nextView);
     }
 }

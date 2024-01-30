@@ -11,6 +11,8 @@ namespace HotFix_Project.View
 {
     class FX_LoginView : FX_BaseView
     {
+        private static FX_BaseView thisView;
+
         private static Text Title_Txt, Send_Txt;
         private static InputField Acc_IF, Psw_IF;
         private static Button Send_Btn, Switch_Btn;
@@ -27,14 +29,14 @@ namespace HotFix_Project.View
 
         private static void Init(BaseView baseView, GameObject viewObj)
         {
-            new FX_BaseView().SetObj(baseView, viewObj);
+            thisView = new FX_BaseView().SetObj(baseView, viewObj);
 
-            Title_Txt = FindConponent.FindObj<Text>(view.transform, "Title_Txt");
-            Send_Txt = FindConponent.FindObj<Text>(view.transform, "Send_Txt");
-            Acc_IF = FindConponent.FindObj<InputField>(view.transform, "Acc_IF");
-            Psw_IF = FindConponent.FindObj<InputField>(view.transform, "Psw_IF");
-            Send_Btn = FindConponent.FindObj<Button>(view.transform, "Send_Btn");
-            Switch_Btn = FindConponent.FindObj<Button>(view.transform, "Switch_Btn");
+            Title_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Title_Txt");
+            Send_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Send_Txt");
+            Acc_IF = FindConponent.FindObj<InputField>(thisView.view.transform, "Acc_IF");
+            Psw_IF = FindConponent.FindObj<InputField>(thisView.view.transform, "Psw_IF");
+            Send_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Send_Btn");
+            Switch_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Switch_Btn");
         }
 
         private static void Awake()
@@ -64,7 +66,7 @@ namespace HotFix_Project.View
                 loginPack.Password = Psw_IF.text;
 
                 pack.LoginPack = loginPack;
-                view.SendRequest(pack);
+                thisView.view.SendRequest(pack);
             });
 
             //切換按鈕
@@ -113,7 +115,6 @@ namespace HotFix_Project.View
             {
                 if (pack.ActionCode == ActionCode.Login)
                 {
-                    Debug.Log("登入");
                     //登入
                     UIManager.Instance.ShowLoadingView(ViewType.ModeView);
                 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using UnityEngine.Events;
 
 public class UIManager : UnitySingleton<UIManager>
 {
@@ -15,7 +16,8 @@ public class UIManager : UnitySingleton<UIManager>
     {
         ViewType.TipView, 
         ViewType.LoadingView,
-        ViewType.WaitView
+        ViewType.WaitView,
+        ViewType.ConfirmView,
     };
     private Dictionary<ViewType, BaseView> toolsViewDic = new Dictionary<ViewType, BaseView>();
 
@@ -81,8 +83,26 @@ public class UIManager : UnitySingleton<UIManager>
         BaseView view = ShowToolView(ViewType.LoadingView);
         if (view != null)
         {
-            ((LoadingView)view).SetNextView(nextView);
+            ((LoadingView)view).OpenLoading(nextView);
         }
+    }
+
+    /// <summary>
+    /// 顯示確認視窗
+    /// </summary>
+    /// <param name="confirmCallBack"></param>
+    /// <param name="str"></param>
+    /// <param name="isHaveCancel"></param>
+    /// <returns></returns>
+    public BaseView ShowConfirmView(UnityAction confirmCallBack, string str, bool isHaveCancel = true)
+    {
+        BaseView view = ShowToolView(ViewType.ConfirmView);
+        if (view != null)
+        {
+            ((ConfirmView)view).SetConfirmView(confirmCallBack, str, isHaveCancel);
+        }
+
+        return view;
     }
 
     /// <summary>
@@ -113,6 +133,12 @@ public class UIManager : UnitySingleton<UIManager>
             ViewStackPop();
             view = await CreatePanel(viewType);
             InitView(view, viewType);
+        }
+
+        //關閉LoadingView
+        if(toolsViewDic.ContainsKey(ViewType.LoadingView))
+        {
+            toolsViewDic[ViewType.LoadingView].gameObject.SetActive(false);
         }
 
         view.gameObject.SetActive(true);
@@ -147,7 +173,8 @@ public class UIManager : UnitySingleton<UIManager>
         else
         {
             TaskCompletionSource<BaseView> tcs = new TaskCompletionSource<BaseView>();
-            ABManager.Instance.GetABRes<GameObject>("view", viewType.ToString(), (obj) =>
+            string abName = ViewABName.Instance.GetAbName(viewType);
+            ABManager.Instance.GetABRes<GameObject>(abName, viewType.ToString(), (obj) =>
             {
                 GameObject viewObj = Instantiate(obj);
                 viewObj.transform.SetParent(canvas_Tr);

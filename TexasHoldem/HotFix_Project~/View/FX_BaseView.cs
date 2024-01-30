@@ -9,13 +9,15 @@ namespace HotFix_Project.View
 {
     class FX_BaseView
     {
-        protected static BaseView view = null;
-        protected static GameObject obj = null;
+        public BaseView view = null;
+        public GameObject obj = null;
 
-        public virtual void SetObj(BaseView baseView, GameObject viewObj)
+        public virtual FX_BaseView SetObj(BaseView baseView, GameObject viewObj)
         {
             view = baseView;
             obj = viewObj;
+
+            return this;
         }
     }
 }

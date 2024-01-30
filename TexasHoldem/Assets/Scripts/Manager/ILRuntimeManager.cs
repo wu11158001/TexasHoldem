@@ -140,7 +140,6 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
         });
 
         appdomain.DelegateManager.RegisterMethodDelegate<TexasHoldemProtobuf.MainPack>();
-
         appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<TexasHoldemProtobuf.MainPack>>((act) =>
         {
             return new UnityEngine.Events.UnityAction<TexasHoldemProtobuf.MainPack>((arg0) =>
@@ -156,5 +155,24 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
                 ((System.Action<BaseView, GameObject>)act)(arg1, arg2);
             });
         });
+
+        appdomain.DelegateManager.RegisterMethodDelegate<System.Int64>();
+        appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<System.Int64>>((act) =>
+        {
+            return new UnityEngine.Events.UnityAction<System.Int64>((arg0) =>
+            {
+                ((System.Action<System.Int64>)act)(arg0);
+            });
+        });
+
+        appdomain.DelegateManager.RegisterMethodDelegate<System.Single>();
+        appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<System.Single>>((act) =>
+        {
+            return new UnityEngine.Events.UnityAction<System.Single>((arg0) =>
+            {
+                ((System.Action<System.Single>)act)(arg0);
+            });
+        });
+
     }
 }

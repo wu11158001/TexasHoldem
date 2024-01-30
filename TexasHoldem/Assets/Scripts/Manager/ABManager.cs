@@ -17,6 +17,49 @@ public class ABManager : UnitySingleton<ABManager>
     {
         base.Awake();
     }
+    
+    /// <summary>
+    /// 監測是否有AB資源
+    /// </summary>
+    /// <param name="abName"></param>
+    /// <returns></returns>
+    public bool CheckAb(string abName)
+    {
+        return abDic.ContainsKey(abName);
+    }
+
+    /// <summary>
+    /// 獲取AB包大小
+    /// </summary>
+    /// <param name="abName"></param>
+    /// <param name="callBack"></param>
+    public void GetABSize(string abName, UnityAction<long> callBack)
+    {
+        StartCoroutine(ICheckABSize(abName, callBack));
+    }
+
+    /// <summary>
+    /// 檢查AB包大小
+    /// </summary>
+    /// <param name="abName"></param>
+    /// <param name="callBack"></param>
+    /// <returns></returns>
+    private IEnumerator ICheckABSize(string abName, UnityAction<long> callBack)
+    {
+        UnityWebRequest webRequest = UnityWebRequest.Get(resUrl + abName);
+
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.result == UnityWebRequest.Result.Success)
+        {
+            long abSize = (long)webRequest.downloadedBytes;
+            callBack(abSize);
+        }
+        else
+        {
+            Debug.LogError($"{abName} 檢查AB包大小失敗: {webRequest.error}");
+        }
+    }
 
     /// <summary>
     /// 獲取AB資源
@@ -49,11 +92,23 @@ public class ABManager : UnitySingleton<ABManager>
     }
 
     /// <summary>
+    /// 載入AB包
+    /// </summary>
+    /// <param name="abName"></param>
+    /// <param name="progressCallBack"></param>
+    /// <param name="finishedCallBack"></param>
+    public void LoadAb(string abName, UnityAction<float> progressCallBack = null)
+    {
+        StartCoroutine(ILoadAB(abName, progressCallBack));
+    }
+
+    /// <summary>
     /// 加載AB資源
     /// </summary>
     /// <param name="abName"></param>
+    /// <param name="progressCallBack"></param>
     /// <returns></returns>
-    private IEnumerator ILoadAB(string abName)
+    private IEnumerator ILoadAB(string abName, UnityAction<float> progressCallBack = null)
     {
         UnityWebRequest webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + "AB");
         yield return webRequest.SendWebRequest();
@@ -97,25 +152,32 @@ public class ABManager : UnitySingleton<ABManager>
             if (!abDic.ContainsKey(abName))
             {
                 webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + abName);
-                yield return webRequest.SendWebRequest();
+                webRequest.SendWebRequest();
 
-                if (webRequest.result != UnityWebRequest.Result.Success)
+                while (!webRequest.isDone)
                 {
-                    Debug.LogError(webRequest.error);
+                    if (progressCallBack != null)
+                    {
+                        float progress = Mathf.Clamp01(webRequest.downloadProgress);
+                        progressCallBack(progress * 100);
+                    }
+
+                    yield return null;
+                }
+
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    ab = DownloadHandlerAssetBundle.GetContent(webRequest);
+                    abDic.Add(abName, ab);
+
+                    if (progressCallBack != null)
+                    {
+                        progressCallBack(100);
+                    }
                 }
                 else
                 {
-                    try
-                    {
-                        ab = DownloadHandlerAssetBundle.GetContent(webRequest);
-                        abDic.Add(abName, ab);
-                    }
-                    catch (System.Exception)
-                    {
-                        Debug.LogError("加載資源失敗:" + abName);
-                        throw;
-                    }
-                    
+                    Debug.LogError("加載資源失敗:" + abName);
                 }
             }
         }

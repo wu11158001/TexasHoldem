@@ -11,6 +11,7 @@ public class Entry : UnitySingleton<Entry>
     {
         base.Awake();
 
+        gameObject.AddComponent<ViewABName>();
         gameObject.AddComponent<ILRuntimeManager>();
         gameObject.AddComponent<ABManager>();
         gameObject.AddComponent<UIManager>();
