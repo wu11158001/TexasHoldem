@@ -6,35 +6,37 @@ using TexasHoldemProtobuf;
 
 public class BaseView :MonoBehaviour
 {
-    protected string hotFixName = "HotFix_Project.View.FX_";
+    protected string hotFixPath;
 
     protected AppDomain appdomain { get { return ILRuntimeManager.Instance.appdomain; } }
     protected MainPack pack;
 
     public virtual void Init(BaseView baseView, GameObject obj)
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "Init", null, baseView, obj);
+        hotFixPath = $"HotFix_Project.FX_{this.GetType().Name}";
+
+        appdomain.Invoke($"{hotFixPath}", "Init", null, baseView, obj);
     }
 
     public virtual void Awake()
     {
         Init(this, gameObject);
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "Awake", null, null);
+        appdomain.Invoke($"{hotFixPath}", "Awake", null, null);
     }
 
     public virtual void OnEnable()
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "OnEnable", null, null);
+        appdomain.Invoke($"{hotFixPath}", "OnEnable", null, null);
     }
 
     public virtual void Start()
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "Start", null, null);
+        appdomain.Invoke($"{hotFixPath}", "Start", null, null);
     }
 
     public virtual void Update()
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "Update", null, null);
+        appdomain.Invoke($"{hotFixPath}", "Update", null, null);
 
         if(pack != null)
         {
@@ -45,12 +47,12 @@ public class BaseView :MonoBehaviour
 
     public virtual void OnDisable()
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "OnDisable", null, null);
+        appdomain.Invoke($"{hotFixPath}", "OnDisable", null, null);
     }
 
     public virtual void OnDestroy()
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "OnDestroy", null, null);
+        appdomain.Invoke($"{hotFixPath}", "OnDestroy", null, null);
     }
 
     /// <summary>
@@ -77,6 +79,15 @@ public class BaseView :MonoBehaviour
     /// <param name="pack"></param>
     public virtual void HandleRequest(MainPack pack)
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "HandleRequest", null, pack);
+        appdomain.Invoke($"{hotFixPath}", "HandleRequest", null, pack);
+    }
+
+    /// <summary>
+    /// 接收廣播訊息
+    /// </summary>
+    /// <param name="pack"></param>
+    public virtual void ReciveBroadcast(MainPack pack)
+    {
+        appdomain.Invoke($"{hotFixPath}", "ReciveBroadcast", null, pack);
     }
 }

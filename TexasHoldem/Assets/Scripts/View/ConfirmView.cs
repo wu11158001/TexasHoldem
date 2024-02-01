@@ -23,6 +23,6 @@ public class ConfirmView : BaseView
     /// <param name="isHaveCancel"></param>
     public void SetConfirmView(UnityAction confirmCallBack, string str, bool isHaveCancel = true)
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "SetConfirmView", null, confirmCallBack, str, isHaveCancel);
+        appdomain.Invoke($"{hotFixPath}", "SetConfirmView", null, confirmCallBack, str, isHaveCancel);
     }
 }

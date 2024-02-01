@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-namespace HotFix_Project.View
+namespace HotFix_Project
 {
     class FX_ConfirmView :FX_BaseView
     {
@@ -19,6 +19,7 @@ namespace HotFix_Project.View
         private static void Init(BaseView baseView, GameObject viewObj)
         {
             thisView = new FX_BaseView().SetObj(baseView, viewObj);
+
             Content_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Content_Txt");
             Cancel_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Cancel_Btn");
             Confirm_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Confirm_Btn");

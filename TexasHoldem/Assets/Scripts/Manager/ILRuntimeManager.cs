@@ -174,5 +174,14 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
             });
         });
 
+        appdomain.DelegateManager.RegisterMethodDelegate<System.Object>();
+        appdomain.DelegateManager.RegisterDelegateConvertor<System.Threading.TimerCallback>((act) =>
+        {
+            return new System.Threading.TimerCallback((state) =>
+            {
+                ((System.Action<System.Object>)act)(state);
+            });
+        });
+
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TexasHoldemProtobuf;
 
-namespace HotFix_Project.View
+namespace HotFix_Project
 {
     class FX_LoginView : FX_BaseView
     {
@@ -104,7 +104,7 @@ namespace HotFix_Project.View
         }
 
         /// <summary>
-        /// 處理接收
+        /// 處理協議
         /// </summary>
         /// <param name="pack"></param>
         private static void HandleRequest(MainPack pack)

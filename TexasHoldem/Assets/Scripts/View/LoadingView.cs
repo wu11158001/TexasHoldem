@@ -15,11 +15,18 @@ public class LoadingView : BaseView
     }
 
     /// <summary>
-    /// 開啟載入
+    /// 開啟載入畫面
     /// </summary>
-    /// <param name="nextView"></param>
-    public void OpenLoading(ViewType nextView)
+    public void OpenLoading()
     {
-        appdomain.Invoke($"{hotFixName}{this.GetType().Name}", "OpenLoading", null, nextView);
+        appdomain.Invoke($"{hotFixPath}", "OpenLoading", null, null);
+    }
+
+    /// <summary>
+    /// 關閉載入畫面
+    /// </summary>
+    public void CloseLoading(GameObject nextView)
+    {
+        appdomain.Invoke($"{hotFixPath}", "CloseLoading", null, nextView);
     }
 }

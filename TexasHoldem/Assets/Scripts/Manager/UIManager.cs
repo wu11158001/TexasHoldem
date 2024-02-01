@@ -35,7 +35,7 @@ public class UIManager : UnitySingleton<UIManager>
     {
         for (int i = 0; i < toolsViewType.Length; i++)
         {
-            BaseView view = await CreatePanel(toolsViewType[i]);
+            BaseView view = await CreateView(toolsViewType[i]);
             InitView(view, toolsViewType[i]);
             toolsViewDic.Add(toolsViewType[i], view);
 
@@ -77,14 +77,21 @@ public class UIManager : UnitySingleton<UIManager>
     /// <summary>
     /// 顯示載入畫面
     /// </summary>
-    /// <param name="nextView"></param>
-    public void ShowLoadingView(ViewType nextView)
+    /// <param name="nextViewType"></param>
+    async public Task<BaseView> ShowLoadingView(ViewType nextViewType)
     {
         BaseView view = ShowToolView(ViewType.LoadingView);
         if (view != null)
         {
-            ((LoadingView)view).OpenLoading(nextView);
+            ((LoadingView)view).OpenLoading();
+            BaseView nextView = await ShowView(nextViewType);
+            nextView.gameObject.SetActive(false);
+            ((LoadingView)view).CloseLoading(nextView.gameObject);
+
+            return nextView;
         }
+
+        return null;
     }
 
     /// <summary>
@@ -131,14 +138,8 @@ public class UIManager : UnitySingleton<UIManager>
         else
         {
             ViewStackPop();
-            view = await CreatePanel(viewType);
+            view = await CreateView(viewType);
             InitView(view, viewType);
-        }
-
-        //關閉LoadingView
-        if(toolsViewDic.ContainsKey(ViewType.LoadingView))
-        {
-            toolsViewDic[ViewType.LoadingView].gameObject.SetActive(false);
         }
 
         view.gameObject.SetActive(true);
@@ -149,7 +150,7 @@ public class UIManager : UnitySingleton<UIManager>
     //初始化View
     private void InitView(BaseView view, ViewType viewType)
     {
-        view.gameObject.SetActive(false);
+        view.gameObject.SetActive(false);      
         view.name = viewType.ToString();
         RectTransform rt = view.GetComponent<RectTransform>();
         rt.anchoredPosition = Vector2.zero;
@@ -164,8 +165,8 @@ public class UIManager : UnitySingleton<UIManager>
     /// </summary>
     /// <param name="viewType"></param>
     /// <returns></returns>
-    async private Task<BaseView> CreatePanel(ViewType viewType)
-    {
+    async private Task<BaseView> CreateView(ViewType viewType)
+    {       
         if (viewDic.ContainsKey(viewType))
         { 
             return viewDic[viewType];

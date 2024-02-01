@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace HotFix_Project.View
+namespace HotFix_Project
 {
     class FX_ModeView :FX_BaseView
     {
@@ -23,11 +23,12 @@ namespace HotFix_Project.View
             thisView = new FX_BaseView().SetObj(baseView, viewObj);
 
             Holdem_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Holdem_Btn");
-            DownLoadProgress_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "DownLoadProgress_Obj").gameObject;
+            DownLoadProgress_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "DownLoadProgress_Obj").gameObject;            
+            Download_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "Download_Obj").gameObject;            
+            Progress_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Progress_Img");
+
             DownLoadProgress_Obj.SetActive(false);
-            Download_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "Download_Obj").gameObject;
-            Download_Obj.SetActive(!ABManager.Instance.CheckAb("holdem"));
-            Progress_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Progress_Img");            
+            Download_Obj.SetActive(!ABManager.Instance.IsDownloadAB("holdem"));
         }
 
         private static void Start()
@@ -35,12 +36,12 @@ namespace HotFix_Project.View
             Holdem_Btn.onClick.AddListener(() =>
             {
                 string abName = "holdem";
-                bool isDownLoad = ABManager.Instance.CheckAb(abName);
+                bool isDownLoad = ABManager.Instance.IsDownloadAB(abName);
                 Download_Obj.SetActive(isDownLoad);
 
                 if (isDownLoad)
                 {
-                    UIManager.Instance.ShowView(ViewType.LobbyView);
+                    UIManager.Instance.ShowLoadingView(ViewType.LobbyView);
                 }
                 else
                 {

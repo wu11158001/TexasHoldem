@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using TexasHoldemProtobuf;
 using UnityEngine;
+using TexasHoldemProtobuf;
 
-public class LobbyView : BaseView
+public class HoldemGameView : BaseView
 {
     public override void Awake()
     {
+        RequestManager.Instance.RegisterBroadcast(ActionCode.UpdateRoomUserInfo, ReciveBroadcast);
         base.Awake();
     }
 
@@ -25,11 +26,6 @@ public class LobbyView : BaseView
         base.Update();
     }
 
-    public override void OnDisable()
-    {
-        base.OnDisable();
-    }
-
     public override void SendRequest(MainPack pack)
     {
         base.SendRequest(pack);
@@ -43,5 +39,10 @@ public class LobbyView : BaseView
     public override void HandleRequest(MainPack pack)
     {
         base.HandleRequest(pack);
+    }
+
+    public override void ReciveBroadcast(MainPack pack)
+    {
+        base.ReciveBroadcast(pack);
     }
 }

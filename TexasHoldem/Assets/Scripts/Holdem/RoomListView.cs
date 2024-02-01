@@ -1,18 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using TexasHoldemProtobuf;
 using UnityEngine;
+using TexasHoldemProtobuf;
 
-public class LobbyView : BaseView
+public class RoomListView : BaseView
 {
     public override void Awake()
     {
         base.Awake();
-    }
-
-    public override void OnEnable()
-    {
-        base.OnEnable();
     }
 
     public override void Start()
@@ -23,11 +18,6 @@ public class LobbyView : BaseView
     public override void Update()
     {
         base.Update();
-    }
-
-    public override void OnDisable()
-    {
-        base.OnDisable();
     }
 
     public override void SendRequest(MainPack pack)
@@ -43,5 +33,14 @@ public class LobbyView : BaseView
     public override void HandleRequest(MainPack pack)
     {
         base.HandleRequest(pack);
+    }
+
+    /// <summary>
+    /// 設定房間訊息
+    /// </summary>
+    /// <param name="roomPack"></param>
+    public void SetRoomInfo(RoomPack roomPack)
+    {
+        appdomain.Invoke($"{hotFixPath}", "SetRoomInfo", null, roomPack);
     }
 }

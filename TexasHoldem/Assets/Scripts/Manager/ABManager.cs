@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;
+using System.IO;
 
 public class ABManager : UnitySingleton<ABManager>
 {
@@ -19,13 +20,22 @@ public class ABManager : UnitySingleton<ABManager>
     }
     
     /// <summary>
-    /// 監測是否有AB資源
+    /// 監測是否已有AB資源
     /// </summary>
     /// <param name="abName"></param>
     /// <returns></returns>
-    public bool CheckAb(string abName)
+    public bool IsDownloadAB(string abName)
     {
-        return abDic.ContainsKey(abName);
+        //return abDic.ContainsKey(abName);
+        AssetBundle[] loadedAssetBundles = (AssetBundle[])AssetBundle.GetAllLoadedAssetBundles();
+        foreach (var bundle in loadedAssetBundles)
+        {
+            if (bundle.name == abName)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>
@@ -70,18 +80,18 @@ public class ABManager : UnitySingleton<ABManager>
     /// <param name="callBack"></param>
     public void GetABRes<T>(string abName, string resName, UnityAction<T> callBack) where T: Object
     {
-        StartCoroutine(ILoadResAsync<T>(abName, resName, callBack));
+        StartCoroutine(IGetABAsync<T>(abName, resName, callBack));
     }
 
     /// <summary>
-    /// 加載資源
+    /// 獲取AB資源
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="abName"></param>
     /// <param name="resName"></param>
     /// <param name="callBack"></param>
     /// <returns></returns>
-    private IEnumerator ILoadResAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : Object
+    private IEnumerator IGetABAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : Object
     {
         yield return ILoadAB(abName);
 
@@ -89,17 +99,6 @@ public class ABManager : UnitySingleton<ABManager>
         yield return abr;
 
         callBack(abr.asset as T);
-    }
-
-    /// <summary>
-    /// 載入AB包
-    /// </summary>
-    /// <param name="abName"></param>
-    /// <param name="progressCallBack"></param>
-    /// <param name="finishedCallBack"></param>
-    public void LoadAb(string abName, UnityAction<float> progressCallBack = null)
-    {
-        StartCoroutine(ILoadAB(abName, progressCallBack));
     }
 
     /// <summary>
@@ -124,16 +123,19 @@ public class ABManager : UnitySingleton<ABManager>
                 //加載主包
                 mainAB = DownloadHandlerAssetBundle.GetContent(webRequest);
                 manifest = mainAB.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-            }            
-
+            }
+          
             //獲取依賴包
             AssetBundle ab = null;
-            string[] strs = manifest.GetAllDependencies(abName);
-            for (int i = 0; i < strs.Length; i++)
+            string[] assetsPath = manifest.GetAllDependencies(abName);
+            for (int i = 0; i < assetsPath.Length; i++)
             {
-                if (!abDic.ContainsKey(strs[i]))
+                if (!abDic.ContainsKey(assetsPath[i]))
                 {
-                    webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + strs[i]);
+                    webRequest = UnityWebRequest.Get(resUrl + assetsPath[i]);
+                    yield return webRequest.SendWebRequest();
+
+                    /*webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + assetsPath[i]);
                     yield return webRequest.SendWebRequest();
 
                     if (webRequest.result != UnityWebRequest.Result.Success)
@@ -143,12 +145,12 @@ public class ABManager : UnitySingleton<ABManager>
                     else
                     {
                         ab = DownloadHandlerAssetBundle.GetContent(webRequest);
-                        abDic.Add(strs[i], ab);
-                    }
+                        abDic.Add(assetsPath[i], ab);
+                    }*/
                 }
             }
 
-            //資源未加載過
+            //資源未加載
             if (!abDic.ContainsKey(abName))
             {
                 webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + abName);
@@ -170,10 +172,13 @@ public class ABManager : UnitySingleton<ABManager>
                     ab = DownloadHandlerAssetBundle.GetContent(webRequest);
                     abDic.Add(abName, ab);
 
+                    //回調進度
                     if (progressCallBack != null)
                     {
                         progressCallBack(100);
                     }
+
+                    ab.Unload(false);
                 }
                 else
                 {
@@ -181,5 +186,16 @@ public class ABManager : UnitySingleton<ABManager>
                 }
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+#if UNITY_EDITOR
+        /*Debug.Log("AB資源卸載");
+        foreach (var ab in abDic.Values)
+        {
+            ab.Unload(true);
+        }*/
+#endif
     }
 }

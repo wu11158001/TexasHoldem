@@ -25,6 +25,8 @@ namespace TexasHoldemServer.Servers
         private MySqlManager mySqlManager;
         public MySqlManager GetMySql { get { return mySqlManager; } }
 
+        public Room GetRoom { get; set; }
+
         public class UserInfoData
         {
             public string Account { get; set; }
@@ -110,6 +112,7 @@ namespace TexasHoldemServer.Servers
         /// </summary>
         void Close()
         {
+            if (GetRoom != null) GetRoom.Exit(server, this);
             server.RemoveClient(this);
             socket.Close();
             mySqlConnection.Close();

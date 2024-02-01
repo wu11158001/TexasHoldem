@@ -9,6 +9,8 @@ public class TipView : BaseView
 
     public override void Awake()
     {
+        base.Awake();
+
         TipSample = FindConponent.FindObj<Transform>(transform, "TipSample").gameObject;
         TipSample.gameObject.SetActive(false);
     }

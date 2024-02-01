@@ -7,17 +7,14 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace HotFix_Project.View
+namespace HotFix_Project
 {
     class FX_LoadingView : FX_BaseView
     {
         private static FX_BaseView thisView;
 
         private static DateTime startTime;
-        private static TimeSpan elapsedTime;
-
-        private static ViewType showView;
-        private static bool isShowNext;
+        private static GameObject showView;
 
         private static void Init(BaseView baseView, GameObject viewObj)
         {
@@ -26,22 +23,27 @@ namespace HotFix_Project.View
 
         private static void Update()
         {
-            elapsedTime = DateTime.Now - startTime;
-            if (elapsedTime.TotalSeconds > 2 && !isShowNext)
-            {
-                isShowNext = true;
-                UIManager.Instance.ShowView(showView);
+            if ((DateTime.Now - startTime).TotalSeconds > 1.5f && showView != null)
+            {                
+                showView.SetActive(true);
+                thisView.obj.SetActive(false);
             }
         }
 
         /// <summary>
-        /// 開啟載入
+        /// 開啟載入畫面
         /// </summary>
-        /// <param name="nextView"></param>
-        private static void OpenLoading(ViewType nextView)
+        private static void OpenLoading()
         {
-            isShowNext = false;
+            showView = null;
             startTime = DateTime.Now;
+        }
+
+        /// <summary>
+        /// 關閉載入畫面
+        /// </summary>
+        private static void CloseLoading(GameObject nextView)
+        {
             showView = nextView;
         }
     }

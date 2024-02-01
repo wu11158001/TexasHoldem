@@ -22,6 +22,11 @@ namespace TexasHoldemServer.Servers
 
         private ControllerManager controllerManager;
 
+        //存放所有房間
+        private List<Room> roomList = new List<Room>();
+        public int GetRoomCount { get { return roomList.Count; } }
+        private int roomName;
+
         public Server(int port)
         {
             controllerManager = new ControllerManager(this);
@@ -70,6 +75,157 @@ namespace TexasHoldemServer.Servers
         public void RemoveClient(Client client)
         {
             clientList.Remove(client);
+        }
+
+        /// <summary>
+        /// 快速開局
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        /// <returns></returns>
+        public MainPack QuickJoinRoom(Client client, MainPack pack)
+        {
+            foreach (Room r in roomList)
+            {
+                if (r.GetRoomInfo.CurrCount < r.GetRoomInfo.MaxCount)
+                {
+                    r.Join(client);
+                    pack.RoomPack.Add(r.GetRoomInfo);
+                    foreach (RoomUserInfoPack p in r.GetRoomUserInfo())
+                    {
+                        pack.RoomUserInfoPack.Add(p);
+                    }
+                    pack.ReturnCode = ReturnCode.Succeed;
+                    return pack;
+                }
+            }
+
+            //沒有找到房間創建房間
+            return CreateRoom(client, pack);
+        }
+
+        /// <summary>
+        /// 創建房間
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        /// <returns></returns>
+        private MainPack CreateRoom(Client client, MainPack pack)
+        {
+            try
+            {
+                RoomPack roomPack = new RoomPack();
+                roomPack.RoomName = (roomName++).ToString();
+                roomPack.MaxCount = 5;
+                pack.RoomPack.Add(roomPack);
+
+                Room room = new Room(this, client, roomPack);
+                roomList.Add(room);
+
+                foreach (RoomUserInfoPack p in room.GetRoomUserInfo())
+                {
+                    pack.RoomUserInfoPack.Add(p);
+                }
+
+                pack.ReturnCode = ReturnCode.Succeed;
+                return pack;
+            }
+            catch (Exception)
+            {
+                pack.ReturnCode = ReturnCode.Fail;
+                return pack;
+            }
+        }
+
+        /// <summary>
+        /// 刷新房間
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        /// <returns></returns>
+        public MainPack UpdateRoom(Client client, MainPack pack)
+        {
+            try
+            {                
+                foreach (Room room in roomList)
+                {
+                    pack.RoomPack.Add(room.GetRoomInfo);
+                }
+
+                pack.ReturnCode = ReturnCode.Succeed;
+            }
+            catch (Exception)
+            {
+                pack.ReturnCode = ReturnCode.Fail;
+            }
+
+            return pack;
+        }
+
+        /// <summary>
+        /// 加入房間
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        /// <returns></returns>
+        public MainPack JoinRoom(Client client, MainPack pack)
+        {
+            foreach (Room r in roomList)
+            {
+                if (r.GetRoomInfo.RoomName.Equals(pack.RoomPack[0].RoomName))
+                {
+                    if (r.GetRoomInfo.CurrCount < r.GetRoomInfo.MaxCount)
+                    {
+                        //可以加入房間
+                        r.Join(client);
+                        pack.RoomPack.Add(r.GetRoomInfo);
+                        foreach (RoomUserInfoPack user in r.GetRoomUserInfo())
+                        {
+                            pack.RoomUserInfoPack.Add(user);
+                        }
+                        pack.ReturnCode = ReturnCode.Succeed;
+                        return pack;
+                    }
+                    else
+                    {
+                        //無法加入房間
+                        pack.ReturnCode = ReturnCode.Fail;
+                        return pack;
+                    }
+                }
+            }
+
+            //沒有此房間
+            pack.ReturnCode = ReturnCode.NotRoom;
+            return pack;
+        }
+
+        /// <summary>
+        /// 離開房間
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        /// <returns></returns>
+        public MainPack ExitRoom(Client client, MainPack pack)
+        {
+            if (client.GetRoom == null)
+            {
+                pack.ReturnCode = ReturnCode.Fail;
+                return null;
+            }
+
+            client.GetRoom.Exit(this, client);
+            pack.ReturnCode = ReturnCode.Succeed;
+            return pack;
+        }
+
+        /// <summary>
+        /// 移除房間
+        /// </summary>
+        /// <param name="room"></param>
+        public void RemoveRoom(Room room)
+        {
+            roomList.Remove(room);
         }
     }
 }

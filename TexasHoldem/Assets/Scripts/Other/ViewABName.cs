@@ -5,9 +5,11 @@ using UnityEngine;
 public class ViewABName : UnitySingleton<ViewABName>
 {
     private Dictionary<ViewType, string> abPathDic = new Dictionary<ViewType, string>();
-
-    private void Awake()
+    
+    public override void Awake()
     {
+        base.Awake();
+
         abPathDic.Add(ViewType.TipView, "view");
         abPathDic.Add(ViewType.LoadingView, "view");
         abPathDic.Add(ViewType.WaitView, "view");
@@ -16,6 +18,7 @@ public class ViewABName : UnitySingleton<ViewABName>
         abPathDic.Add(ViewType.ModeView, "view");
 
         abPathDic.Add(ViewType.LobbyView, "holdem");
+        abPathDic.Add(ViewType.HoldemGameView, "holdem");
     }
 
     /// <summary>
@@ -31,7 +34,7 @@ public class ViewABName : UnitySingleton<ViewABName>
         }
         else
         {
-            Debug.LogError($"沒有找到 {viewType} AB資源");
+            Debug.LogError($"沒有找到 {viewType} AB資源!!!");
             return "";
         }
     }
