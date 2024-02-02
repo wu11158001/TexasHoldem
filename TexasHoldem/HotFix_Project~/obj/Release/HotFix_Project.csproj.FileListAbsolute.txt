@@ -7,3 +7,5 @@ E:\MyUnityProject\Texas Holdem Fild\TexasHoldem\HotFix_Project~\obj\Release\HotF
 E:\MyUnityProject\Texas Holdem Fild\TexasHoldem\HotFix_Project~\obj\Release\HotFix_Project.dll
 E:\MyUnityProject\Texas Holdem Fild\TexasHoldem\HotFix_Project~\obj\Release\HotFix_Project.pdb
 E:\MyUnityProject\Texas Holdem Fild\TexasHoldem\HotFix_Project~\obj\Release\HotFix_Project.csproj.AssemblyReference.cache
+E:\HttpServer\TexasHoldem\HotFix\HotFix_Project.dll
+E:\HttpServer\TexasHoldem\HotFix\HotFix_Project.pdb

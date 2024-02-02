@@ -4,33 +4,11 @@ using System.IO;
 using UnityEngine;
 using ILRuntime.Runtime.Enviorment;
 using UnityEngine.Networking;
-using UnityEditor;
+using System.Threading.Tasks;
 
 public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 {
-    private string DllUrl 
-    {
-        get
-        {
-#if DEBUG && UNITY_EDITOR
-            return "file:///" + Application.streamingAssetsPath + "/HotFix/HotFix_Project.dll";
-#else
-            return "http://192.168.1.172:8080//TexasHoldem/HotFix/HotFix_Project.dll";
-#endif
-        }
-    }
-
-    private string PdbUrl
-    {
-        get
-        {
-#if DEBUG && UNITY_EDITOR
-            return "file:///" + Application.streamingAssetsPath + "/HotFix/HotFix_Project.pdb";
-#else
-            return "http://192.168.1.172:8080//TexasHoldem/HotFix/HotFix_Project.pdb";
-#endif
-        }
-    }
+    private const string downloadUrl = "http://192.168.1.172:8080//TexasHoldem/HotFix/";
 
     public AppDomain appdomain;
     private MemoryStream msDll;
@@ -39,67 +17,15 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
     public override void Awake()
     {
         base.Awake();
+    }
 
+    async public Task Init()
+    {
         appdomain = new AppDomain();
 
-        LoadHotHif();
-    }
+        byte[] dll = await ABManager.Instance.DownloadAB("HotFix_Project.dll", null, "HotFix", downloadUrl);
+        byte[] pdb = await ABManager.Instance.DownloadAB("HotFix_Project.pdb", null, "HotFix", downloadUrl);
 
-    /// <summary>
-    /// 載入熱更
-    /// </summary>
-    public void LoadHotHif()
-    {
-        StartCoroutine(ILoadingHotUpdate());
-    }
-
-    /// <summary>
-    /// 下載熱更
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator ILoadingHotUpdate()
-    {
-        byte[] dll = null;
-        byte[] pdb = null;
-        
-        UnityWebRequest webRequest = UnityWebRequest.Get(DllUrl);
-        yield return webRequest.SendWebRequest();
-
-        if (webRequest.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError("dll熱更錯誤:" + webRequest.error);
-        }
-        else
-        {
-            dll = webRequest.downloadHandler.data;
-        }
-
-#if DEBUG && UNITY_EDITOR
-        webRequest = UnityWebRequest.Get(PdbUrl);
-        yield return webRequest.SendWebRequest();
-
-        if (webRequest.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError("pdb熱更錯誤:" + webRequest.error);
-        }
-        else
-        {
-            pdb = webRequest.downloadHandler.data;
-        }
-#endif
-
-        LoadHotFixAssembly(dll, pdb);
-
-        yield return null;
-    }
-
-    /// <summary>
-    /// 載入熱更資源
-    /// </summary>
-    /// <param name="dll"></param>
-    /// <param name="pdb"></param>
-    private void LoadHotFixAssembly(byte[] dll, byte[] pdb)
-    {
         msDll = new MemoryStream(dll);
 #if  UNITY_EDITOR
         msPdb = new MemoryStream(pdb);
@@ -117,13 +43,11 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 
         HotFixAdapter();
 
-
 #if DEBUG && UNITY_EDITOR
         appdomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
 
         appdomain.Invoke("HotFix_Project.Main", "Init", null, null);
-        Entry.Instance.StartConnect();
     }
 
     /// <summary>
@@ -183,5 +107,24 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
             });
         });
 
+        appdomain.DelegateManager.RegisterMethodDelegate<System.Boolean>();
+        appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<System.Boolean>>((act) =>
+        {
+            return new UnityEngine.Events.UnityAction<System.Boolean>((arg0) =>
+            {
+                ((System.Action<System.Boolean>)act)(arg0);
+            });
+        });
+    }
+
+    private void OnDestroy()
+    {
+#if UNITY_EDITOR
+        if (Entry.Instance.isDeleteAssetBundle)
+        {
+            File.Delete(Path.Combine(Application.streamingAssetsPath, "HotFix", "HotFix_Project.dll"));
+            File.Delete(Path.Combine(Application.streamingAssetsPath, "HotFix", "HotFix_Project.pdb"));
+        }    
+#endif
     }
 }

@@ -57,6 +57,10 @@ public class UIManager : UnitySingleton<UIManager>
             view.gameObject.SetActive(true);
             view.gameObject.transform.SetSiblingIndex(100);
         }
+        else
+        {
+            Debug.LogError($"{viewType} 資源不存在!!!");
+        }
 
         return view;
     }
@@ -175,7 +179,7 @@ public class UIManager : UnitySingleton<UIManager>
         {
             TaskCompletionSource<BaseView> tcs = new TaskCompletionSource<BaseView>();
             string abName = ViewABName.Instance.GetAbName(viewType);
-            ABManager.Instance.GetABRes<GameObject>(abName, viewType.ToString(), (obj) =>
+            await ABManager.Instance.GetAB<GameObject>(abName, viewType.ToString(), (obj) =>
             {
                 GameObject viewObj = Instantiate(obj);
                 viewObj.transform.SetParent(canvas_Tr);

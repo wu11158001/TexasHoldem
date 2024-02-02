@@ -4,38 +4,224 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;
 using System.IO;
+using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Linq;
+using System.Threading;
 
 public class ABManager : UnitySingleton<ABManager>
 {
-    private string resUrl = "http://127.0.0.1:8080/TexasHoldem/AB/";
+    private const string downloadUrl = "http://127.0.0.1:8080/TexasHoldem/AB/";
 
-    //紀錄AB資源
-    private Dictionary<string, AssetBundle> abDic = new Dictionary<string, AssetBundle>();
     private AssetBundle mainAB = null;
     private AssetBundleManifest manifest;
+
+    private Dictionary<string, AssetBundle> abDic = new Dictionary<string, AssetBundle>();
+    private Dictionary<string, SemaphoreSlim> downloadLocks = new Dictionary<string, SemaphoreSlim>();
 
     public override void Awake()
     {
         base.Awake();
     }
-    
+
+    async public Task Init()
+    {
+        mainAB = await LoadAB(downloadUrl + "AB");
+        manifest = mainAB.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+
+        string resourceDirectory = Path.Combine(Application.streamingAssetsPath, "AB");
+
+        if (!Directory.Exists(Path.Combine(Application.streamingAssetsPath, resourceDirectory)))
+        {
+            Directory.CreateDirectory(Path.Combine(Application.streamingAssetsPath, resourceDirectory));
+        }
+
+        // 獲取資源目錄下所有的 AssetBundle 文件
+        string[] assetBundleFiles = Directory.GetFiles(resourceDirectory, "*", SearchOption.AllDirectories)
+                                             .Where(file => !file.EndsWith(".meta"))
+                                             .ToArray();
+
+        // 加載本地資源到 loadedAssetBundles 字典中
+        foreach (string filePath in assetBundleFiles)
+        {
+            string abName = Path.GetFileNameWithoutExtension(filePath);
+            if (!abDic.ContainsKey(filePath))
+            {
+                AssetBundle ab = AssetBundle.LoadFromFile(filePath);
+                if (ab != null)
+                {
+                    abDic.Add(abName, ab);
+                    Debug.Log($"添加本地資源:{abName}");
+                }
+                else
+                {
+                    Debug.LogError($"添加本地資源失敗:{abName}");
+                }
+            }
+        }
+
+        Debug.Log("AB初始化完成");
+    }
+
     /// <summary>
-    /// 監測是否已有AB資源
+    /// 下載AB資源
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    async public Task<AssetBundle> LoadAB(string path)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequestAssetBundle.GetAssetBundle(path))
+        {
+            var asyncOperation = webRequest.SendWebRequest();
+            while (!asyncOperation.isDone)
+            {
+                await Task.Yield();
+            }
+
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                return DownloadHandlerAssetBundle.GetContent(webRequest); 
+            }
+            else
+            {
+                Debug.LogError("下載AB資源失敗:" + webRequest.error);
+                return null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 下載AB資源到本地
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="abName"></param>
+    /// <param name="savePath"></param>
+    /// <param name="progressCallBack"></param>
+    /// <returns></returns>
+    async public Task<byte[]> DownloadAB(string abName, UnityAction<float> progressCallBack = null, string savePath = "AB", string url = downloadUrl)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url + abName))
+        {
+            var asyncOperation = webRequest.SendWebRequest();
+            while (!asyncOperation.isDone)
+            {
+                if (progressCallBack != null)
+                {
+                    float progress = Mathf.Clamp01(webRequest.downloadProgress);
+                    progressCallBack(progress * 100);
+                }
+
+                await Task.Yield();
+            }
+
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                if (!Directory.Exists(Path.Combine(Application.streamingAssetsPath, savePath)))
+                {
+                    Directory.CreateDirectory(Path.Combine(Application.streamingAssetsPath, savePath));
+                }
+
+                byte[] data = webRequest.downloadHandler.data;
+                using (FileStream fs = File.Create(Path.Combine(Application.streamingAssetsPath, savePath, abName)))
+                {
+                    await fs.WriteAsync(data, 0, webRequest.downloadHandler.data.Length);
+                    await fs.FlushAsync();
+                }
+
+                //回調進度
+                if (progressCallBack != null)
+                {
+                    progressCallBack(100);
+                }
+               
+                return data;
+            }
+            else
+            {
+                Debug.LogError("下載AB資源到本地失敗!!!");
+                return null;
+            }              
+        }
+    }
+
+    /// <summary>
+    /// 檢查AB資源
     /// </summary>
     /// <param name="abName"></param>
     /// <returns></returns>
-    public bool IsDownloadAB(string abName)
+    async public Task<bool> CheckAB(string abName, UnityAction<bool> callback = null)
     {
-        //return abDic.ContainsKey(abName);
-        AssetBundle[] loadedAssetBundles = (AssetBundle[])AssetBundle.GetAllLoadedAssetBundles();
-        foreach (var bundle in loadedAssetBundles)
+        string path = Path.Combine(Application.streamingAssetsPath, "AB", abName);
+        if (File.Exists(path))
         {
-            if (bundle.name == abName)
+            string localHash = CalculateFileHash(path);
+            string RemoteHash = await CalculateRemoteFileHash(downloadUrl + abName);
+
+            if (callback != null)
             {
-                return true;
+                callback(localHash == RemoteHash);
+            }
+
+            return localHash == RemoteHash;
+        }
+        else
+        {
+            if (callback != null)
+            {
+                callback(false);
+            }
+
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 計算檔案哈希值
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
+    private string CalculateFileHash(string filePath)
+    {
+        using (var md5 = MD5.Create())
+        {
+            using (var stream = File.OpenRead(filePath))
+            {
+                byte[] hashBytes = md5.ComputeHash(stream);
+                return System.BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
             }
         }
-        return false;
+    }
+
+    /// <summary>
+    /// 計算遠端文件哈希
+    /// </summary>
+    /// <param name="url"></param>
+    /// <returns></returns>
+    async private Task<string> CalculateRemoteFileHash(string url)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            var asyncOperation = webRequest.SendWebRequest();
+            while (!asyncOperation.isDone)
+            {
+                await Task.Yield();
+            }
+
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                byte[] data = webRequest.downloadHandler.data;
+                using (var md5 = MD5.Create())
+                {
+                    byte[] hashBytes = md5.ComputeHash(data);
+                    return System.BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+                }
+            }
+            else
+            {
+                Debug.LogError("計算遠端文件哈希失敗!!!");
+                return "";
+            }            
+        }        
     }
 
     /// <summary>
@@ -43,22 +229,15 @@ public class ABManager : UnitySingleton<ABManager>
     /// </summary>
     /// <param name="abName"></param>
     /// <param name="callBack"></param>
-    public void GetABSize(string abName, UnityAction<long> callBack)
+    async public void GetABSize(string abName, UnityAction<long> callBack)
     {
-        StartCoroutine(ICheckABSize(abName, callBack));
-    }
+        UnityWebRequest webRequest = UnityWebRequest.Get(downloadUrl + abName);
 
-    /// <summary>
-    /// 檢查AB包大小
-    /// </summary>
-    /// <param name="abName"></param>
-    /// <param name="callBack"></param>
-    /// <returns></returns>
-    private IEnumerator ICheckABSize(string abName, UnityAction<long> callBack)
-    {
-        UnityWebRequest webRequest = UnityWebRequest.Get(resUrl + abName);
-
-        yield return webRequest.SendWebRequest();
+        var asyncOperation = webRequest.SendWebRequest();
+        while (!asyncOperation.isDone)
+        {
+            await Task.Yield();
+        }
 
         if (webRequest.result == UnityWebRequest.Result.Success)
         {
@@ -78,124 +257,106 @@ public class ABManager : UnitySingleton<ABManager>
     /// <param name="abName"></param>
     /// <param name="resName"></param>
     /// <param name="callBack"></param>
-    public void GetABRes<T>(string abName, string resName, UnityAction<T> callBack) where T: Object
+    async public Task GetAB<T>(string abName, string resName, UnityAction<T> callBack) where T: Object
     {
-        StartCoroutine(IGetABAsync<T>(abName, resName, callBack));
-    }
-
-    /// <summary>
-    /// 獲取AB資源
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="abName"></param>
-    /// <param name="resName"></param>
-    /// <param name="callBack"></param>
-    /// <returns></returns>
-    private IEnumerator IGetABAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : Object
-    {
-        yield return ILoadAB(abName);
-
-        AssetBundleRequest abr = abDic[abName].LoadAssetAsync<T>(resName);
-        yield return abr;
-
-        callBack(abr.asset as T);
-    }
-
-    /// <summary>
-    /// 加載AB資源
-    /// </summary>
-    /// <param name="abName"></param>
-    /// <param name="progressCallBack"></param>
-    /// <returns></returns>
-    private IEnumerator ILoadAB(string abName, UnityAction<float> progressCallBack = null)
-    {
-        UnityWebRequest webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + "AB");
-        yield return webRequest.SendWebRequest();
-
-        if (webRequest.result != UnityWebRequest.Result.Success)
+        SemaphoreSlim downloadLock;
+        lock (downloadLocks)
         {
-            Debug.LogError(webRequest.error);
+            if (!downloadLocks.TryGetValue(resName, out downloadLock))
+            {
+                downloadLock = new SemaphoreSlim(1, 1);
+                downloadLocks.Add(resName, downloadLock);
+            }
         }
-        else
+
+        await downloadLock.WaitAsync();
+
+        try
         {
-            if (mainAB == null)
+            bool isDownload = await CheckAB(abName);
+            if (isDownload)
             {
-                //加載主包
-                mainAB = DownloadHandlerAssetBundle.GetContent(webRequest);
-                manifest = mainAB.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-            }
-          
-            //獲取依賴包
-            AssetBundle ab = null;
-            string[] assetsPath = manifest.GetAllDependencies(abName);
-            for (int i = 0; i < assetsPath.Length; i++)
-            {
-                if (!abDic.ContainsKey(assetsPath[i]))
+                if (abDic.ContainsKey(abName))
                 {
-                    webRequest = UnityWebRequest.Get(resUrl + assetsPath[i]);
-                    yield return webRequest.SendWebRequest();
-
-                    /*webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + assetsPath[i]);
-                    yield return webRequest.SendWebRequest();
-
-                    if (webRequest.result != UnityWebRequest.Result.Success)
-                    {
-                        Debug.LogError(webRequest.error);
-                    }
-                    else
-                    {
-                        ab = DownloadHandlerAssetBundle.GetContent(webRequest);
-                        abDic.Add(assetsPath[i], ab);
-                    }*/
-                }
-            }
-
-            //資源未加載
-            if (!abDic.ContainsKey(abName))
-            {
-                webRequest = UnityWebRequestAssetBundle.GetAssetBundle(resUrl + abName);
-                webRequest.SendWebRequest();
-
-                while (!webRequest.isDone)
-                {
-                    if (progressCallBack != null)
-                    {
-                        float progress = Mathf.Clamp01(webRequest.downloadProgress);
-                        progressCallBack(progress * 100);
-                    }
-
-                    yield return null;
-                }
-
-                if (webRequest.result == UnityWebRequest.Result.Success)
-                {
-                    ab = DownloadHandlerAssetBundle.GetContent(webRequest);
-                    abDic.Add(abName, ab);
-
-                    //回調進度
-                    if (progressCallBack != null)
-                    {
-                        progressCallBack(100);
-                    }
-
-                    ab.Unload(false);
+                    callBack(abDic[abName].LoadAsset<T>(resName));
                 }
                 else
                 {
-                    Debug.LogError("加載資源失敗:" + abName);
+                    await DownloadAB(abName);
+                    await LoadLoaclAB<T>(abName, resName, callBack);
                 }
             }
+            else
+            {
+                await DownloadAB(abName);
+                await LoadLoaclAB<T>(abName, resName, callBack);
+            }
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            downloadLock.Release();
+        }
+    }
+
+    /// <summary>
+    /// 載入本地資源
+    /// </summary>
+    private async Task LoadLoaclAB<T>(string abName, string resName, UnityAction<T> callBack) where T : Object
+    {
+        string fullPath = Path.Combine(Application.streamingAssetsPath, "AB", abName);
+
+        TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+        AssetBundleCreateRequest asyncRequest = AssetBundle.LoadFromFileAsync(fullPath);
+        asyncRequest.completed += operation =>
+        {
+            tcs.SetResult(true);
+        };
+
+        await tcs.Task;
+
+        AssetBundle ab = asyncRequest.assetBundle;
+
+        if (ab != null)
+        {
+            Debug.Log($"載入本地資源:{resName}");
+            T asset = ab.LoadAsset<T>(resName);
+            callBack(asset);
+
+            if (!abDic.ContainsKey(abName))
+            {
+                abDic.Add(abName, ab);
+            }
+        }
+        else
+        {
+            Debug.LogError($"{abName}:載入本地資源失敗");
         }
     }
 
     private void OnDestroy()
     {
 #if UNITY_EDITOR
-        /*Debug.Log("AB資源卸載");
-        foreach (var ab in abDic.Values)
+        if (Entry.Instance.isDeleteAssetBundle)
         {
-            ab.Unload(true);
-        }*/
+            foreach (var abName in abDic.Keys)
+            {
+                string filePath = Path.Combine(Application.streamingAssetsPath, "AB", abName);
+
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    Debug.Log($"移除本地資源:{abName}");
+                }
+                else
+                {
+                    Debug.LogWarning($"移除本地資源失敗:{abName}");
+                }
+            }
+        }            
 #endif
     }
 }

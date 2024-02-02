@@ -28,26 +28,41 @@ namespace HotFix_Project
             Progress_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Progress_Img");
 
             DownLoadProgress_Obj.SetActive(false);
-            Download_Obj.SetActive(!ABManager.Instance.IsDownloadAB("holdem"));
+
+            ABManager.Instance.CheckAB("holdem", SwitchDownloadObj);
         }
 
         private static void Start()
         {
             Holdem_Btn.onClick.AddListener(() =>
             {
-                string abName = "holdem";
-                bool isDownLoad = ABManager.Instance.IsDownloadAB(abName);
-                Download_Obj.SetActive(isDownLoad);
-
-                if (isDownLoad)
-                {
-                    UIManager.Instance.ShowLoadingView(ViewType.LobbyView);
-                }
-                else
-                {
-                    ABManager.Instance.GetABSize(abName, CheckResources);
-                }                
+                ABManager.Instance.CheckAB("holdem", ClickHoldemBtn);         
             });
+        }
+
+        /// <summary>
+        /// 按下德州撲克
+        /// </summary>
+        /// <param name="isdownload"></param>
+        private static void ClickHoldemBtn(bool isdownload)
+        {
+            if (isdownload)
+            {
+                UIManager.Instance.ShowLoadingView(ViewType.LobbyView);
+            }
+            else
+            {
+                ABManager.Instance.GetABSize("holdem", CheckResources);
+            }
+        }
+
+        /// <summary>
+        /// 下載物件顯示開關
+        /// </summary>
+        /// <param name="isdownload"></param>
+        private static void SwitchDownloadObj(bool isdownload)
+        {
+            Download_Obj.SetActive(!isdownload);
         }
 
         /// <summary>
@@ -61,7 +76,7 @@ namespace HotFix_Project
 
             UIManager.Instance.ShowConfirmView(() =>
             {
-                ABManager.Instance.LoadAb("holdem", DownloadProgress);
+                ABManager.Instance.DownloadAB("holdem", DownloadProgress);
             },
             $"下載熱更資源: {(size / 1000.0f).ToString("F1")} M"
             );
@@ -78,6 +93,7 @@ namespace HotFix_Project
             Progress_Img.fillAmount = progress;
             if (progress == 100)
             {
+                ABManager.Instance.CheckAB("holdem", SwitchDownloadObj);
                 DownLoadProgress_Obj.SetActive(false);
             }
         }
