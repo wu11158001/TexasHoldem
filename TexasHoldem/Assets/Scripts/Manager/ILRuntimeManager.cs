@@ -49,7 +49,7 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 
         appdomain.Invoke("HotFix_Project.Main", "Init", null, null);
     }
-
+    
     /// <summary>
     /// 添加熱更適配器
     /// </summary>
@@ -115,6 +115,16 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
                 ((System.Action<System.Boolean>)act)(arg0);
             });
         });
+
+        appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.Sprite>();
+        appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<UnityEngine.Sprite>>((act) =>
+        {
+            return new UnityEngine.Events.UnityAction<UnityEngine.Sprite>((arg0) =>
+            {
+                ((System.Action<UnityEngine.Sprite>)act)(arg0);
+            });
+        });
+
     }
 
     private void OnDestroy()

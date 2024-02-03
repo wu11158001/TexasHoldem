@@ -39,14 +39,14 @@ namespace TexasHoldemProtobuf {
             "YXRhchgCIAEoCRIMCgRjYXNoGAMgASgJIkEKCFJvb21QYWNrEhAKCHJvb21O",
             "YW1lGAEgASgJEhAKCG1heENvdW50GAIgASgFEhEKCUN1cnJDb3VudBgDIAEo",
             "BSo8CgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQARII",
-            "CgRSb29tEAISCAoER2FtZRADKroBCgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5v",
+            "CgRSb29tEAISCAoER2FtZRADKswBCgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5v",
             "bmUQABIJCgVMb2dvbhABEgkKBUxvZ2luEAISCgoGTG9nb3V0EAMSDwoLR2V0",
             "VXNlckluZm8QBBIMCghKb2luUm9vbRAFEhEKDVF1aWNrSm9pblJvb20QBhIW",
             "ChJVcGRhdGVSb29tVXNlckluZm8QBxIOCgpVcGRhdGVSb29tEAgSDAoIRXhp",
-            "dFJvb20QCRISCg5SZXZpc2VOaWNrTmFtZRAKKlAKClJldHVybkNvZGUSDgoK",
-            "UmV0dXJuTm9uZRAAEgsKB1N1Y2NlZWQQARIICgRGYWlsEAISDgoKRHVwbGlj",
-            "YXRlZBADEgsKB05vdFJvb20QBCorCgxTZW5kTW9kZUNvZGUSCAoETm9uZRAA",
-            "EhEKDVJvb21Ccm9hZGNhc3QQAWIGcHJvdG8z"));
+            "dFJvb20QCRISCg5SZXZpc2VOaWNrTmFtZRAKEhAKDFJldmlzZUF2YXRhchAL",
+            "KlAKClJldHVybkNvZGUSDgoKUmV0dXJuTm9uZRAAEgsKB1N1Y2NlZWQQARII",
+            "CgRGYWlsEAISDgoKRHVwbGljYXRlZBADEgsKB05vdFJvb20QBCorCgxTZW5k",
+            "TW9kZUNvZGUSCAoETm9uZRAAEhEKDVJvb21Ccm9hZGNhc3QQAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::TexasHoldemProtobuf.RequestCode), typeof(global::TexasHoldemProtobuf.ActionCode), typeof(global::TexasHoldemProtobuf.ReturnCode), typeof(global::TexasHoldemProtobuf.SendModeCode), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -121,6 +121,10 @@ namespace TexasHoldemProtobuf {
     ///修改暱稱
     /// </summary>
     [pbr::OriginalName("ReviseNickName")] ReviseNickName = 10,
+    /// <summary>
+    ///修改頭像
+    /// </summary>
+    [pbr::OriginalName("ReviseAvatar")] ReviseAvatar = 11,
   }
 
   public enum ReturnCode {

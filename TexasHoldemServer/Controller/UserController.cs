@@ -177,5 +177,28 @@ namespace TexasHoldemServer.Controller
                 return pack;
             }            
         }
+
+        /// <summary>
+        /// 修改頭像
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        /// <returns></returns>
+        public MainPack ReviseAvatar(Server server, Client client, MainPack pack)
+        {
+            string[] serchNames = { "avatar" };
+            string[] reviseValue = { pack.UserInfoPack[0].Avatar };
+            bool result = client.GetMySql.ReviseData(client.GetMySqlConnection,
+                                                    tableName,
+                                                    "account",
+                                                    client.UserInfo.Account,
+                                                    serchNames,
+                                                    reviseValue
+                                                    );
+
+            pack.ReturnCode = result == true ? ReturnCode.Succeed : ReturnCode.Fail;
+            return pack;
+        }
     }
 }

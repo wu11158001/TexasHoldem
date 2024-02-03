@@ -10,12 +10,12 @@ public class ViewABName : UnitySingleton<ViewABName>
     {
         base.Awake();
 
-        abPathDic.Add(ViewType.TipView, "view");
-        abPathDic.Add(ViewType.LoadingView, "view");
-        abPathDic.Add(ViewType.WaitView, "view");
-        abPathDic.Add(ViewType.ConfirmView, "view");
-        abPathDic.Add(ViewType.LoginView, "view");
-        abPathDic.Add(ViewType.ModeView, "view");
+        abPathDic.Add(ViewType.TipView, "entry");
+        abPathDic.Add(ViewType.LoadingView, "entry");
+        abPathDic.Add(ViewType.WaitView, "entry");
+        abPathDic.Add(ViewType.ConfirmView, "entry");
+        abPathDic.Add(ViewType.LoginView, "entry");
+        abPathDic.Add(ViewType.ModeView, "entry");
 
         abPathDic.Add(ViewType.LobbyView, "holdem");
         abPathDic.Add(ViewType.HoldemGameView, "holdem");

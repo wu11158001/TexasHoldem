@@ -49,25 +49,8 @@ namespace HotFix_Project
         {
             //發送按鈕
             Send_Btn.onClick.AddListener(() =>
-            {               
-                if(string.IsNullOrEmpty(Acc_IF.text) || string.IsNullOrEmpty(Psw_IF.text))
-                {
-                    UIManager.Instance.ShowTip("帳號/密碼 不可為空!");
-                    return;
-                }
-
-                UIManager.Instance.WaitViewSwitch(true);
-
-                MainPack pack = new MainPack();
-                pack.ActionCode = currentMode == ModeType.login ? ActionCode.Login : ActionCode.Logon;
-                pack.RequestCode = RequestCode.User;
-
-                LoginPack loginPack = new LoginPack();
-                loginPack.Account = Acc_IF.text;
-                loginPack.Password = Psw_IF.text;
-
-                pack.LoginPack = loginPack;
-                thisView.view.SendRequest(pack);
+            {
+                ClickSend();
             });
 
             //切換按鈕
@@ -76,6 +59,46 @@ namespace HotFix_Project
                 ModeType modeType = currentMode == ModeType.login ? ModeType.logon : ModeType.login;
                 SwichMode(modeType);
             });
+
+            Acc_IF.Select();
+        }
+
+        private static void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                Psw_IF.Select();
+            }
+
+            if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+            {
+                ClickSend();
+            }
+        }
+
+        /// <summary>
+        /// 按下發送
+        /// </summary>
+        private static void ClickSend()
+        {
+            if (string.IsNullOrEmpty(Acc_IF.text) || string.IsNullOrEmpty(Psw_IF.text))
+            {
+                UIManager.Instance.ShowTip("帳號/密碼 不可為空!");
+                return;
+            }
+
+            UIManager.Instance.WaitViewSwitch(true);
+
+            MainPack pack = new MainPack();
+            pack.ActionCode = currentMode == ModeType.login ? ActionCode.Login : ActionCode.Logon;
+            pack.RequestCode = RequestCode.User;
+
+            LoginPack loginPack = new LoginPack();
+            loginPack.Account = Acc_IF.text;
+            loginPack.Password = Psw_IF.text;
+
+            pack.LoginPack = loginPack;
+            thisView.view.SendRequest(pack);
         }
 
         /// <summary>
