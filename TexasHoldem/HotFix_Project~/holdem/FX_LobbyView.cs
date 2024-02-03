@@ -14,7 +14,7 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Button QuickStart_Btn;
+        private static Button Back_Btn, QuickStart_Btn;
         private static Transform RoomList_Tr;
         private static GameObject RoomListSample_Obj;
 
@@ -26,6 +26,7 @@ namespace HotFix_Project
         {
             thisView = new FX_BaseView().SetObj(baseView, viewObj);
 
+            Back_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Back_Btn");
             QuickStart_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "QuickStart_Btn");
             RoomList_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "RoomList_Tr");
             RoomListSample_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "RoomListSample_Obj").gameObject;
@@ -40,6 +41,11 @@ namespace HotFix_Project
 
         private static void Start()
         {
+            Back_Btn.onClick.AddListener(() =>
+            {
+                UIManager.Instance.ShowLoadingView(ViewType.LobbyView, true);
+            });
+
             QuickStart_Btn.onClick.AddListener(() =>
             {
                 MainPack pack = new MainPack();

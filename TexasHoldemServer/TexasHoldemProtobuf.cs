@@ -25,36 +25,35 @@ namespace TexasHoldemProtobuf {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChlUZXhhc0hvbGRlbVByb3RvYnVmLnByb3RvEhNUZXhhc0hvbGRlbVByb3Rv",
-            "YnVmIokDCghNYWluUGFjaxI1CgtyZXF1ZXN0Q29kZRgBIAEoDjIgLlRleGFz",
+            "YnVmIoEDCghNYWluUGFjaxI1CgtyZXF1ZXN0Q29kZRgBIAEoDjIgLlRleGFz",
             "SG9sZGVtUHJvdG9idWYuUmVxdWVzdENvZGUSMwoKYWN0aW9uQ29kZRgCIAEo",
             "DjIfLlRleGFzSG9sZGVtUHJvdG9idWYuQWN0aW9uQ29kZRIzCgpyZXR1cm5D",
             "b2RlGAMgASgOMh8uVGV4YXNIb2xkZW1Qcm90b2J1Zi5SZXR1cm5Db2RlEjEK",
             "CWxvZ2luUGFjaxgEIAEoCzIeLlRleGFzSG9sZGVtUHJvdG9idWYuTG9naW5Q",
             "YWNrEjcKDHNlbmRNb2RlQ29kZRgFIAEoDjIhLlRleGFzSG9sZGVtUHJvdG9i",
             "dWYuU2VuZE1vZGVDb2RlEi8KCHJvb21QYWNrGAYgAygLMh0uVGV4YXNIb2xk",
-            "ZW1Qcm90b2J1Zi5Sb29tUGFjaxI/ChByb29tVXNlckluZm9QYWNrGAcgAygL",
-            "MiUuVGV4YXNIb2xkZW1Qcm90b2J1Zi5Sb29tVXNlckluZm9QYWNrIj4KCUxv",
-            "Z2luUGFjaxIPCgdhY2NvdW50GAEgASgJEhAKCHBhc3N3b3JkGAIgASgJEg4K",
-            "BmF2YXRhchgDIAEoCSIgCgxVc2VySW5mb1BhY2sSEAoIdXNlckNhc2gYASAB",
-            "KAkiQQoIUm9vbVBhY2sSEAoIcm9vbU5hbWUYASABKAkSEAoIbWF4Q291bnQY",
-            "AiABKAUSEQoJQ3VyckNvdW50GAMgASgFIicKEFJvb21Vc2VySW5mb1BhY2sS",
-            "EwoLYWNjb3VudE5hbWUYASABKAkqPAoLUmVxdWVzdENvZGUSDwoLUmVxdWVz",
-            "dE5vbmUQABIICgRVc2VyEAESCAoEUm9vbRACEggKBEdhbWUQAyqaAQoKQWN0",
-            "aW9uQ29kZRIOCgpBY3Rpb25Ob25lEAASCQoFTG9nb24QARIJCgVMb2dpbhAC",
-            "Eg8KC0dldFVzZXJJbmZvEAMSDAoISm9pblJvb20QBBIRCg1RdWlja0pvaW5S",
-            "b29tEAUSFgoSVXBkYXRlUm9vbVVzZXJJbmZvEAYSDgoKVXBkYXRlUm9vbRAH",
-            "EgwKCEV4aXRSb29tEAgqVAoKUmV0dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAAS",
-            "CwoHU3VjY2VlZBABEggKBEZhaWwQAhISCg5EdXBsaWNhdGVMb2dpbhADEgsK",
-            "B05vdFJvb20QBCorCgxTZW5kTW9kZUNvZGUSCAoETm9uZRAAEhEKDVJvb21C",
-            "cm9hZGNhc3QQAWIGcHJvdG8z"));
+            "ZW1Qcm90b2J1Zi5Sb29tUGFjaxI3Cgx1c2VySW5mb1BhY2sYByADKAsyIS5U",
+            "ZXhhc0hvbGRlbVByb3RvYnVmLlVzZXJJbmZvUGFjayI+CglMb2dpblBhY2sS",
+            "DwoHYWNjb3VudBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCRIOCgZhdmF0YXIY",
+            "AyABKAkiPgoMVXNlckluZm9QYWNrEhAKCG5pY2tOYW1lGAEgASgJEg4KBmF2",
+            "YXRhchgCIAEoCRIMCgRjYXNoGAMgASgJIkEKCFJvb21QYWNrEhAKCHJvb21O",
+            "YW1lGAEgASgJEhAKCG1heENvdW50GAIgASgFEhEKCUN1cnJDb3VudBgDIAEo",
+            "BSo8CgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQARII",
+            "CgRSb29tEAISCAoER2FtZRADKroBCgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5v",
+            "bmUQABIJCgVMb2dvbhABEgkKBUxvZ2luEAISCgoGTG9nb3V0EAMSDwoLR2V0",
+            "VXNlckluZm8QBBIMCghKb2luUm9vbRAFEhEKDVF1aWNrSm9pblJvb20QBhIW",
+            "ChJVcGRhdGVSb29tVXNlckluZm8QBxIOCgpVcGRhdGVSb29tEAgSDAoIRXhp",
+            "dFJvb20QCRISCg5SZXZpc2VOaWNrTmFtZRAKKlAKClJldHVybkNvZGUSDgoK",
+            "UmV0dXJuTm9uZRAAEgsKB1N1Y2NlZWQQARIICgRGYWlsEAISDgoKRHVwbGlj",
+            "YXRlZBADEgsKB05vdFJvb20QBCorCgxTZW5kTW9kZUNvZGUSCAoETm9uZRAA",
+            "EhEKDVJvb21Ccm9hZGNhc3QQAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::TexasHoldemProtobuf.RequestCode), typeof(global::TexasHoldemProtobuf.ActionCode), typeof(global::TexasHoldemProtobuf.ReturnCode), typeof(global::TexasHoldemProtobuf.SendModeCode), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.MainPack), global::TexasHoldemProtobuf.MainPack.Parser, new[]{ "RequestCode", "ActionCode", "ReturnCode", "LoginPack", "SendModeCode", "RoomPack", "RoomUserInfoPack" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.MainPack), global::TexasHoldemProtobuf.MainPack.Parser, new[]{ "RequestCode", "ActionCode", "ReturnCode", "LoginPack", "SendModeCode", "RoomPack", "UserInfoPack" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.LoginPack), global::TexasHoldemProtobuf.LoginPack.Parser, new[]{ "Account", "Password", "Avatar" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.UserInfoPack), global::TexasHoldemProtobuf.UserInfoPack.Parser, new[]{ "UserCash" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.RoomPack), global::TexasHoldemProtobuf.RoomPack.Parser, new[]{ "RoomName", "MaxCount", "CurrCount" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.RoomUserInfoPack), global::TexasHoldemProtobuf.RoomUserInfoPack.Parser, new[]{ "AccountName" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.UserInfoPack), global::TexasHoldemProtobuf.UserInfoPack.Parser, new[]{ "NickName", "Avatar", "Cash" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.RoomPack), global::TexasHoldemProtobuf.RoomPack.Parser, new[]{ "RoomName", "MaxCount", "CurrCount" }, null, null, null, null)
           }));
     }
     #endregion
@@ -91,29 +90,37 @@ namespace TexasHoldemProtobuf {
     /// </summary>
     [pbr::OriginalName("Login")] Login = 2,
     /// <summary>
+    ///登出
+    /// </summary>
+    [pbr::OriginalName("Logout")] Logout = 3,
+    /// <summary>
     ///獲取用戶訊息
     /// </summary>
-    [pbr::OriginalName("GetUserInfo")] GetUserInfo = 3,
+    [pbr::OriginalName("GetUserInfo")] GetUserInfo = 4,
     /// <summary>
     ///加入指定房間
     /// </summary>
-    [pbr::OriginalName("JoinRoom")] JoinRoom = 4,
+    [pbr::OriginalName("JoinRoom")] JoinRoom = 5,
     /// <summary>
     ///快速加入房間
     /// </summary>
-    [pbr::OriginalName("QuickJoinRoom")] QuickJoinRoom = 5,
+    [pbr::OriginalName("QuickJoinRoom")] QuickJoinRoom = 6,
     /// <summary>
     ///更新房間玩家訊息
     /// </summary>
-    [pbr::OriginalName("UpdateRoomUserInfo")] UpdateRoomUserInfo = 6,
+    [pbr::OriginalName("UpdateRoomUserInfo")] UpdateRoomUserInfo = 7,
     /// <summary>
     ///刷新房間列表
     /// </summary>
-    [pbr::OriginalName("UpdateRoom")] UpdateRoom = 7,
+    [pbr::OriginalName("UpdateRoom")] UpdateRoom = 8,
     /// <summary>
     ///離開房間
     /// </summary>
-    [pbr::OriginalName("ExitRoom")] ExitRoom = 8,
+    [pbr::OriginalName("ExitRoom")] ExitRoom = 9,
+    /// <summary>
+    ///修改暱稱
+    /// </summary>
+    [pbr::OriginalName("ReviseNickName")] ReviseNickName = 10,
   }
 
   public enum ReturnCode {
@@ -127,9 +134,9 @@ namespace TexasHoldemProtobuf {
     /// </summary>
     [pbr::OriginalName("Fail")] Fail = 2,
     /// <summary>
-    ///重複登入
+    ///重複
     /// </summary>
-    [pbr::OriginalName("DuplicateLogin")] DuplicateLogin = 3,
+    [pbr::OriginalName("Duplicated")] Duplicated = 3,
     /// <summary>
     ///房間不存在
     /// </summary>
@@ -175,7 +182,7 @@ namespace TexasHoldemProtobuf {
       loginPack_ = other.loginPack_ != null ? other.loginPack_.Clone() : null;
       sendModeCode_ = other.sendModeCode_;
       roomPack_ = other.roomPack_.Clone();
-      roomUserInfoPack_ = other.roomUserInfoPack_.Clone();
+      userInfoPack_ = other.userInfoPack_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -249,14 +256,14 @@ namespace TexasHoldemProtobuf {
       get { return roomPack_; }
     }
 
-    /// <summary>Field number for the "roomUserInfoPack" field.</summary>
-    public const int RoomUserInfoPackFieldNumber = 7;
-    private static readonly pb::FieldCodec<global::TexasHoldemProtobuf.RoomUserInfoPack> _repeated_roomUserInfoPack_codec
-        = pb::FieldCodec.ForMessage(58, global::TexasHoldemProtobuf.RoomUserInfoPack.Parser);
-    private readonly pbc::RepeatedField<global::TexasHoldemProtobuf.RoomUserInfoPack> roomUserInfoPack_ = new pbc::RepeatedField<global::TexasHoldemProtobuf.RoomUserInfoPack>();
+    /// <summary>Field number for the "userInfoPack" field.</summary>
+    public const int UserInfoPackFieldNumber = 7;
+    private static readonly pb::FieldCodec<global::TexasHoldemProtobuf.UserInfoPack> _repeated_userInfoPack_codec
+        = pb::FieldCodec.ForMessage(58, global::TexasHoldemProtobuf.UserInfoPack.Parser);
+    private readonly pbc::RepeatedField<global::TexasHoldemProtobuf.UserInfoPack> userInfoPack_ = new pbc::RepeatedField<global::TexasHoldemProtobuf.UserInfoPack>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::TexasHoldemProtobuf.RoomUserInfoPack> RoomUserInfoPack {
-      get { return roomUserInfoPack_; }
+    public pbc::RepeatedField<global::TexasHoldemProtobuf.UserInfoPack> UserInfoPack {
+      get { return userInfoPack_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -278,7 +285,7 @@ namespace TexasHoldemProtobuf {
       if (!object.Equals(LoginPack, other.LoginPack)) return false;
       if (SendModeCode != other.SendModeCode) return false;
       if(!roomPack_.Equals(other.roomPack_)) return false;
-      if(!roomUserInfoPack_.Equals(other.roomUserInfoPack_)) return false;
+      if(!userInfoPack_.Equals(other.userInfoPack_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -291,7 +298,7 @@ namespace TexasHoldemProtobuf {
       if (loginPack_ != null) hash ^= LoginPack.GetHashCode();
       if (SendModeCode != global::TexasHoldemProtobuf.SendModeCode.None) hash ^= SendModeCode.GetHashCode();
       hash ^= roomPack_.GetHashCode();
-      hash ^= roomUserInfoPack_.GetHashCode();
+      hash ^= userInfoPack_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -326,7 +333,7 @@ namespace TexasHoldemProtobuf {
         output.WriteEnum((int) SendModeCode);
       }
       roomPack_.WriteTo(output, _repeated_roomPack_codec);
-      roomUserInfoPack_.WriteTo(output, _repeated_roomUserInfoPack_codec);
+      userInfoPack_.WriteTo(output, _repeated_userInfoPack_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -351,7 +358,7 @@ namespace TexasHoldemProtobuf {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) SendModeCode);
       }
       size += roomPack_.CalculateSize(_repeated_roomPack_codec);
-      size += roomUserInfoPack_.CalculateSize(_repeated_roomUserInfoPack_codec);
+      size += userInfoPack_.CalculateSize(_repeated_userInfoPack_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -382,7 +389,7 @@ namespace TexasHoldemProtobuf {
         SendModeCode = other.SendModeCode;
       }
       roomPack_.Add(other.roomPack_);
-      roomUserInfoPack_.Add(other.roomUserInfoPack_);
+      userInfoPack_.Add(other.userInfoPack_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -422,7 +429,7 @@ namespace TexasHoldemProtobuf {
             break;
           }
           case 58: {
-            roomUserInfoPack_.AddEntriesFrom(input, _repeated_roomUserInfoPack_codec);
+            userInfoPack_.AddEntriesFrom(input, _repeated_userInfoPack_codec);
             break;
           }
         }
@@ -656,7 +663,9 @@ namespace TexasHoldemProtobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public UserInfoPack(UserInfoPack other) : this() {
-      userCash_ = other.userCash_;
+      nickName_ = other.nickName_;
+      avatar_ = other.avatar_;
+      cash_ = other.cash_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -665,17 +674,45 @@ namespace TexasHoldemProtobuf {
       return new UserInfoPack(this);
     }
 
-    /// <summary>Field number for the "userCash" field.</summary>
-    public const int UserCashFieldNumber = 1;
-    private string userCash_ = "";
+    /// <summary>Field number for the "nickName" field.</summary>
+    public const int NickNameFieldNumber = 1;
+    private string nickName_ = "";
+    /// <summary>
+    ///暱稱
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string NickName {
+      get { return nickName_; }
+      set {
+        nickName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "avatar" field.</summary>
+    public const int AvatarFieldNumber = 2;
+    private string avatar_ = "";
+    /// <summary>
+    ///頭像
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Avatar {
+      get { return avatar_; }
+      set {
+        avatar_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "cash" field.</summary>
+    public const int CashFieldNumber = 3;
+    private string cash_ = "";
     /// <summary>
     ///用戶金幣
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string UserCash {
-      get { return userCash_; }
+    public string Cash {
+      get { return cash_; }
       set {
-        userCash_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        cash_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -692,14 +729,18 @@ namespace TexasHoldemProtobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (UserCash != other.UserCash) return false;
+      if (NickName != other.NickName) return false;
+      if (Avatar != other.Avatar) return false;
+      if (Cash != other.Cash) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (UserCash.Length != 0) hash ^= UserCash.GetHashCode();
+      if (NickName.Length != 0) hash ^= NickName.GetHashCode();
+      if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
+      if (Cash.Length != 0) hash ^= Cash.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -713,9 +754,17 @@ namespace TexasHoldemProtobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (UserCash.Length != 0) {
+      if (NickName.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(UserCash);
+        output.WriteString(NickName);
+      }
+      if (Avatar.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Avatar);
+      }
+      if (Cash.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Cash);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -725,8 +774,14 @@ namespace TexasHoldemProtobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (UserCash.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserCash);
+      if (NickName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(NickName);
+      }
+      if (Avatar.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Avatar);
+      }
+      if (Cash.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Cash);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -739,8 +794,14 @@ namespace TexasHoldemProtobuf {
       if (other == null) {
         return;
       }
-      if (other.UserCash.Length != 0) {
-        UserCash = other.UserCash;
+      if (other.NickName.Length != 0) {
+        NickName = other.NickName;
+      }
+      if (other.Avatar.Length != 0) {
+        Avatar = other.Avatar;
+      }
+      if (other.Cash.Length != 0) {
+        Cash = other.Cash;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -754,7 +815,15 @@ namespace TexasHoldemProtobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            UserCash = input.ReadString();
+            NickName = input.ReadString();
+            break;
+          }
+          case 18: {
+            Avatar = input.ReadString();
+            break;
+          }
+          case 26: {
+            Cash = input.ReadString();
             break;
           }
         }
@@ -952,141 +1021,6 @@ namespace TexasHoldemProtobuf {
           }
           case 24: {
             CurrCount = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  /// <summary>
-  ///房間玩家訊息包
-  /// </summary>
-  public sealed partial class RoomUserInfoPack : pb::IMessage<RoomUserInfoPack> {
-    private static readonly pb::MessageParser<RoomUserInfoPack> _parser = new pb::MessageParser<RoomUserInfoPack>(() => new RoomUserInfoPack());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<RoomUserInfoPack> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::TexasHoldemProtobuf.TexasHoldemProtobufReflection.Descriptor.MessageTypes[4]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public RoomUserInfoPack() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public RoomUserInfoPack(RoomUserInfoPack other) : this() {
-      accountName_ = other.accountName_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public RoomUserInfoPack Clone() {
-      return new RoomUserInfoPack(this);
-    }
-
-    /// <summary>Field number for the "accountName" field.</summary>
-    public const int AccountNameFieldNumber = 1;
-    private string accountName_ = "";
-    /// <summary>
-    ///用戶帳號
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string AccountName {
-      get { return accountName_; }
-      set {
-        accountName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as RoomUserInfoPack);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(RoomUserInfoPack other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (AccountName != other.AccountName) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (AccountName.Length != 0) hash ^= AccountName.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (AccountName.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(AccountName);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (AccountName.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(AccountName);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(RoomUserInfoPack other) {
-      if (other == null) {
-        return;
-      }
-      if (other.AccountName.Length != 0) {
-        AccountName = other.AccountName;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            AccountName = input.ReadString();
             break;
           }
         }

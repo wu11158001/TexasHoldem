@@ -91,9 +91,9 @@ namespace TexasHoldemServer.Servers
                 {
                     r.Join(client);
                     pack.RoomPack.Add(r.GetRoomInfo);
-                    foreach (RoomUserInfoPack p in r.GetRoomUserInfo())
+                    foreach (UserInfoPack p in r.GetRoomUserInfo())
                     {
-                        pack.RoomUserInfoPack.Add(p);
+                        pack.UserInfoPack.Add(p);
                     }
                     pack.ReturnCode = ReturnCode.Succeed;
                     return pack;
@@ -122,9 +122,9 @@ namespace TexasHoldemServer.Servers
                 Room room = new Room(this, client, roomPack);
                 roomList.Add(room);
 
-                foreach (RoomUserInfoPack p in room.GetRoomUserInfo())
+                foreach (UserInfoPack p in room.GetRoomUserInfo())
                 {
-                    pack.RoomUserInfoPack.Add(p);
+                    pack.UserInfoPack.Add(p);
                 }
 
                 pack.ReturnCode = ReturnCode.Succeed;
@@ -179,9 +179,9 @@ namespace TexasHoldemServer.Servers
                         //可以加入房間
                         r.Join(client);
                         pack.RoomPack.Add(r.GetRoomInfo);
-                        foreach (RoomUserInfoPack user in r.GetRoomUserInfo())
+                        foreach (UserInfoPack user in r.GetRoomUserInfo())
                         {
-                            pack.RoomUserInfoPack.Add(user);
+                            pack.UserInfoPack.Add(user);
                         }
                         pack.ReturnCode = ReturnCode.Succeed;
                         return pack;

@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TexasHoldemProtobuf;
 
-public class LoginView : BaseView
+public class UserInfoView : BaseView
 {
     public override void Awake()
     {

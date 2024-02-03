@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using TexasHoldemProtobuf;
 
 namespace HotFix_Project
 {
@@ -14,7 +15,7 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Button Holdem_Btn;
+        private static Button Logout_Btn, Holdem_Btn;
         private static GameObject Download_Obj, DownLoadProgress_Obj;
         private static Image Progress_Img;
 
@@ -22,6 +23,7 @@ namespace HotFix_Project
         {
             thisView = new FX_BaseView().SetObj(baseView, viewObj);
 
+            Logout_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Logout_Btn");
             Holdem_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Holdem_Btn");
             DownLoadProgress_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "DownLoadProgress_Obj").gameObject;            
             Download_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "Download_Obj").gameObject;            
@@ -34,6 +36,14 @@ namespace HotFix_Project
 
         private static void Start()
         {
+            Logout_Btn.onClick.AddListener(() =>
+            {
+                MainPack pack = new MainPack();
+                pack.RequestCode = RequestCode.User;
+                pack.ActionCode = ActionCode.Logout;
+                thisView.view.SendRequest(pack);
+            });
+
             Holdem_Btn.onClick.AddListener(() =>
             {
                 ABManager.Instance.CheckAB("holdem", ClickHoldemBtn);         
@@ -96,6 +106,18 @@ namespace HotFix_Project
                 ABManager.Instance.CheckAB("holdem", SwitchDownloadObj);
                 DownLoadProgress_Obj.SetActive(false);
             }
+        }
+
+        /// <summary>
+        /// 處理協議
+        /// </summary>
+        /// <param name="pack"></param>
+        private static void HandleRequest(MainPack pack)
+        {
+            if (pack.ReturnCode == ReturnCode.Succeed)
+            {
+                UIManager.Instance.ShowLoadingView(ViewType.LoginView);
+            }            
         }
     }
 }

@@ -82,20 +82,28 @@ public class UIManager : UnitySingleton<UIManager>
     /// 顯示載入畫面
     /// </summary>
     /// <param name="nextViewType"></param>
-    async public Task<BaseView> ShowLoadingView(ViewType nextViewType)
+    /// <param name="isBack"></param>
+    /// <returns></returns>
+    async public Task ShowLoadingView(ViewType nextViewType, bool isBack = false)
     {
         BaseView view = ShowToolView(ViewType.LoadingView);
-        if (view != null)
+        ((LoadingView)view).OpenLoading();
+
+        if (isBack)
         {
-            ((LoadingView)view).OpenLoading();
-            BaseView nextView = await ShowView(nextViewType);
-            nextView.gameObject.SetActive(false);
-            ((LoadingView)view).CloseLoading(nextView.gameObject);
-
-            return nextView;
+            BackView();
+            ((LoadingView)view).CloseLoading();
         }
-
-        return null;
+        else
+        {
+            
+            if (view != null)
+            {  
+                BaseView nextView = await ShowView(nextViewType);
+                nextView.gameObject.SetActive(false);
+                ((LoadingView)view).CloseLoading(nextView.gameObject);
+            }
+        }
     }
 
     /// <summary>
@@ -120,7 +128,7 @@ public class UIManager : UnitySingleton<UIManager>
     /// 等待畫面開關
     /// </summary>
     /// <param name=""></param>
-    public void SwitchWaitView(bool isOpen)
+    public void WaitViewSwitch(bool isOpen)
     {
         BaseView view = ShowToolView(ViewType.WaitView);
         ((WaitView)view).gameObject.SetActive(isOpen);
@@ -134,14 +142,18 @@ public class UIManager : UnitySingleton<UIManager>
     async public Task<BaseView> ShowView(ViewType viewType)
     {
         BaseView view = null;
+        if (viewStack.Count > 0)
+        {
+            view = viewStack.Peek();
+            view.gameObject.SetActive(false);
+        }
+        
         if (viewDic.ContainsKey(viewType))
         {
-            ViewStackPop();
             view = viewDic[viewType];
         }
         else
         {
-            ViewStackPop();
             view = await CreateView(viewType);
             InitView(view, viewType);
         }
@@ -195,14 +207,21 @@ public class UIManager : UnitySingleton<UIManager>
     }
 
     /// <summary>
-    /// 關閉前個View
+    /// 返回前個View
     /// </summary>
-    private void ViewStackPop()
+    public void BackView()
     {
+        BaseView view = null;
         if (viewStack.Count > 0)
         {
-            BaseView topPanel = viewStack.Pop();
-            topPanel.gameObject.SetActive(false);
+            view = viewStack.Pop();
+            view.gameObject.SetActive(false);
+        }
+
+        if (viewStack.Count > 0)
+        {
+            view = viewStack.Peek();
+            view.gameObject.SetActive(true);
         }
     }
 }

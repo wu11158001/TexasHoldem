@@ -31,10 +31,7 @@ public class ABManager : UnitySingleton<ABManager>
 
         string resourceDirectory = Path.Combine(Application.streamingAssetsPath, "AB");
 
-        if (!Directory.Exists(Path.Combine(Application.streamingAssetsPath, resourceDirectory)))
-        {
-            Directory.CreateDirectory(Path.Combine(Application.streamingAssetsPath, resourceDirectory));
-        }
+        CreateDirectory(Path.Combine(Application.streamingAssetsPath, resourceDirectory));
 
         // 獲取資源目錄下所有的 AssetBundle 文件
         string[] assetBundleFiles = Directory.GetFiles(resourceDirectory, "*", SearchOption.AllDirectories)
@@ -51,7 +48,6 @@ public class ABManager : UnitySingleton<ABManager>
                 if (ab != null)
                 {
                     abDic.Add(abName, ab);
-                    Debug.Log($"添加本地資源:{abName}");
                 }
                 else
                 {
@@ -61,6 +57,18 @@ public class ABManager : UnitySingleton<ABManager>
         }
 
         Debug.Log("AB初始化完成");
+    }
+
+    /// <summary>
+    /// 創建目錄
+    /// </summary>
+    /// <param name="resourceDirectory"></param>
+    public void CreateDirectory(string resourceDirectory)
+    {
+        if (!Directory.Exists(Path.Combine(Application.streamingAssetsPath, resourceDirectory)))
+        {
+            Directory.CreateDirectory(resourceDirectory);
+        }        
     }
 
     /// <summary>
@@ -116,10 +124,7 @@ public class ABManager : UnitySingleton<ABManager>
 
             if (webRequest.result == UnityWebRequest.Result.Success)
             {
-                if (!Directory.Exists(Path.Combine(Application.streamingAssetsPath, savePath)))
-                {
-                    Directory.CreateDirectory(Path.Combine(Application.streamingAssetsPath, savePath));
-                }
+                CreateDirectory(Path.Combine(Application.streamingAssetsPath, savePath));
 
                 byte[] data = webRequest.downloadHandler.data;
                 using (FileStream fs = File.Create(Path.Combine(Application.streamingAssetsPath, savePath, abName)))

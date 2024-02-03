@@ -38,14 +38,16 @@ namespace TexasHoldemServer.Servers
         /// 獲取房間玩家訊息
         /// </summary>
         /// <returns></returns>
-        public RepeatedField<RoomUserInfoPack> GetRoomUserInfo()
+        public RepeatedField<UserInfoPack> GetRoomUserInfo()
         {
-            RepeatedField<RoomUserInfoPack> pack = new RepeatedField<RoomUserInfoPack>();
+            RepeatedField<UserInfoPack> pack = new RepeatedField<UserInfoPack>();
             foreach (Client c in clientList)
             {
-                RoomUserInfoPack roomUserInfo = new RoomUserInfoPack();
-                roomUserInfo.AccountName = c.UserInfo.Account;
-                pack.Add(roomUserInfo);
+                UserInfoPack userInfoPack = new UserInfoPack();
+                userInfoPack.NickName = c.UserInfo.NickName;
+                userInfoPack.Avatar = c.UserInfo.Avatar;
+
+                pack.Add(userInfoPack);
             }
 
             return pack;
@@ -81,9 +83,9 @@ namespace TexasHoldemServer.Servers
             pack.ActionCode = ActionCode.UpdateRoomUserInfo;
 
             //賦值
-            foreach (RoomUserInfoPack user in GetRoomUserInfo())
+            foreach (UserInfoPack user in GetRoomUserInfo())
             {
-                pack.RoomUserInfoPack.Add(user);
+                pack.UserInfoPack.Add(user);
             }
 
             Broadcast(client, pack);
@@ -97,9 +99,9 @@ namespace TexasHoldemServer.Servers
         public void UpdateRoomUserInfo(Client client, MainPack pack)
         {
             //賦值
-            foreach (RoomUserInfoPack user in GetRoomUserInfo())
+            foreach (UserInfoPack user in GetRoomUserInfo())
             {
-                pack.RoomUserInfoPack.Add(user);
+                pack.UserInfoPack.Add(user);
             }
 
             Broadcast(client, pack);
@@ -127,9 +129,9 @@ namespace TexasHoldemServer.Servers
             pack.ActionCode = ActionCode.UpdateRoomUserInfo;
 
             //賦值
-            foreach (RoomUserInfoPack user in GetRoomUserInfo())
+            foreach (UserInfoPack user in GetRoomUserInfo())
             {
-                pack.RoomUserInfoPack.Add(user);
+                pack.UserInfoPack.Add(user);
             }
 
             Broadcast(client, pack);

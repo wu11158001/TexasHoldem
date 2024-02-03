@@ -13,7 +13,7 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Text Title_Txt, Send_Txt;
+        private static Text Title_Txt, Send_Txt, Switch_Txt;
         private static InputField Acc_IF, Psw_IF;
         private static Button Send_Btn, Switch_Btn;
 
@@ -33,13 +33,14 @@ namespace HotFix_Project
 
             Title_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Title_Txt");
             Send_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Send_Txt");
+            Switch_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Switch_Txt");
             Acc_IF = FindConponent.FindObj<InputField>(thisView.view.transform, "Acc_IF");
             Psw_IF = FindConponent.FindObj<InputField>(thisView.view.transform, "Psw_IF");
             Send_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Send_Btn");
             Switch_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Switch_Btn");
         }
 
-        private static void Awake()
+        private static void OnEnable()
         {
             SwichMode(ModeType.login);
         }
@@ -55,7 +56,7 @@ namespace HotFix_Project
                     return;
                 }
 
-                UIManager.Instance.SwitchWaitView(true);
+                UIManager.Instance.WaitViewSwitch(true);
 
                 MainPack pack = new MainPack();
                 pack.ActionCode = currentMode == ModeType.login ? ActionCode.Login : ActionCode.Logon;
@@ -87,20 +88,9 @@ namespace HotFix_Project
             Acc_IF.text = "";
             Psw_IF.text = "";
 
-            switch (modeType)
-            {
-                //登入
-                case ModeType.login:                    
-                    Title_Txt.text = "登入";
-                    Send_Txt.text = "登入";
-                    break;
-
-                //註冊
-                case ModeType.logon:
-                    Title_Txt.text = "註冊";
-                    Send_Txt.text = "註冊";
-                    break;
-            }
+            Title_Txt.text = modeType == ModeType.login ? "登入" : "註冊";
+            Send_Txt.text = modeType == ModeType.login ? "登入" : "註冊";
+            Switch_Txt.text = modeType == ModeType.login ? "註冊" : "登入";
         }
 
         /// <summary>
@@ -109,7 +99,7 @@ namespace HotFix_Project
         /// <param name="pack"></param>
         private static void HandleRequest(MainPack pack)
         {
-            UIManager.Instance.SwitchWaitView(false);
+            UIManager.Instance.WaitViewSwitch(false);
 
             if (pack.ReturnCode == ReturnCode.Succeed)
             {
@@ -121,22 +111,19 @@ namespace HotFix_Project
                 else if (pack.ActionCode == ActionCode.Logon)
                 {
                     //註冊
-                    UIManager.Instance.SwitchWaitView(true);
+                    UIManager.Instance.WaitViewSwitch(true);
                     UIManager.Instance.ShowTip("註冊完成。進入遊戲...");
                     AsyncFunc.DelayFunc(3000, () =>
                     {
                         UIManager.Instance.ShowLoadingView(ViewType.ModeView);
-                        UIManager.Instance.SwitchWaitView(false);
+                        UIManager.Instance.WaitViewSwitch(false);
                     });                    
                 }
             }
-            else if (pack.ReturnCode == ReturnCode.DuplicateLogin)
+            else if (pack.ReturnCode == ReturnCode.Duplicated)
             {
-                if (pack.ActionCode == ActionCode.Login)
-                {
-                    //登入
-                    UIManager.Instance.ShowTip("帳號已登入!!!");
-                }
+                string tipStr = pack.ActionCode == ActionCode.Login ? "帳號已登入!!!" : "帳號已註冊!!!";
+                UIManager.Instance.ShowTip(tipStr);
             }
             else
             {             

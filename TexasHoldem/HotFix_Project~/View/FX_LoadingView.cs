@@ -15,6 +15,7 @@ namespace HotFix_Project
 
         private static DateTime startTime;
         private static GameObject showView;
+        private static bool isClose;
 
         private static void Init(BaseView baseView, GameObject viewObj)
         {
@@ -23,9 +24,12 @@ namespace HotFix_Project
 
         private static void Update()
         {
-            if ((DateTime.Now - startTime).TotalSeconds > 1.5f && showView != null)
-            {                
-                showView.SetActive(true);
+            if ((DateTime.Now - startTime).TotalSeconds > 1.5f && isClose == true)
+            {
+                if (showView != null)
+                {
+                    showView.SetActive(true);
+                }
                 thisView.obj.SetActive(false);
             }
         }
@@ -35,15 +39,16 @@ namespace HotFix_Project
         /// </summary>
         private static void OpenLoading()
         {
-            showView = null;
+            isClose = false;
             startTime = DateTime.Now;
         }
 
         /// <summary>
         /// 關閉載入畫面
         /// </summary>
-        private static void CloseLoading(GameObject nextView)
+        private static void CloseLoading(GameObject nextView = null)
         {
+            isClose = true;
             showView = nextView;
         }
     }

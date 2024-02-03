@@ -25,7 +25,7 @@ public class LoadingView : BaseView
     /// <summary>
     /// 關閉載入畫面
     /// </summary>
-    public void CloseLoading(GameObject nextView)
+    public void CloseLoading(GameObject nextView = null)
     {
         appdomain.Invoke($"{hotFixPath}", "CloseLoading", null, nextView);
     }

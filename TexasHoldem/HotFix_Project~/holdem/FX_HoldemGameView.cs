@@ -13,13 +13,13 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Button Leave_Btn;
+        private static Button Exit_Btn;
 
         private static void Init(BaseView baseView, GameObject viewObj)
         {
             thisView = new FX_BaseView().SetObj(baseView, viewObj);
 
-            Leave_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Leave_Btn");
+            Exit_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Exit_Btn");
         }
 
         private static void OnEnable()
@@ -29,7 +29,7 @@ namespace HotFix_Project
 
         private static void Start()
         {
-            Leave_Btn.onClick.AddListener(() =>
+            Exit_Btn.onClick.AddListener(() =>
             {
                 MainPack pack = new MainPack();
                 pack.ActionCode = ActionCode.ExitRoom;
@@ -63,7 +63,7 @@ namespace HotFix_Project
                 switch (pack.ActionCode)
                 {
                     case ActionCode.ExitRoom:
-                        UIManager.Instance.ShowView(ViewType.LobbyView);
+                        UIManager.Instance.ShowLoadingView(ViewType.LobbyView, true);
                         break;
                 }
             }
@@ -79,9 +79,9 @@ namespace HotFix_Project
         /// <param name="pack"></param>
         private static void ReciveBroadcast(MainPack pack)
         {
-            foreach (var user in pack.RoomUserInfoPack)
+            foreach (var user in pack.UserInfoPack)
             {
-                Debug.Log(user.AccountName);
+                Debug.Log(user.NickName);
             }
         }
     }
