@@ -54,8 +54,8 @@ namespace HotFix_Project
             roomName = roomPack.RoomName;
 
             RoomName_Txt.text = $"{roomName}.";
-            Count_Txt.text = $"{roomPack.CurrCount} / {roomPack.MaxCount}";
-            Count_Img.fillAmount = roomPack.CurrCount / roomPack.MaxCount;
+            Count_Txt.text = $"{roomPack.CurrCount + 1} / {roomPack.MaxCount + 1}";
+            Count_Img.fillAmount = roomPack.CurrCount + 1 / roomPack.MaxCount + 1;
         }
 
         /// <summary>

@@ -125,6 +125,15 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
             });
         });
 
+        appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.Sprite[]>();
+        appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<UnityEngine.Sprite[]>>((act) =>
+        {
+            return new UnityEngine.Events.UnityAction<UnityEngine.Sprite[]>((arg0) =>
+            {
+                ((System.Action<UnityEngine.Sprite[]>)act)(arg0);
+            });
+        });
+
     }
 
     private void OnDestroy()

@@ -94,7 +94,7 @@ namespace TexasHoldemServer.SqlData
         /// <returns></returns>
         public Dictionary<string, string> GetData(MySqlConnection mySqlConnection, string tableName, string searchName, string searchNameValue, string[] dataNames)
         {
-            string sql = $"SELECT * FROM {tableName} WHERE {searchNameValue} = @{searchName}";
+            string sql = $"SELECT * FROM {tableName} WHERE {searchName} = @{searchName}";
             MySqlCommand cmd = new MySqlCommand(sql, mySqlConnection);
 
             cmd.Parameters.AddWithValue($"@{searchName}", searchNameValue);

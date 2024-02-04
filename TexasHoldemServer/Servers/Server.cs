@@ -116,7 +116,7 @@ namespace TexasHoldemServer.Servers
             {
                 RoomPack roomPack = new RoomPack();
                 roomPack.RoomName = (roomName++).ToString();
-                roomPack.MaxCount = 5;
+                roomPack.MaxCount = 4;
                 pack.RoomPack.Add(roomPack);
 
                 Room room = new Room(this, client, roomPack);

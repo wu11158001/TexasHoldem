@@ -308,6 +308,45 @@ public class ABManager : UnitySingleton<ABManager>
     }
 
     /// <summary>
+    /// 載入圖集ScriptableObject
+    /// </summary>
+    /// <param name="abName"></param>
+    /// <param name="resName"></param>
+    /// <param name="callBack"></param>
+    /// <returns></returns>
+    async public Task LoadSprite(string abName, string resName, UnityAction<Sprite[]> callBack)
+    {
+        await ABManager.Instance.GetAB<SpriteScriptableObject>(abName, resName, (spriteList) =>
+        {
+            if (spriteList != null)
+            {
+                Sprites sprites = spriteList.sprites;
+                if (sprites != null)
+                {
+                    Sprite[] spriteArray = sprites.spritesList;
+
+                    if (spriteArray != null)
+                    {
+                        callBack(spriteArray);
+                    }
+                    else
+                    {
+                        Debug.LogError($"{resName}:圖像合集內容為空");
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"{resName}:圖像合集 null !!!");
+                }
+            }
+            else
+            {
+                Debug.LogError($"沒有找到圖像合集:{resName}");
+            }
+        });
+    }
+
+    /// <summary>
     /// 載入本地資源
     /// </summary>
     private async Task LoadLoaclAB<T>(string abName, string resName, UnityAction<T> callBack) where T : Object

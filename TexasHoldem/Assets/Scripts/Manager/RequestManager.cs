@@ -47,6 +47,11 @@ public class RequestManager : UnitySingleton<RequestManager>
             if (broadcastDic.ContainsKey(pack.ActionCode))
             {
                 broadcastDic[pack.ActionCode](pack);
+
+                if (requsetDic.ContainsKey(pack.ActionCode))
+                {
+                    requsetDic.Remove(pack.ActionCode);
+                }
             }
             else
             {

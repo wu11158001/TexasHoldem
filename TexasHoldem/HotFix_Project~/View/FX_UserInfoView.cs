@@ -23,7 +23,7 @@ namespace HotFix_Project
         private static float avatarListWidth;
         private static Vector2 avatarItemSize;
 
-        private static List<Sprite> avatarList = new List<Sprite>();
+        private static Sprite[] avatarList;
 
         private static void Init(BaseView baseView, GameObject viewObj)
         {
@@ -116,19 +116,20 @@ namespace HotFix_Project
             HorizontalLayoutGroup group = AvatarList_Rt.GetComponent<HorizontalLayoutGroup>();
             avatarItemSize = AvatarSample_Tr.GetComponent<RectTransform>().rect.size;
             AvatarList_Rt.sizeDelta = new Vector2(0, avatarItemSize.y);
-            for (int i = 0; i < 5; i++)
+            ABManager.Instance.LoadSprite("entry", "AvatarList", (avatars) =>
             {
-                int currentIndex = i;
-                ABManager.Instance.GetAB<Sprite>("entry", $"Avatar{i}", (avatar) =>
+                avatarList = avatars;
+
+                for (int i = 0; i < avatarList.Length; i++)
                 {
-                    avatarList.Add(avatar);
+                    int currentIndex = i;
 
                     GameObject avatarObj = GameObject.Instantiate<GameObject>(AvatarSample_Tr.gameObject);
                     avatarObj.transform.SetParent(AvatarList_Rt);
                     avatarObj.SetActive(true);
                     avatarListWidth += avatarItemSize.x + group.spacing;
                     Image img = FindConponent.FindObj<Image>(avatarObj.transform, "Item_Img");
-                    img.sprite = avatar;
+                    img.sprite = avatarList[i];
                     avatarObj.GetComponent<Button>().onClick.AddListener(delegate
                     {
                         MainPack pack = new MainPack();
@@ -140,11 +141,9 @@ namespace HotFix_Project
 
                         pack.UserInfoPack.Add(userInfoPack);
                         thisView.view.SendRequest(pack);
-
-                        Debug.LogError("發送頭像" + currentIndex.ToString());
                     });
-                });
-            }
+                }
+            });
         }
 
         /// <summary>

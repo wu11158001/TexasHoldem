@@ -414,4 +414,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36122757d758a94d94e3ed60b58a980, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDeleteAssetBundle: 1
+  isDeleteAssetBundle: 0

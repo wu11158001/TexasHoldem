@@ -104,7 +104,7 @@ namespace TexasHoldemServer.Servers
                 pack.UserInfoPack.Add(user);
             }
 
-            Broadcast(client, pack);
+            Broadcast(null, pack);
         }
 
         /// <summary>
