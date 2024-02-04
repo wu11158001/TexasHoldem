@@ -24,7 +24,7 @@ namespace TexasHoldemServer.Controller
         /// <returns></returns>
         public MainPack UpdateRoomUserInfo(Server server, Client client, MainPack pack)
         {
-            client.GetRoom.UpdateRoomUserInfo(null, pack);
+            client.GetRoom.UpdateRoomUserInfo(client, pack);
             return null;
         }
 

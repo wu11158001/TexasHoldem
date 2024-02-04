@@ -45,4 +45,9 @@ public class HoldemGameView : BaseView
     {
         base.ReciveBroadcast(pack);
     }
+
+    public override void HandleBroadcast(MainPack pack)
+    {
+        base.HandleBroadcast(pack);
+    }
 }

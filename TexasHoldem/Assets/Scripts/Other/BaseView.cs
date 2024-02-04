@@ -10,6 +10,7 @@ public class BaseView :MonoBehaviour
 
     protected AppDomain appdomain { get { return ILRuntimeManager.Instance.appdomain; } }
     protected MainPack pack;
+    protected MainPack coradcastPack;
 
     public virtual void Init(BaseView baseView, GameObject obj)
     {
@@ -42,6 +43,12 @@ public class BaseView :MonoBehaviour
         {
             HandleRequest(pack);
             pack = null;
+        }
+
+        if (coradcastPack != null)
+        {
+            HandleBroadcast(coradcastPack);
+            coradcastPack = null;
         }
     }
 
@@ -88,6 +95,15 @@ public class BaseView :MonoBehaviour
     /// <param name="pack"></param>
     public virtual void ReciveBroadcast(MainPack pack)
     {
-        appdomain.Invoke($"{hotFixPath}", "ReciveBroadcast", null, pack);
+        this.coradcastPack = pack;
+    }
+
+    /// <summary>
+    /// 處理廣播訊息
+    /// </summary>
+    /// <param name="pack"></param>
+    public virtual void HandleBroadcast(MainPack pack)
+    {
+        appdomain.Invoke($"{hotFixPath}", "HandleBroadcast", null, pack);
     }
 }

@@ -18,7 +18,8 @@ namespace HotFix_Project
         private static Text UserNickName_Txt, UserCash_Txt;
 
         private static Sprite[] avatarList;
-        private static Transform[] OtherUserSeat;
+        private static Image[] othersAvatar_Img;
+        private static Text[] othersNickName_Txt;
         private static Dictionary<string, int> otherUserDic = new Dictionary<string, int>();
 
         private static void Init(BaseView baseView, GameObject viewObj)
@@ -30,11 +31,18 @@ namespace HotFix_Project
             UserNickName_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "UserNickName_Txt");
             UserCash_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "UserCash_Txt");
             Transform OtherUser = FindConponent.FindObj<Transform>(thisView.view.transform, "OtherUser");
-            OtherUserSeat = new Transform[OtherUser.childCount];
-            for (int i = 0; i < OtherUserSeat.Length; i++)
+            othersAvatar_Img = new Image[OtherUser.childCount];
+            othersNickName_Txt = new Text[OtherUser.childCount];
+            for (int i = 0; i < OtherUser.childCount; i++)
             {
-                OtherUserSeat[i] = OtherUser.GetChild(i);
+                othersAvatar_Img[i] = FindConponent.FindObj<Image>(OtherUser.GetChild(i), "Avatar_Img");
+                othersNickName_Txt[i] = FindConponent.FindObj<Text>(OtherUser.GetChild(i), "NickName_Txt");
             }
+
+            ABManager.Instance.LoadSprite("entry", "AvatarList", (avatars) =>
+            {
+                avatarList = avatars;
+            });
         }
 
         private static void OnEnable()
@@ -51,12 +59,6 @@ namespace HotFix_Project
                 pack.ActionCode = ActionCode.ExitRoom;                
 
                 thisView.view.SendRequest(pack);
-            });
-
-            ABManager.Instance.LoadSprite("entry", "AvatarList", (avatars) =>
-            {
-                avatarList = avatars;
-                SendGetUserInfo();
             });
         }
 
@@ -87,7 +89,6 @@ namespace HotFix_Project
         /// </summary>
         private static void SendUpdateRoomInfo()
         {
-            Debug.LogError("SEND::");
             MainPack pack = new MainPack();
             pack.ActionCode = ActionCode.UpdateRoomUserInfo;
             pack.RequestCode = RequestCode.Game;
@@ -114,41 +115,34 @@ namespace HotFix_Project
                     UserCash_Txt.text = pack.UserInfoPack[0].Cash;
                     UserAvatar_Img.sprite = avatarList[Convert.ToInt32(pack.UserInfoPack[0].Avatar)];
 
-                    SendUpdateRoomInfo();
+                    //SendUpdateRoomInfo();
                     break;
             }
         }
 
         /// <summary>
-        /// 接收廣播訊息
+        /// 處理廣播訊息
         /// </summary>
         /// <param name="pack"></param>
-        private static void ReciveBroadcast(MainPack pack)
+        private static void HandleBroadcast(MainPack pack)
         {
             switch (pack.ActionCode)
             {
                 //更新房間訊息
                 case ActionCode.UpdateRoomUserInfo:
-                    Debug.LogError("ININ");
                     foreach (var user in pack.UserInfoPack)
                     {
                         if (user.NickName != UserNickName_Txt.text)
                         {
                             if (!otherUserDic.ContainsKey(user.NickName))
                             {
-                                for (int i = 0; i < OtherUserSeat.Length; i++)
+                                for (int i = 0; i < othersAvatar_Img.Length; i++)
                                 {
                                     if (!otherUserDic.ContainsValue(i))
                                     {
-                                        Debug.LogError(user.NickName + ":座位:" + i);
                                         otherUserDic.Add(user.NickName, i);
-                                        Image avatar = FindConponent.FindObj<Image>(OtherUserSeat[i], "Avatar_Img");
-                                        Debug.Log("Checking OtherUserSeat: " + OtherUserSeat[i]);
-                                        Debug.Log("Checking avatar: " + avatar);
-                                        Debug.Log("Checking user.Avatar: " + user.Avatar);
-                                        avatar.sprite = avatarList[Convert.ToInt32(user.Avatar)];
-                                        Text nickName = FindConponent.FindObj<Text>(OtherUserSeat[i], "NickName_Txt");
-                                        nickName.text = user.NickName;
+                                        othersAvatar_Img[i].sprite = avatarList[Convert.ToInt32(user.Avatar)];                                        
+                                        othersNickName_Txt[i].text = user.NickName;
                                         break;
                                     }
                                 }
