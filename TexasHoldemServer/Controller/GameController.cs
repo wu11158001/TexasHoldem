@@ -28,6 +28,13 @@ namespace TexasHoldemServer.Controller
             return null;
         }
 
+        /// <summary>
+        /// 離開房間
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        /// <returns></returns>
         public MainPack ExitRoom(Server server, Client client, MainPack pack)
         {
             return server.ExitRoom(client, pack);

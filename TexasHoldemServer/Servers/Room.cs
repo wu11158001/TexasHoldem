@@ -104,7 +104,7 @@ namespace TexasHoldemServer.Servers
                 pack.UserInfoPack.Add(user);
             }
 
-            Broadcast(client, pack);
+            Broadcast(null, pack);
         }
 
         /// <summary>
@@ -114,8 +114,6 @@ namespace TexasHoldemServer.Servers
         /// <param name="client"></param>
         public void Exit(Server server, Client client)
         {
-            MainPack pack = new MainPack();
-
             //房間只剩1人關閉房間
             if (clientList.Count == 1)
             {
@@ -126,13 +124,15 @@ namespace TexasHoldemServer.Servers
 
             clientList.Remove(client);
             client.GetRoom = null;
-            pack.ActionCode = ActionCode.UpdateRoomUserInfo;
 
-            //賦值
-            foreach (UserInfoPack user in GetRoomUserInfo())
-            {
-                pack.UserInfoPack.Add(user);
-            }
+            MainPack pack = new MainPack();
+            pack.ActionCode = ActionCode.OtherUserExitRoom;
+            pack.SendModeCode = SendModeCode.RoomBroadcast;
+
+            UserInfoPack userInfoPack = new UserInfoPack();
+            userInfoPack.NickName = client.UserInfo.NickName;
+
+            pack.UserInfoPack.Add(userInfoPack);
 
             Broadcast(client, pack);
         }

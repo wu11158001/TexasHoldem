@@ -8,6 +8,7 @@ public class HoldemGameView : BaseView
     public override void Awake()
     {
         RequestManager.Instance.RegisterBroadcast(ActionCode.UpdateRoomUserInfo, ReciveBroadcast);
+        RequestManager.Instance.RegisterBroadcast(ActionCode.OtherUserExitRoom, ReciveBroadcast);
         base.Awake();
     }
 

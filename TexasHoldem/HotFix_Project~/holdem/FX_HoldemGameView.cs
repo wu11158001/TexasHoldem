@@ -115,7 +115,7 @@ namespace HotFix_Project
                     UserCash_Txt.text = pack.UserInfoPack[0].Cash;
                     UserAvatar_Img.sprite = avatarList[Convert.ToInt32(pack.UserInfoPack[0].Avatar)];
 
-                    //SendUpdateRoomInfo();
+                    SendUpdateRoomInfo();
                     break;
             }
         }
@@ -148,6 +148,17 @@ namespace HotFix_Project
                                 }
                             }
                         }
+                    }
+                    break;
+
+                //其他用戶離開房間
+                case ActionCode.OtherUserExitRoom:
+                    if (otherUserDic.ContainsKey(pack.UserInfoPack[0].NickName))
+                    {
+                        int seat = otherUserDic[pack.UserInfoPack[0].NickName];
+                        othersAvatar_Img[seat].sprite = null;
+                        othersNickName_Txt[seat].text = "";
+                        otherUserDic.Remove(pack.UserInfoPack[0].NickName);
                     }
                     break;
             }

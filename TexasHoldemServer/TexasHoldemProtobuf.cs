@@ -39,14 +39,15 @@ namespace TexasHoldemProtobuf {
             "YXRhchgCIAEoCRIMCgRjYXNoGAMgASgJIkEKCFJvb21QYWNrEhAKCHJvb21O",
             "YW1lGAEgASgJEhAKCG1heENvdW50GAIgASgFEhEKCUN1cnJDb3VudBgDIAEo",
             "BSo8CgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggKBFVzZXIQARII",
-            "CgRSb29tEAISCAoER2FtZRADKswBCgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5v",
+            "CgRSb29tEAISCAoER2FtZRADKuMBCgpBY3Rpb25Db2RlEg4KCkFjdGlvbk5v",
             "bmUQABIJCgVMb2dvbhABEgkKBUxvZ2luEAISCgoGTG9nb3V0EAMSDwoLR2V0",
             "VXNlckluZm8QBBIMCghKb2luUm9vbRAFEhEKDVF1aWNrSm9pblJvb20QBhIW",
-            "ChJVcGRhdGVSb29tVXNlckluZm8QBxIOCgpVcGRhdGVSb29tEAgSDAoIRXhp",
-            "dFJvb20QCRISCg5SZXZpc2VOaWNrTmFtZRAKEhAKDFJldmlzZUF2YXRhchAL",
-            "KlAKClJldHVybkNvZGUSDgoKUmV0dXJuTm9uZRAAEgsKB1N1Y2NlZWQQARII",
-            "CgRGYWlsEAISDgoKRHVwbGljYXRlZBADEgsKB05vdFJvb20QBCorCgxTZW5k",
-            "TW9kZUNvZGUSCAoETm9uZRAAEhEKDVJvb21Ccm9hZGNhc3QQAWIGcHJvdG8z"));
+            "ChJVcGRhdGVSb29tVXNlckluZm8QBxIOCgpVcGRhdGVSb29tEAgSFQoRT3Ro",
+            "ZXJVc2VyRXhpdFJvb20QCRIMCghFeGl0Um9vbRAKEhIKDlJldmlzZU5pY2tO",
+            "YW1lEAsSEAoMUmV2aXNlQXZhdGFyEAwqUAoKUmV0dXJuQ29kZRIOCgpSZXR1",
+            "cm5Ob25lEAASCwoHU3VjY2VlZBABEggKBEZhaWwQAhIOCgpEdXBsaWNhdGVk",
+            "EAMSCwoHTm90Um9vbRAEKisKDFNlbmRNb2RlQ29kZRIICgROb25lEAASEQoN",
+            "Um9vbUJyb2FkY2FzdBABYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::TexasHoldemProtobuf.RequestCode), typeof(global::TexasHoldemProtobuf.ActionCode), typeof(global::TexasHoldemProtobuf.ReturnCode), typeof(global::TexasHoldemProtobuf.SendModeCode), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -106,7 +107,7 @@ namespace TexasHoldemProtobuf {
     /// </summary>
     [pbr::OriginalName("QuickJoinRoom")] QuickJoinRoom = 6,
     /// <summary>
-    ///更新房間玩家訊息
+    ///更新房間用戶訊息
     /// </summary>
     [pbr::OriginalName("UpdateRoomUserInfo")] UpdateRoomUserInfo = 7,
     /// <summary>
@@ -114,17 +115,21 @@ namespace TexasHoldemProtobuf {
     /// </summary>
     [pbr::OriginalName("UpdateRoom")] UpdateRoom = 8,
     /// <summary>
+    ///其他用戶離開房間
+    /// </summary>
+    [pbr::OriginalName("OtherUserExitRoom")] OtherUserExitRoom = 9,
+    /// <summary>
     ///離開房間
     /// </summary>
-    [pbr::OriginalName("ExitRoom")] ExitRoom = 9,
+    [pbr::OriginalName("ExitRoom")] ExitRoom = 10,
     /// <summary>
     ///修改暱稱
     /// </summary>
-    [pbr::OriginalName("ReviseNickName")] ReviseNickName = 10,
+    [pbr::OriginalName("ReviseNickName")] ReviseNickName = 11,
     /// <summary>
     ///修改頭像
     /// </summary>
-    [pbr::OriginalName("ReviseAvatar")] ReviseAvatar = 11,
+    [pbr::OriginalName("ReviseAvatar")] ReviseAvatar = 12,
   }
 
   public enum ReturnCode {
