@@ -41,7 +41,6 @@ namespace TexasHoldemServer.SqlData
                     }
                     else
                     {
-                        Console.WriteLine($"檢測資料庫錯誤!!!");
                         return false;
                     }
                 }

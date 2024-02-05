@@ -130,16 +130,19 @@ namespace HotFix_Project
                     avatarListWidth += avatarItemSize.x + group.spacing;
                     Image img = FindConponent.FindObj<Image>(avatarObj.transform, "Item_Img");
                     img.sprite = avatarList[i];
+
+                    //修改頭像
                     avatarObj.GetComponent<Button>().onClick.AddListener(delegate
                     {
                         MainPack pack = new MainPack();
                         pack.RequestCode = RequestCode.User;
-                        pack.ActionCode = ActionCode.ReviseAvatar;
+                        pack.ActionCode = ActionCode.ReviseUserInfo;
 
-                        UserInfoPack userInfoPack = new UserInfoPack();
-                        userInfoPack.Avatar = currentIndex.ToString();
+                        ReviseUserInfoPack reviseUserInfoPack = new ReviseUserInfoPack();
+                        reviseUserInfoPack.ReviseName = "avatar";
+                        reviseUserInfoPack.ReviseValue = currentIndex.ToString();
 
-                        pack.UserInfoPack.Add(userInfoPack);
+                        pack.ReviseUserInfoPack = reviseUserInfoPack;
                         thisView.view.SendRequest(pack);
                     });
                 }
@@ -161,12 +164,13 @@ namespace HotFix_Project
             {
                 MainPack pack = new MainPack();
                 pack.RequestCode = RequestCode.User;
-                pack.ActionCode = ActionCode.ReviseNickName;
+                pack.ActionCode = ActionCode.ReviseUserInfo;
 
-                UserInfoPack userInfoPack = new UserInfoPack();
-                userInfoPack.NickName = NickName_IF.text;
+                ReviseUserInfoPack reviseUserInfoPack = new ReviseUserInfoPack();
+                reviseUserInfoPack.ReviseName = "nickname";
+                reviseUserInfoPack.ReviseValue = NickName_IF.text;
 
-                pack.UserInfoPack.Add(userInfoPack);
+                pack.ReviseUserInfoPack = reviseUserInfoPack;
                 thisView.view.SendRequest(pack);
             }
             else
@@ -190,33 +194,47 @@ namespace HotFix_Project
                     Avatar_Img.sprite = avatarList[Convert.ToInt32(pack.UserInfoPack[0].Avatar)];
                     break;
 
-                //修改暱稱
-                case ActionCode.ReviseNickName:
+                //修改用戶訊息
+                case ActionCode.ReviseUserInfo:
                     if (pack.ReturnCode == ReturnCode.Succeed)
                     {
-                        ReviseNickName_Tr.gameObject.SetActive(false);
-                        NickName_Txt.text = pack.UserInfoPack[0].NickName;
+                        string reviseValue = pack.ReviseUserInfoPack.ReviseValue;
+                        switch (pack.ReviseUserInfoPack.ReviseName)
+                        {
+                            case "avatar":                                
+                                AvatarList_Rt.gameObject.SetActive(false);
+                                Avatar_Img.sprite = avatarList[Convert.ToInt32(reviseValue)];
+                                break;
+
+                            case "nickname":
+                                ReviseNickName_Tr.gameObject.SetActive(false);
+                                NickName_Txt.text = reviseValue;
+                                break;
+                        }
+                        
                     }
                     else if (pack.ReturnCode == ReturnCode.Duplicated)
-                    {                        
-                        UIManager.Instance.ShowTip("暱稱重複!!!");
+                    {
+                        switch (pack.ReviseUserInfoPack.ReviseName)
+                        {
+                            case "nickname":
+                                UIManager.Instance.ShowTip("暱稱重複!!!");
+                                break;
+                        }                        
                     }
                     else
-                    {                        
-                        UIManager.Instance.ShowTip("修改暱稱失敗!!!");
-                    }
-                    break;
+                    {
+                        switch (pack.ReviseUserInfoPack.ReviseName)
+                        {
+                            case "avatar":
+                                UIManager.Instance.ShowTip("修改暱稱失敗!!!");
+                                break;
 
-                //修改頭像
-                case ActionCode.ReviseAvatar:
-                    if (pack.ReturnCode == ReturnCode.Succeed)
-                    {
-                        AvatarList_Rt.gameObject.SetActive(false);
-                        Avatar_Img.sprite = avatarList[Convert.ToInt32(pack.UserInfoPack[0].Avatar)];
-                    }
-                    else
-                    {
-                        UIManager.Instance.ShowTip("更換頭像失敗!!!");
+                            case "nickname":
+                                UIManager.Instance.ShowTip("更換頭像失敗!!!");
+                                break;
+                        }
+                        
                     }
                     break;
             }

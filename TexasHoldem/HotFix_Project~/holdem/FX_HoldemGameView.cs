@@ -14,40 +14,47 @@ namespace HotFix_Project
         private static FX_BaseView thisView;
 
         private static Button Exit_Btn;
-        private static Image UserAvatar_Img;
-        private static Text UserNickName_Txt, UserCash_Txt;
 
-        private static Sprite[] avatarList;
-        private static Image[] othersAvatar_Img;
-        private static Text[] othersNickName_Txt;
-        private static Dictionary<string, int> otherUserDic = new Dictionary<string, int>();
+        private static Sprite[] avatarSpriteList;
+        private static Image[] userAvatars_Img, userMasks;
+        private static Text[] userNickNames_Txt, userChips_Txt, userCountDown_Txt;
+        private static Dictionary<string, int> userDic = new Dictionary<string, int>();
+
+        private static string userName;
 
         private static void Init(BaseView baseView, GameObject viewObj)
         {
             thisView = new FX_BaseView().SetObj(baseView, viewObj);
 
             Exit_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Exit_Btn");
-            UserAvatar_Img = FindConponent.FindObj<Image>(thisView.view.transform, "UserAvatar_Img");
-            UserNickName_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "UserNickName_Txt");
-            UserCash_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "UserCash_Txt");
-            Transform OtherUser = FindConponent.FindObj<Transform>(thisView.view.transform, "OtherUser");
-            othersAvatar_Img = new Image[OtherUser.childCount];
-            othersNickName_Txt = new Text[OtherUser.childCount];
-            for (int i = 0; i < OtherUser.childCount; i++)
+
+            Transform Seat = FindConponent.FindObj<Transform>(thisView.view.transform, "Seat_Tr");
+            userAvatars_Img = new Image[Seat.childCount];
+            userNickNames_Txt = new Text[Seat.childCount];
+            userChips_Txt = new Text[Seat.childCount];
+            userMasks = new Image[Seat.childCount];
+            userCountDown_Txt = new Text[Seat.childCount];
+            for (int i = 0; i < Seat.childCount; i++)
             {
-                othersAvatar_Img[i] = FindConponent.FindObj<Image>(OtherUser.GetChild(i), "Avatar_Img");
-                othersNickName_Txt[i] = FindConponent.FindObj<Text>(OtherUser.GetChild(i), "NickName_Txt");
+                userAvatars_Img[i] = FindConponent.FindObj<Image>(Seat.GetChild(i), "Avatar_Img");
+                userNickNames_Txt[i] = FindConponent.FindObj<Text>(Seat.GetChild(i), "NickName_Txt");
+                userChips_Txt[i] = FindConponent.FindObj<Text>(Seat.GetChild(i), "Chips_Txt");
+                userMasks[i] = FindConponent.FindObj<Image>(Seat.GetChild(i), "DountDown_Img");
+                userCountDown_Txt[i] = FindConponent.FindObj<Text>(Seat.GetChild(i), "userCountDown_Txt");
             }
 
             ABManager.Instance.LoadSprite("entry", "AvatarList", (avatars) =>
             {
-                avatarList = avatars;
+                avatarSpriteList = avatars;
             });
         }
 
         private static void OnEnable()
         {
-            SendGetUserInfo();
+            MainPack pack = new MainPack();
+            pack.RequestCode = RequestCode.User;
+            pack.ActionCode = ActionCode.GetUserInfo;
+            thisView.view.SendRequest(pack);
         }
 
         private static void Start()
@@ -71,27 +78,13 @@ namespace HotFix_Project
         }
 
         /// <summary>
-        /// 發送獲取用戶訊息
-        /// </summary>
-        private static void SendGetUserInfo()
-        {
-            if (avatarList != null)
-            {
-                MainPack pack = new MainPack();
-                pack.RequestCode = RequestCode.User;
-                pack.ActionCode = ActionCode.GetUserInfo;
-                thisView.view.SendRequest(pack);
-            }                
-        }
-
-        /// <summary>
         /// 發送更新房間玩家訊息
         /// </summary>
         private static void SendUpdateRoomInfo()
         {
             MainPack pack = new MainPack();
-            pack.ActionCode = ActionCode.UpdateRoomUserInfo;
             pack.RequestCode = RequestCode.Game;
+            pack.ActionCode = ActionCode.UpdateRoomUserInfo;
             pack.SendModeCode = SendModeCode.RoomBroadcast;
             thisView.view.SendRequest(pack);
         }     
@@ -111,9 +104,7 @@ namespace HotFix_Project
 
                 //更新用戶訊息
                 case ActionCode.GetUserInfo:
-                    UserNickName_Txt.text = pack.UserInfoPack[0].NickName;
-                    UserCash_Txt.text = pack.UserInfoPack[0].Cash;
-                    UserAvatar_Img.sprite = avatarList[Convert.ToInt32(pack.UserInfoPack[0].Avatar)];
+                    userName = pack.UserInfoPack[0].NickName;
 
                     SendUpdateRoomInfo();
                     break;
@@ -130,35 +121,47 @@ namespace HotFix_Project
             {
                 //更新房間訊息
                 case ActionCode.UpdateRoomUserInfo:
+                    //玩家
                     foreach (var user in pack.UserInfoPack)
                     {
-                        if (user.NickName != UserNickName_Txt.text)
+                        if (!userDic.ContainsKey(user.NickName))
                         {
-                            if (!otherUserDic.ContainsKey(user.NickName))
+                            //座位
+                            int seat = 0;
+                            if (user.NickName != userName)
                             {
-                                for (int i = 0; i < othersAvatar_Img.Length; i++)
+                                for (int i = 2; i < userAvatars_Img.Length; i++)
                                 {
-                                    if (!otherUserDic.ContainsValue(i))
+                                    if (!userDic.ContainsValue(i))
                                     {
-                                        otherUserDic.Add(user.NickName, i);
-                                        othersAvatar_Img[i].sprite = avatarList[Convert.ToInt32(user.Avatar)];                                        
-                                        othersNickName_Txt[i].text = user.NickName;
+                                        seat = i;
                                         break;
                                     }
                                 }
                             }
+
+                            userDic.Add(user.NickName, seat);
+                            userAvatars_Img[seat].sprite = avatarSpriteList[Convert.ToInt32(user.Avatar)];
+                            userNickNames_Txt[seat].text = user.NickName;
+                            userChips_Txt[seat].text = user.Chips;
                         }
                     }
+
+                    //電腦玩家
+                    int computerSeat = 1;
+                    userAvatars_Img[computerSeat].sprite = avatarSpriteList[Convert.ToInt32(pack.ComputerPack.Avatar)];
+                    userNickNames_Txt[computerSeat].text = pack.ComputerPack.NickName;
+                    userChips_Txt[computerSeat].text = pack.ComputerPack.Chips;
                     break;
 
                 //其他用戶離開房間
                 case ActionCode.OtherUserExitRoom:
-                    if (otherUserDic.ContainsKey(pack.UserInfoPack[0].NickName))
+                    if (userDic.ContainsKey(pack.UserInfoPack[0].NickName))
                     {
-                        int seat = otherUserDic[pack.UserInfoPack[0].NickName];
-                        othersAvatar_Img[seat].sprite = null;
-                        othersNickName_Txt[seat].text = "";
-                        otherUserDic.Remove(pack.UserInfoPack[0].NickName);
+                        int seat = userDic[pack.UserInfoPack[0].NickName];
+                        userAvatars_Img[seat].sprite = null;
+                        userNickNames_Txt[seat].text = "";
+                        userDic.Remove(pack.UserInfoPack[0].NickName);
                     }
                     break;
             }

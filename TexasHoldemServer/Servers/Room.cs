@@ -26,13 +26,29 @@ namespace TexasHoldemServer.Servers
             }
         }
 
-        public Room(Server server, Client client, RoomPack pack)
+        public Room(Server server, Client client, RoomPack pack, string initChips)
         {
             this.server = server;
             roomInfo = pack;
             clientList.Add(client);
             client.GetRoom = this;
+
+            ComputerInfo = new ComputerData();
+            ComputerInfo.NickName = "專業代打";
+            ComputerInfo.Avatar = "0";
+            ComputerInfo.Chips = initChips;
         }
+
+        /// <summary>
+        /// 電腦玩家
+        /// </summary>
+        public class ComputerData
+        {
+            public string NickName { get; set; }
+            public string Avatar { get; set; }
+            public string Chips { get; set; }
+        }
+        public ComputerData ComputerInfo { get; set; }
 
         /// <summary>
         /// 獲取房間玩家訊息
@@ -46,6 +62,7 @@ namespace TexasHoldemServer.Servers
                 UserInfoPack userInfoPack = new UserInfoPack();
                 userInfoPack.NickName = c.UserInfo.NickName;
                 userInfoPack.Avatar = c.UserInfo.Avatar;
+                userInfoPack.Chips = c.UserInfo.Chips;
 
                 pack.Add(userInfoPack);
             }
@@ -103,6 +120,12 @@ namespace TexasHoldemServer.Servers
             {
                 pack.UserInfoPack.Add(user);
             }
+
+            ComputerPack computerPack = new ComputerPack();
+            computerPack.NickName = client.GetRoom.ComputerInfo.NickName;
+            computerPack.Avatar = client.GetRoom.ComputerInfo.Avatar;
+            computerPack.Chips = client.GetRoom.ComputerInfo.Chips;
+            pack.ComputerPack = computerPack;
 
             Broadcast(null, pack);
         }

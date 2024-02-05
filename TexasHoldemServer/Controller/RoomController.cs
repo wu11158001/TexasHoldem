@@ -16,6 +16,18 @@ namespace TexasHoldemServer.Controller
         }
 
         /// <summary>
+        /// 獲取初始籌碼
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="Bigblind"></param>
+        /// <returns></returns>
+        private string GetInitChips(Client client, string Bigblind)
+        {
+            Dictionary<string, string> dataDic = client.GetMySql.GetData(client.GetMySqlConnection, "rule", "bigblind", Bigblind, new string[] { "initchips" });
+            return dataDic["initchips"];
+        }
+
+        /// <summary>
         /// 刷新房間列表
         /// </summary>
         /// <param name="server"></param>
@@ -36,7 +48,9 @@ namespace TexasHoldemServer.Controller
         /// <returns></returns>
         public MainPack QuickJoinRoom(Server server, Client client, MainPack pack)
         {
-            return server.QuickJoinRoom(client, pack);
+            string initChips = GetInitChips(client, "50");
+
+            return server.QuickJoinRoom(client, pack, initChips);
         }
 
         /// <summary>
@@ -48,7 +62,9 @@ namespace TexasHoldemServer.Controller
         /// <returns></returns>
         public MainPack JoinRoom(Server server, Client client, MainPack pack)
         {
-            return server.JoinRoom(client, pack);
+            string initChips = GetInitChips(client, "50");
+
+            return server.JoinRoom(client, pack, initChips);
         }
     }
 }

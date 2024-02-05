@@ -82,8 +82,9 @@ namespace TexasHoldemServer.Servers
         /// </summary>
         /// <param name="client"></param>
         /// <param name="pack"></param>
+        /// <param name="initBlind"></param>
         /// <returns></returns>
-        public MainPack QuickJoinRoom(Client client, MainPack pack)
+        public MainPack QuickJoinRoom(Client client, MainPack pack, string initBlind)
         {
             foreach (Room r in roomList)
             {
@@ -91,17 +92,26 @@ namespace TexasHoldemServer.Servers
                 {
                     r.Join(client);
                     pack.RoomPack.Add(r.GetRoomInfo);
+
+                    client.UserInfo.Chips = initBlind;
                     foreach (UserInfoPack p in r.GetRoomUserInfo())
                     {
                         pack.UserInfoPack.Add(p);
                     }
+
+                    ComputerPack computerPack = new ComputerPack();
+                    computerPack.NickName = r.ComputerInfo.NickName;
+                    computerPack.Avatar = r.ComputerInfo.Avatar;
+                    computerPack.Chips = r.ComputerInfo.Chips;
+                    pack.ComputerPack = computerPack;
+
                     pack.ReturnCode = ReturnCode.Succeed;
                     return pack;
                 }
             }
 
             //沒有找到房間創建房間
-            return CreateRoom(client, pack);
+            return CreateRoom(client, pack, initBlind);
         }
 
         /// <summary>
@@ -109,8 +119,9 @@ namespace TexasHoldemServer.Servers
         /// </summary>
         /// <param name="client"></param>
         /// <param name="pack"></param>
+        /// <param name="initChips"></param>
         /// <returns></returns>
-        private MainPack CreateRoom(Client client, MainPack pack)
+        private MainPack CreateRoom(Client client, MainPack pack, string initChips)
         {
             try
             {
@@ -119,13 +130,20 @@ namespace TexasHoldemServer.Servers
                 roomPack.MaxCount = 4;
                 pack.RoomPack.Add(roomPack);
 
-                Room room = new Room(this, client, roomPack);
+                Room room = new Room(this, client, roomPack, initChips);
                 roomList.Add(room);
 
+                client.UserInfo.Chips = initChips;
                 foreach (UserInfoPack p in room.GetRoomUserInfo())
                 {
                     pack.UserInfoPack.Add(p);
                 }
+
+                ComputerPack computerPack = new ComputerPack();
+                computerPack.NickName = room.ComputerInfo.NickName;
+                computerPack.Avatar = room.ComputerInfo.Avatar;
+                computerPack.Chips = room.ComputerInfo.Chips;
+                pack.ComputerPack = computerPack;
 
                 pack.ReturnCode = ReturnCode.Succeed;
                 return pack;
@@ -167,8 +185,9 @@ namespace TexasHoldemServer.Servers
         /// </summary>
         /// <param name="client"></param>
         /// <param name="pack"></param>
+        /// <param name="initChips"></param>
         /// <returns></returns>
-        public MainPack JoinRoom(Client client, MainPack pack)
+        public MainPack JoinRoom(Client client, MainPack pack, string initChips)
         {
             foreach (Room r in roomList)
             {
@@ -177,7 +196,9 @@ namespace TexasHoldemServer.Servers
                     if (r.GetRoomInfo.CurrCount < r.GetRoomInfo.MaxCount)
                     {
                         //可以加入房間
+                        client.UserInfo.Chips = initChips;
                         r.Join(client);
+
                         pack.RoomPack.Add(r.GetRoomInfo);
                         foreach (UserInfoPack user in r.GetRoomUserInfo())
                         {

@@ -148,54 +148,34 @@ namespace TexasHoldemServer.Controller
         }
 
         /// <summary>
-        /// 修改暱稱
+        /// 修改用戶資料
         /// </summary>
         /// <param name="server"></param>
         /// <param name="client"></param>
         /// <param name="pack"></param>
         /// <returns></returns>
-        public MainPack ReviseNickName(Server server, Client client, MainPack pack)
+        public MainPack ReviseUserInfo(Server server, Client client, MainPack pack)
         {
-            string[] serchNames = { "nickName" };
-            string[] reviseValue = { pack.UserInfoPack[0].NickName };
-            if (client.GetMySql.CheckData(client.GetMySqlConnection, tableName, serchNames, reviseValue))
+            string[] serchNames = { pack.ReviseUserInfoPack.ReviseName };
+            string[] reviseValue = { pack.ReviseUserInfoPack.ReviseValue };
+
+            //暱稱重複判斷
+            if (pack.ReviseUserInfoPack.ReviseName == "nickname")
             {
-                pack.ReturnCode = ReturnCode.Duplicated;
-                return pack;
+                if (client.GetMySql.CheckData(client.GetMySqlConnection, tableName, serchNames, reviseValue))
+                {
+                    pack.ReturnCode = ReturnCode.Duplicated;
+                    return pack;
+                }
             }
-            else
-            {
-                bool result = client.GetMySql.ReviseData(client.GetMySqlConnection,
+
+            bool result = client.GetMySql.ReviseData(client.GetMySqlConnection,
                                                      tableName,
                                                      "account",
                                                      client.UserInfo.Account,
                                                      serchNames,
                                                      reviseValue
                                                      );
-
-                pack.ReturnCode = result == true ? ReturnCode.Succeed : ReturnCode.Fail;
-                return pack;
-            }            
-        }
-
-        /// <summary>
-        /// 修改頭像
-        /// </summary>
-        /// <param name="server"></param>
-        /// <param name="client"></param>
-        /// <param name="pack"></param>
-        /// <returns></returns>
-        public MainPack ReviseAvatar(Server server, Client client, MainPack pack)
-        {
-            string[] serchNames = { "avatar" };
-            string[] reviseValue = { pack.UserInfoPack[0].Avatar };
-            bool result = client.GetMySql.ReviseData(client.GetMySqlConnection,
-                                                    tableName,
-                                                    "account",
-                                                    client.UserInfo.Account,
-                                                    serchNames,
-                                                    reviseValue
-                                                    );
 
             pack.ReturnCode = result == true ? ReturnCode.Succeed : ReturnCode.Fail;
             return pack;
