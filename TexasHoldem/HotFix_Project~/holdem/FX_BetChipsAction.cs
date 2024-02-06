@@ -36,7 +36,7 @@ namespace HotFix_Project
                 foreach (var move in moveDic)
                 {
                     //顯示時間
-                    if ((DateTime.Now - move.Value.Item1).TotalSeconds >= 4)
+                    if ((DateTime.Now - move.Value.Item1).TotalSeconds >= 3)
                     {
                         GameObject.Destroy(move.Key.gameObject);
                         moveDic.Remove(move.Key);
@@ -58,15 +58,6 @@ namespace HotFix_Project
                     }
                 }
             }            
-        }
-
-        /// <summary>
-        /// 設定目標
-        /// </summary>
-        /// <param name="target"></param>
-        private static void SetPointTarget(RectTransform target)
-        {
-            PointTarget = target;           
         }
 
         /// <summary>
