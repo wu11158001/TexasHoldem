@@ -44,24 +44,35 @@ namespace TexasHoldemProtobuf {
             "GAQgASgJEg0KBWNoaXBzGAUgASgJIj0KElJldmlzZVVzZXJJbmZvUGFjaxIS",
             "CgpyZXZpc2VOYW1lGAEgASgJEhMKC3JldmlzZVZhbHVlGAIgASgJIkEKCFJv",
             "b21QYWNrEhAKCHJvb21OYW1lGAEgASgJEhAKCG1heENvdW50GAIgASgFEhEK",
-            "CUN1cnJDb3VudBgDIAEoBSI/CgxDb21wdXRlclBhY2sSEAoIbmlja05hbWUY",
-            "ASABKAkSDgoGYXZhdGFyGAIgASgJEg0KBWNoaXBzGAMgASgJIrQBCg9HYW1l",
-            "UHJvY2Vzc1BhY2sSNQoLZ2FtZVByb2Nlc3MYASABKA4yIC5UZXhhc0hvbGRl",
-            "bVByb3RvYnVmLkdhbWVQcm9jZXNzEhIKCmFjdGlvblVzZXIYAiABKAkSFAoM",
-            "c21hbGxCbGluZGVyGAMgASgJEhIKCkJpZ0JsaW5kZXIYBCABKAkSFQoNYmln",
-            "QmxpbmRWYWx1ZRgFIAEoCRIVCg10b3RhbEJldENoaXBzGAYgASgJKjwKC1Jl",
-            "cXVlc3RDb2RlEg8KC1JlcXVlc3ROb25lEAASCAoEVXNlchABEggKBFJvb20Q",
-            "AhIICgRHYW1lEAMq7wEKCkFjdGlvbkNvZGUSDgoKQWN0aW9uTm9uZRAAEgkK",
-            "BUxvZ29uEAESCQoFTG9naW4QAhIKCgZMb2dvdXQQAxIPCgtHZXRVc2VySW5m",
-            "bxAEEgwKCEpvaW5Sb29tEAUSEQoNUXVpY2tKb2luUm9vbRAGEhYKElVwZGF0",
-            "ZVJvb21Vc2VySW5mbxAHEg4KClVwZGF0ZVJvb20QCBIVChFPdGhlclVzZXJF",
-            "eGl0Um9vbRAJEgwKCEV4aXRSb29tEAoSEgoOUmV2aXNlVXNlckluZm8QCxIN",
-            "CglTdGFydEdhbWUQDBINCglHYW1lU3RhZ2UQDSpQCgpSZXR1cm5Db2RlEg4K",
-            "ClJldHVybk5vbmUQABILCgdTdWNjZWVkEAESCAoERmFpbBACEg4KCkR1cGxp",
-            "Y2F0ZWQQAxILCgdOb3RSb29tEAQqLwoMU2VuZE1vZGVDb2RlEgwKCE1vZGVO",
-            "b25lEAASEQoNUm9vbUJyb2FkY2FzdBABKlgKC0dhbWVQcm9jZXNzEg8KC1By",
-            "b2Nlc3NOb25lEAASDAoIU2V0QmxpbmQQARILCgdQcmVmbG9wEAISCAoERmxv",
-            "cBADEggKBFR1cm4QBBIJCgVSaXZlchAFYgZwcm90bzM="));
+            "CUN1cnJDb3VudBgDIAEoBSJkCgxDb21wdXRlclBhY2sSEAoIbmlja05hbWUY",
+            "ASABKAkSDgoGYXZhdGFyGAIgASgJEhEKCWhhbmRQb2tlchgFIAMoBRIQCghi",
+            "ZXRDaGlwcxgEIAEoCRINCgVjaGlwcxgDIAEoCSLNBAoPR2FtZVByb2Nlc3NQ",
+            "YWNrEjUKC2dhbWVQcm9jZXNzGAEgASgOMiAuVGV4YXNIb2xkZW1Qcm90b2J1",
+            "Zi5HYW1lUHJvY2VzcxISCgphY3Rpb25Vc2VyGAIgASgJEhQKDHNtYWxsQmxp",
+            "bmRlchgDIAEoCRISCgpiaWdCbGluZGVyGAQgASgJEhUKDWJpZ0JsaW5kVmFs",
+            "dWUYBSABKAkSFQoNdG90YWxCZXRDaGlwcxgGIAEoCRIOCgZyZXN1bHQYByAD",
+            "KAUSRgoJaGFuZFBva2VyGAggAygLMjMuVGV4YXNIb2xkZW1Qcm90b2J1Zi5H",
+            "YW1lUHJvY2Vzc1BhY2suSGFuZFBva2VyRW50cnkSRAoIYmV0U2hpcHMYCSAD",
+            "KAsyMi5UZXhhc0hvbGRlbVByb3RvYnVmLkdhbWVQcm9jZXNzUGFjay5CZXRT",
+            "aGlwc0VudHJ5EkYKCXVzZXJDaGlwcxgKIAMoCzIzLlRleGFzSG9sZGVtUHJv",
+            "dG9idWYuR2FtZVByb2Nlc3NQYWNrLlVzZXJDaGlwc0VudHJ5Gk4KDkhhbmRQ",
+            "b2tlckVudHJ5EgsKA2tleRgBIAEoCRIrCgV2YWx1ZRgCIAEoCzIcLlRleGFz",
+            "SG9sZGVtUHJvdG9idWYuSW50TGlzdDoCOAEaLwoNQmV0U2hpcHNFbnRyeRIL",
+            "CgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBGjAKDlVzZXJDaGlwc0Vu",
+            "dHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEiGQoHSW50TGlz",
+            "dBIOCgZ2YWx1ZXMYASADKAUqPAoLUmVxdWVzdENvZGUSDwoLUmVxdWVzdE5v",
+            "bmUQABIICgRVc2VyEAESCAoEUm9vbRACEggKBEdhbWUQAyrvAQoKQWN0aW9u",
+            "Q29kZRIOCgpBY3Rpb25Ob25lEAASCQoFTG9nb24QARIJCgVMb2dpbhACEgoK",
+            "BkxvZ291dBADEg8KC0dldFVzZXJJbmZvEAQSDAoISm9pblJvb20QBRIRCg1R",
+            "dWlja0pvaW5Sb29tEAYSFgoSVXBkYXRlUm9vbVVzZXJJbmZvEAcSDgoKVXBk",
+            "YXRlUm9vbRAIEhUKEU90aGVyVXNlckV4aXRSb29tEAkSDAoIRXhpdFJvb20Q",
+            "ChISCg5SZXZpc2VVc2VySW5mbxALEg0KCVN0YXJ0R2FtZRAMEg0KCUdhbWVT",
+            "dGFnZRANKlAKClJldHVybkNvZGUSDgoKUmV0dXJuTm9uZRAAEgsKB1N1Y2Nl",
+            "ZWQQARIICgRGYWlsEAISDgoKRHVwbGljYXRlZBADEgsKB05vdFJvb20QBCov",
+            "CgxTZW5kTW9kZUNvZGUSDAoITW9kZU5vbmUQABIRCg1Sb29tQnJvYWRjYXN0",
+            "EAEqWAoLR2FtZVByb2Nlc3MSDwoLUHJvY2Vzc05vbmUQABIMCghTZXRCbGlu",
+            "ZBABEgsKB1ByZWZsb3AQAhIICgRGbG9wEAMSCAoEVHVybhAEEgkKBVJpdmVy",
+            "EAViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::TexasHoldemProtobuf.RequestCode), typeof(global::TexasHoldemProtobuf.ActionCode), typeof(global::TexasHoldemProtobuf.ReturnCode), typeof(global::TexasHoldemProtobuf.SendModeCode), typeof(global::TexasHoldemProtobuf.GameProcess), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -70,8 +81,9 @@ namespace TexasHoldemProtobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.UserInfoPack), global::TexasHoldemProtobuf.UserInfoPack.Parser, new[]{ "GameSeat", "NickName", "Avatar", "Cash", "Chips" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ReviseUserInfoPack), global::TexasHoldemProtobuf.ReviseUserInfoPack.Parser, new[]{ "ReviseName", "ReviseValue" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.RoomPack), global::TexasHoldemProtobuf.RoomPack.Parser, new[]{ "RoomName", "MaxCount", "CurrCount" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ComputerPack), global::TexasHoldemProtobuf.ComputerPack.Parser, new[]{ "NickName", "Avatar", "Chips" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameProcessPack), global::TexasHoldemProtobuf.GameProcessPack.Parser, new[]{ "GameProcess", "ActionUser", "SmallBlinder", "BigBlinder", "BigBlindValue", "TotalBetChips" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ComputerPack), global::TexasHoldemProtobuf.ComputerPack.Parser, new[]{ "NickName", "Avatar", "HandPoker", "BetChips", "Chips" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameProcessPack), global::TexasHoldemProtobuf.GameProcessPack.Parser, new[]{ "GameProcess", "ActionUser", "SmallBlinder", "BigBlinder", "BigBlindValue", "TotalBetChips", "Result", "HandPoker", "BetShips", "UserChips" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.IntList), global::TexasHoldemProtobuf.IntList.Parser, new[]{ "Values" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1452,6 +1464,8 @@ namespace TexasHoldemProtobuf {
     public ComputerPack(ComputerPack other) : this() {
       nickName_ = other.nickName_;
       avatar_ = other.avatar_;
+      handPoker_ = other.handPoker_.Clone();
+      betChips_ = other.betChips_;
       chips_ = other.chips_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -1489,6 +1503,33 @@ namespace TexasHoldemProtobuf {
       }
     }
 
+    /// <summary>Field number for the "handPoker" field.</summary>
+    public const int HandPokerFieldNumber = 5;
+    private static readonly pb::FieldCodec<int> _repeated_handPoker_codec
+        = pb::FieldCodec.ForInt32(42);
+    private readonly pbc::RepeatedField<int> handPoker_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///手牌
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> HandPoker {
+      get { return handPoker_; }
+    }
+
+    /// <summary>Field number for the "betChips" field.</summary>
+    public const int BetChipsFieldNumber = 4;
+    private string betChips_ = "";
+    /// <summary>
+    ///下注籌碼
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string BetChips {
+      get { return betChips_; }
+      set {
+        betChips_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "chips" field.</summary>
     public const int ChipsFieldNumber = 3;
     private string chips_ = "";
@@ -1518,6 +1559,8 @@ namespace TexasHoldemProtobuf {
       }
       if (NickName != other.NickName) return false;
       if (Avatar != other.Avatar) return false;
+      if(!handPoker_.Equals(other.handPoker_)) return false;
+      if (BetChips != other.BetChips) return false;
       if (Chips != other.Chips) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1527,6 +1570,8 @@ namespace TexasHoldemProtobuf {
       int hash = 1;
       if (NickName.Length != 0) hash ^= NickName.GetHashCode();
       if (Avatar.Length != 0) hash ^= Avatar.GetHashCode();
+      hash ^= handPoker_.GetHashCode();
+      if (BetChips.Length != 0) hash ^= BetChips.GetHashCode();
       if (Chips.Length != 0) hash ^= Chips.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1553,6 +1598,11 @@ namespace TexasHoldemProtobuf {
         output.WriteRawTag(26);
         output.WriteString(Chips);
       }
+      if (BetChips.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(BetChips);
+      }
+      handPoker_.WriteTo(output, _repeated_handPoker_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1566,6 +1616,10 @@ namespace TexasHoldemProtobuf {
       }
       if (Avatar.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Avatar);
+      }
+      size += handPoker_.CalculateSize(_repeated_handPoker_codec);
+      if (BetChips.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(BetChips);
       }
       if (Chips.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Chips);
@@ -1586,6 +1640,10 @@ namespace TexasHoldemProtobuf {
       }
       if (other.Avatar.Length != 0) {
         Avatar = other.Avatar;
+      }
+      handPoker_.Add(other.handPoker_);
+      if (other.BetChips.Length != 0) {
+        BetChips = other.BetChips;
       }
       if (other.Chips.Length != 0) {
         Chips = other.Chips;
@@ -1611,6 +1669,15 @@ namespace TexasHoldemProtobuf {
           }
           case 26: {
             Chips = input.ReadString();
+            break;
+          }
+          case 34: {
+            BetChips = input.ReadString();
+            break;
+          }
+          case 42:
+          case 40: {
+            handPoker_.AddEntriesFrom(input, _repeated_handPoker_codec);
             break;
           }
         }
@@ -1653,6 +1720,10 @@ namespace TexasHoldemProtobuf {
       bigBlinder_ = other.bigBlinder_;
       bigBlindValue_ = other.bigBlindValue_;
       totalBetChips_ = other.totalBetChips_;
+      result_ = other.result_.Clone();
+      handPoker_ = other.handPoker_.Clone();
+      betShips_ = other.betShips_.Clone();
+      userChips_ = other.userChips_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1703,7 +1774,7 @@ namespace TexasHoldemProtobuf {
       }
     }
 
-    /// <summary>Field number for the "BigBlinder" field.</summary>
+    /// <summary>Field number for the "bigBlinder" field.</summary>
     public const int BigBlinderFieldNumber = 4;
     private string bigBlinder_ = "";
     /// <summary>
@@ -1745,6 +1816,58 @@ namespace TexasHoldemProtobuf {
       }
     }
 
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 7;
+    private static readonly pb::FieldCodec<int> _repeated_result_codec
+        = pb::FieldCodec.ForInt32(58);
+    private readonly pbc::RepeatedField<int> result_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///牌面結果
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Result {
+      get { return result_; }
+    }
+
+    /// <summary>Field number for the "handPoker" field.</summary>
+    public const int HandPokerFieldNumber = 8;
+    private static readonly pbc::MapField<string, global::TexasHoldemProtobuf.IntList>.Codec _map_handPoker_codec
+        = new pbc::MapField<string, global::TexasHoldemProtobuf.IntList>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::TexasHoldemProtobuf.IntList.Parser), 66);
+    private readonly pbc::MapField<string, global::TexasHoldemProtobuf.IntList> handPoker_ = new pbc::MapField<string, global::TexasHoldemProtobuf.IntList>();
+    /// <summary>
+    ///所有玩家手牌(暱稱, 手牌)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::MapField<string, global::TexasHoldemProtobuf.IntList> HandPoker {
+      get { return handPoker_; }
+    }
+
+    /// <summary>Field number for the "betShips" field.</summary>
+    public const int BetShipsFieldNumber = 9;
+    private static readonly pbc::MapField<string, string>.Codec _map_betShips_codec
+        = new pbc::MapField<string, string>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForString(18, ""), 74);
+    private readonly pbc::MapField<string, string> betShips_ = new pbc::MapField<string, string>();
+    /// <summary>
+    ///所有玩家下注籌碼(暱稱, 下注)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::MapField<string, string> BetShips {
+      get { return betShips_; }
+    }
+
+    /// <summary>Field number for the "userChips" field.</summary>
+    public const int UserChipsFieldNumber = 10;
+    private static readonly pbc::MapField<string, string>.Codec _map_userChips_codec
+        = new pbc::MapField<string, string>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForString(18, ""), 82);
+    private readonly pbc::MapField<string, string> userChips_ = new pbc::MapField<string, string>();
+    /// <summary>
+    ///所有玩家遊戲中籌碼(暱稱, 籌碼)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::MapField<string, string> UserChips {
+      get { return userChips_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GameProcessPack);
@@ -1764,6 +1887,10 @@ namespace TexasHoldemProtobuf {
       if (BigBlinder != other.BigBlinder) return false;
       if (BigBlindValue != other.BigBlindValue) return false;
       if (TotalBetChips != other.TotalBetChips) return false;
+      if(!result_.Equals(other.result_)) return false;
+      if (!HandPoker.Equals(other.HandPoker)) return false;
+      if (!BetShips.Equals(other.BetShips)) return false;
+      if (!UserChips.Equals(other.UserChips)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1776,6 +1903,10 @@ namespace TexasHoldemProtobuf {
       if (BigBlinder.Length != 0) hash ^= BigBlinder.GetHashCode();
       if (BigBlindValue.Length != 0) hash ^= BigBlindValue.GetHashCode();
       if (TotalBetChips.Length != 0) hash ^= TotalBetChips.GetHashCode();
+      hash ^= result_.GetHashCode();
+      hash ^= HandPoker.GetHashCode();
+      hash ^= BetShips.GetHashCode();
+      hash ^= UserChips.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1813,6 +1944,10 @@ namespace TexasHoldemProtobuf {
         output.WriteRawTag(50);
         output.WriteString(TotalBetChips);
       }
+      result_.WriteTo(output, _repeated_result_codec);
+      handPoker_.WriteTo(output, _map_handPoker_codec);
+      betShips_.WriteTo(output, _map_betShips_codec);
+      userChips_.WriteTo(output, _map_userChips_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1839,6 +1974,10 @@ namespace TexasHoldemProtobuf {
       if (TotalBetChips.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(TotalBetChips);
       }
+      size += result_.CalculateSize(_repeated_result_codec);
+      size += handPoker_.CalculateSize(_map_handPoker_codec);
+      size += betShips_.CalculateSize(_map_betShips_codec);
+      size += userChips_.CalculateSize(_map_userChips_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1868,6 +2007,10 @@ namespace TexasHoldemProtobuf {
       if (other.TotalBetChips.Length != 0) {
         TotalBetChips = other.TotalBetChips;
       }
+      result_.Add(other.result_);
+      handPoker_.Add(other.handPoker_);
+      betShips_.Add(other.betShips_);
+      userChips_.Add(other.userChips_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1901,6 +2044,148 @@ namespace TexasHoldemProtobuf {
           }
           case 50: {
             TotalBetChips = input.ReadString();
+            break;
+          }
+          case 58:
+          case 56: {
+            result_.AddEntriesFrom(input, _repeated_result_codec);
+            break;
+          }
+          case 66: {
+            handPoker_.AddEntriesFrom(input, _map_handPoker_codec);
+            break;
+          }
+          case 74: {
+            betShips_.AddEntriesFrom(input, _map_betShips_codec);
+            break;
+          }
+          case 82: {
+            userChips_.AddEntriesFrom(input, _map_userChips_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///工具類
+  /// </summary>
+  public sealed partial class IntList : pb::IMessage<IntList> {
+    private static readonly pb::MessageParser<IntList> _parser = new pb::MessageParser<IntList>(() => new IntList());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<IntList> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::TexasHoldemProtobuf.TexasHoldemProtobufReflection.Descriptor.MessageTypes[7]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public IntList() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public IntList(IntList other) : this() {
+      values_ = other.values_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public IntList Clone() {
+      return new IntList(this);
+    }
+
+    /// <summary>Field number for the "values" field.</summary>
+    public const int ValuesFieldNumber = 1;
+    private static readonly pb::FieldCodec<int> _repeated_values_codec
+        = pb::FieldCodec.ForInt32(10);
+    private readonly pbc::RepeatedField<int> values_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Values {
+      get { return values_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as IntList);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(IntList other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!values_.Equals(other.values_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= values_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      values_.WriteTo(output, _repeated_values_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      size += values_.CalculateSize(_repeated_values_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(IntList other) {
+      if (other == null) {
+        return;
+      }
+      values_.Add(other.values_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10:
+          case 8: {
+            values_.AddEntriesFrom(input, _repeated_values_codec);
             break;
           }
         }

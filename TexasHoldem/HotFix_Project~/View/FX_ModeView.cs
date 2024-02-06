@@ -82,13 +82,14 @@ namespace HotFix_Project
         private static void CheckResources(long size)
         {
             Debug.Log($"下載資源大小:" + size);
+            double megabytes = (double)size / (1024 * 1024);
             DownLoadProgress_Obj.SetActive(true);
 
             UIManager.Instance.ShowConfirmView(() =>
             {
                 ABManager.Instance.DownloadAB("holdem", DownloadProgress);
             },
-            $"下載熱更資源: {(size / 1000.0f).ToString("F1")} M"
+            $"下載熱更資源: {megabytes.ToString("F2")} M"
             );
         }
 

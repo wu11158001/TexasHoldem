@@ -29,13 +29,16 @@ namespace TexasHoldemServer.Servers
 
         public class UserInfoData
         {
-            public string Account { get; set; }
-            public string Password { get; set; }
-            public string NickName { get; set; }
-            public string Avatar { get; set; }
-            public string Cash { get; set; }
-            public string Chips { get; set; }
+            public string Account { get; set; }         //帳號
+            public string Password { get; set; }        //密碼
+            public string NickName { get; set; }        //暱稱
+            public string Avatar { get; set; }          //頭像
+            public string Cash { get; set; }            //金幣
+            public string Chips { get; set; }           //遊戲籌碼
+            public string BetChips { get; set; }        //下注籌碼
+
             public int GameSeat { get; set; }
+            public int[] Pokers { get; set; }
         }
         public UserInfoData UserInfo { get; set; }
 

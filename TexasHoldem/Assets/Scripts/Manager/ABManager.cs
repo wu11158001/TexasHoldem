@@ -236,9 +236,35 @@ public class ABManager : UnitySingleton<ABManager>
     /// <param name="callBack"></param>
     async public void GetABSize(string abName, UnityAction<long> callBack)
     {
-        UnityWebRequest webRequest = UnityWebRequest.Get(downloadUrl + abName);
+        long localABSize = 0;
+        UnityWebRequest webRequest;
+        UnityWebRequestAsyncOperation asyncOperation;
 
-        var asyncOperation = webRequest.SendWebRequest();
+        //本地資源大小
+        string path = Path.Combine(Application.streamingAssetsPath, "AB", abName);
+        if (File.Exists(path))
+        {
+            webRequest = UnityWebRequest.Get(Path.Combine(Application.streamingAssetsPath, "AB", abName));
+            asyncOperation = webRequest.SendWebRequest();
+            while (!asyncOperation.isDone)
+            {
+                await Task.Yield();
+            }
+
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                localABSize = (long)webRequest.downloadedBytes;
+                Debug.Log($"本地資源大小:{localABSize}");
+            }
+            else
+            {
+                Debug.LogError($"{abName} 檢查本地AB包大小失敗: {webRequest.error}");
+            }
+        }
+
+        //遠端資源大小
+        webRequest = UnityWebRequest.Get(downloadUrl + abName);
+        asyncOperation = webRequest.SendWebRequest();
         while (!asyncOperation.isDone)
         {
             await Task.Yield();
@@ -247,11 +273,12 @@ public class ABManager : UnitySingleton<ABManager>
         if (webRequest.result == UnityWebRequest.Result.Success)
         {
             long abSize = (long)webRequest.downloadedBytes;
-            callBack(abSize);
+            Debug.Log($"遠端資源大小:{abSize}");
+            callBack(System.Math.Abs(abSize - localABSize));
         }
         else
         {
-            Debug.LogError($"{abName} 檢查AB包大小失敗: {webRequest.error}");
+            Debug.LogError($"{abName} 檢查遠端AB包大小失敗: {webRequest.error}");
         }
     }
 

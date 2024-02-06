@@ -48,8 +48,20 @@ namespace TexasHoldemServer.Tools
         public static string StringSubtract(string v1, string v2)
         {
             StringBuilder sb = new StringBuilder();
+
+            // 將兩個字串補零至相同長度
+            int maxLength = Math.Max(v1.Length, v2.Length);
+            v1 = v1.PadLeft(maxLength, '0');
+            v2 = v2.PadLeft(maxLength, '0');
+
             Subtract(v1.Length - 1, v2.Length - 1, false);
-            return sb.ToString();
+            // 移除前導的零
+            int startIdx = 0;
+            while (startIdx < sb.Length - 1 && sb[startIdx] == '0')
+            {
+                startIdx++;
+            }
+            return sb.ToString().Substring(startIdx);
 
             // 相減
             void Subtract(int index1, int index2, bool isBorrow)
@@ -59,8 +71,8 @@ namespace TexasHoldemServer.Tools
                     return;
                 }
 
-                int num1 = index1 >= 0 ? Convert.ToInt32(v1[index1].ToString()) : 0;
-                int num2 = index2 >= 0 ? Convert.ToInt32(v2[index2].ToString()) : 0;
+                int num1 = Convert.ToInt32(v1[index1].ToString());
+                int num2 = Convert.ToInt32(v2[index2].ToString());
 
                 int difference = num1 - (num2 + (isBorrow ? 1 : 0));
 

@@ -78,23 +78,37 @@ namespace TexasHoldemServer.Servers
         }
 
         /// <summary>
+        /// 進入遊戲初始數值
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="initChips"></param>
+        /// <param name="srat"></param>
+        private void InitGameInfo(Client client, string initChips, int srat)
+        {
+            client.UserInfo.Chips = initChips;
+            client.UserInfo.GameSeat = srat;
+            client.UserInfo.Pokers = new int[2];
+            client.UserInfo.BetChips = "0";
+        }
+
+        /// <summary>
         /// 快速開局
         /// </summary>
         /// <param name="client"></param>
         /// <param name="pack"></param>
-        /// <param name="initBlind"></param>
+        /// <param name="initChips"></param>
         /// <param name="bigBlindValue"></param>
         /// <returns></returns>
-        public MainPack QuickJoinRoom(Client client, MainPack pack, string initBlind, string bigBlindValue)
+        public MainPack QuickJoinRoom(Client client, MainPack pack, string initChips, string bigBlindValue)
         {
             foreach (Room r in roomList)
             {
                 if (r.GetRoomInfo.CurrCount < r.GetRoomInfo.MaxCount)
                 {
+                    InitGameInfo(client, initChips, r.GetSeatInfo());
                     r.Join(client);
                     pack.RoomPack.Add(r.GetRoomInfo);
 
-                    client.UserInfo.Chips = initBlind;
                     foreach (UserInfoPack p in r.GetRoomUserInfo())
                     {
                         pack.UserInfoPack.Add(p);
@@ -112,7 +126,7 @@ namespace TexasHoldemServer.Servers
             }
 
             //沒有找到房間創建房間
-            return CreateRoom(client, pack, initBlind, bigBlindValue);
+            return CreateRoom(client, pack, initChips, bigBlindValue);
         }
 
         /// <summary>
@@ -135,8 +149,8 @@ namespace TexasHoldemServer.Servers
                 Room room = new Room(this, client, roomPack, initChips, bigBlindValue);
                 roomList.Add(room);
 
-                client.UserInfo.Chips = initChips;
-                client.UserInfo.GameSeat = 0;
+                InitGameInfo(client, initChips, 0);
+
                 foreach (UserInfoPack p in room.GetRoomUserInfo())
                 {
                     pack.UserInfoPack.Add(p);
@@ -199,8 +213,7 @@ namespace TexasHoldemServer.Servers
                     if (r.GetRoomInfo.CurrCount < r.GetRoomInfo.MaxCount)
                     {
                         //可以加入房間
-                        client.UserInfo.Chips = initChips;
-                        client.UserInfo.GameSeat = r.GetSeatInfo();
+                        InitGameInfo(client, initChips, r.GetSeatInfo());
                         r.Join(client);
 
                         pack.RoomPack.Add(r.GetRoomInfo);

@@ -13,4 +13,57 @@ MonoBehaviour:
   m_Name: PokerList
   m_EditorClassIdentifier: 
   sprites:
-    spritesList: []
+    spritesList:
+    - {fileID: 21300000, guid: de4af5c89f69c8e4092135de38d709c4, type: 3}
+    - {fileID: 21300000, guid: ac6e44781f40ebc44a93777df2f4c37b, type: 3}
+    - {fileID: 21300000, guid: 812386428dbdebf4faa7bc9a3f440496, type: 3}
+    - {fileID: 21300000, guid: 4c280b0a2efd404488b2b5bb88a67b85, type: 3}
+    - {fileID: 21300000, guid: 243249c0c6a087a43b27ce26a9f72b0b, type: 3}
+    - {fileID: 21300000, guid: 52e16ce8db7951b4bbf60e4c4f14bfec, type: 3}
+    - {fileID: 21300000, guid: 78206359847c00f43a6f3e9af32be054, type: 3}
+    - {fileID: 21300000, guid: 6861daecc00dec54aacfdb7195ef0e21, type: 3}
+    - {fileID: 21300000, guid: 946dc6769e7c91741ad228a2d009db24, type: 3}
+    - {fileID: 21300000, guid: 1164a5bfa49007545a484ae5a5849e7f, type: 3}
+    - {fileID: 21300000, guid: bbc8e3d32d8baa449be2c269183eeba5, type: 3}
+    - {fileID: 21300000, guid: 154947ac621e77549a03653f118cc44a, type: 3}
+    - {fileID: 21300000, guid: b2d7d109b20ac1a40837e6d0af7085cb, type: 3}
+    - {fileID: 21300000, guid: 59473f65c49854142ac090023e3a5e8d, type: 3}
+    - {fileID: 21300000, guid: 3aa2275fa01afa24a99caf9667f892c7, type: 3}
+    - {fileID: 21300000, guid: 1f37b7754b7e80f43815ca3b5451f26b, type: 3}
+    - {fileID: 21300000, guid: 5e5bd2c07dd071a4a9d64c427062733a, type: 3}
+    - {fileID: 21300000, guid: c7845f5ba528a38419f53fdbb5208d65, type: 3}
+    - {fileID: 21300000, guid: fa1fe030994f4fd4b90c91ae49607c95, type: 3}
+    - {fileID: 21300000, guid: a8e8071e465824e43b9b08106797af95, type: 3}
+    - {fileID: 21300000, guid: 8fd5bb566f8ffed4d89a45c54bb7d5e1, type: 3}
+    - {fileID: 21300000, guid: 122128a9c9c5de14c9f8a812b67556c5, type: 3}
+    - {fileID: 21300000, guid: 30f37ada0fdc1524caa24de72a2e9af3, type: 3}
+    - {fileID: 21300000, guid: 8a6899be38cdb3c4e8d33d10c9877586, type: 3}
+    - {fileID: 21300000, guid: 76a87ab534bffb642a863765c9cfbacd, type: 3}
+    - {fileID: 21300000, guid: 2226e184d054c1a49a39e3b1f6e2e59a, type: 3}
+    - {fileID: 21300000, guid: c5d25302245957940b5063fb4ca5c65b, type: 3}
+    - {fileID: 21300000, guid: 0d550a9c176803544b13bb33de53172f, type: 3}
+    - {fileID: 21300000, guid: cab588d94de3be44ebab083d49c98d55, type: 3}
+    - {fileID: 21300000, guid: 1fc16a5f26b69bf4b8fdd0376c5269ab, type: 3}
+    - {fileID: 21300000, guid: 123e73bf31fac654f9c458a9b9e1f0ff, type: 3}
+    - {fileID: 21300000, guid: 8de898c292c023048953750bfa479fe9, type: 3}
+    - {fileID: 21300000, guid: 7ca916d30aad5c44d9ea2ef9dec68924, type: 3}
+    - {fileID: 21300000, guid: 67da5f3349ad9c142bb20a4f64b6b184, type: 3}
+    - {fileID: 21300000, guid: 8ebc85cce2d2ac443877fabaa9a9c89c, type: 3}
+    - {fileID: 21300000, guid: 1bc14e78f1079d84791e8f7906816fac, type: 3}
+    - {fileID: 21300000, guid: 6af330bdae29309408fcc97a1e6ca5ee, type: 3}
+    - {fileID: 21300000, guid: e051ceb596a85db4496d0ad7b9b4f6ef, type: 3}
+    - {fileID: 21300000, guid: a7af30cd1678c0140bca7699c9be742d, type: 3}
+    - {fileID: 21300000, guid: 94e90a00e0b340d45bdc254a54f66846, type: 3}
+    - {fileID: 21300000, guid: 29112caca4244d24e93614d812c32246, type: 3}
+    - {fileID: 21300000, guid: ba844d28f3330d14d9e5c14335678319, type: 3}
+    - {fileID: 21300000, guid: 42beea122f2a032409b9f09344605a5d, type: 3}
+    - {fileID: 21300000, guid: 780e4ef4800387e4c9d5e4ef18c90491, type: 3}
+    - {fileID: 21300000, guid: d41cd549f45dd414ab663add1d7ad7e1, type: 3}
+    - {fileID: 21300000, guid: 96a0138bb70747b4d8d560efdb935071, type: 3}
+    - {fileID: 21300000, guid: ee52390b82fd7c14aa78a47a978cc7f2, type: 3}
+    - {fileID: 21300000, guid: 1bc07c407e821514c96f8f4ef0cd6b29, type: 3}
+    - {fileID: 21300000, guid: 7ce3f68d89efb194bb4525038ab8ab28, type: 3}
+    - {fileID: 21300000, guid: a36af19abbfa1c847957d2b63d64d6b0, type: 3}
+    - {fileID: 21300000, guid: 5f854583136723241acdcc0409d190f4, type: 3}
+    - {fileID: 21300000, guid: eecc9097f90a2fb4ab459961998c42f8, type: 3}
+    - {fileID: 21300000, guid: cdef2885f33732746a2a8e3aeb8aa651, type: 3}
