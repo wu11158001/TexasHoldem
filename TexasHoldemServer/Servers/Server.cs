@@ -83,8 +83,9 @@ namespace TexasHoldemServer.Servers
         /// <param name="client"></param>
         /// <param name="pack"></param>
         /// <param name="initBlind"></param>
+        /// <param name="bigBlindValue"></param>
         /// <returns></returns>
-        public MainPack QuickJoinRoom(Client client, MainPack pack, string initBlind)
+        public MainPack QuickJoinRoom(Client client, MainPack pack, string initBlind, string bigBlindValue)
         {
             foreach (Room r in roomList)
             {
@@ -111,7 +112,7 @@ namespace TexasHoldemServer.Servers
             }
 
             //沒有找到房間創建房間
-            return CreateRoom(client, pack, initBlind);
+            return CreateRoom(client, pack, initBlind, bigBlindValue);
         }
 
         /// <summary>
@@ -120,8 +121,9 @@ namespace TexasHoldemServer.Servers
         /// <param name="client"></param>
         /// <param name="pack"></param>
         /// <param name="initChips"></param>
+        /// <param name="bigBlindValue"></param>
         /// <returns></returns>
-        private MainPack CreateRoom(Client client, MainPack pack, string initChips)
+        private MainPack CreateRoom(Client client, MainPack pack, string initChips, string bigBlindValue)
         {
             try
             {
@@ -130,10 +132,11 @@ namespace TexasHoldemServer.Servers
                 roomPack.MaxCount = 4;
                 pack.RoomPack.Add(roomPack);
 
-                Room room = new Room(this, client, roomPack, initChips);
+                Room room = new Room(this, client, roomPack, initChips, bigBlindValue);
                 roomList.Add(room);
 
                 client.UserInfo.Chips = initChips;
+                client.UserInfo.GameSeat = 0;
                 foreach (UserInfoPack p in room.GetRoomUserInfo())
                 {
                     pack.UserInfoPack.Add(p);
@@ -197,6 +200,7 @@ namespace TexasHoldemServer.Servers
                     {
                         //可以加入房間
                         client.UserInfo.Chips = initChips;
+                        client.UserInfo.GameSeat = r.GetSeatInfo();
                         r.Join(client);
 
                         pack.RoomPack.Add(r.GetRoomInfo);

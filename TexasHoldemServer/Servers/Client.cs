@@ -35,6 +35,7 @@ namespace TexasHoldemServer.Servers
             public string Avatar { get; set; }
             public string Cash { get; set; }
             public string Chips { get; set; }
+            public int GameSeat { get; set; }
         }
         public UserInfoData UserInfo { get; set; }
 

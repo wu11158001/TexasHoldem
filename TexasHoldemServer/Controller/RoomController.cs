@@ -50,7 +50,7 @@ namespace TexasHoldemServer.Controller
         {
             string initChips = GetInitChips(client, "50");
 
-            return server.QuickJoinRoom(client, pack, initChips);
+            return server.QuickJoinRoom(client, pack, initChips, "50");
         }
 
         /// <summary>

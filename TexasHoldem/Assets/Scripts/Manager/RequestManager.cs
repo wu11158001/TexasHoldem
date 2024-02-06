@@ -26,12 +26,15 @@ public class RequestManager : UnitySingleton<RequestManager>
     /// <param name="callback"></param>
     public void Send(MainPack pack, UnityAction<MainPack> callback)
     {
-        if (requsetDic.ContainsKey(pack.ActionCode))
+        if (pack.SendModeCode != SendModeCode.RoomBroadcast)
         {
-            return;
-        }
+            if (requsetDic.ContainsKey(pack.ActionCode))
+            {
+                return;
+            }
+            requsetDic.Add(pack.ActionCode, callback);
+        }        
 
-        requsetDic.Add(pack.ActionCode, callback);
         ClientManager.Instance.Send(pack);
     }
 

@@ -16,6 +16,19 @@ namespace TexasHoldemServer.Controller
         }
 
         /// <summary>
+        /// 開始遊戲
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        /// <returns></returns>
+        public MainPack StartGame(Server server, Client client, MainPack pack)
+        {
+            client.GetRoom.StartGame(pack);
+            return null;
+        }
+
+        /// <summary>
         /// 更新房間玩家訊息
         /// </summary>
         /// <param name="server"></param>
