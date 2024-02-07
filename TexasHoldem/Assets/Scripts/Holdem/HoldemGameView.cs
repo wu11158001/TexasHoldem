@@ -10,6 +10,7 @@ public class HoldemGameView : BaseView
         RequestManager.Instance.RegisterBroadcast(ActionCode.UpdateRoomUserInfo, ReciveBroadcast);
         RequestManager.Instance.RegisterBroadcast(ActionCode.OtherUserExitRoom, ReciveBroadcast);
         RequestManager.Instance.RegisterBroadcast(ActionCode.GameStage, ReciveBroadcast);
+        RequestManager.Instance.RegisterBroadcast(ActionCode.UserGameAction, ReciveBroadcast);
 
         base.Awake();
     }

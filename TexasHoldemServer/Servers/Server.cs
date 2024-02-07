@@ -87,7 +87,7 @@ namespace TexasHoldemServer.Servers
         {
             client.UserInfo.Chips = initChips;
             client.UserInfo.GameSeat = srat;
-            client.UserInfo.Pokers = new int[2];
+            client.UserInfo.handPoker = new int[2];
             client.UserInfo.BetChips = "0";
         }
 

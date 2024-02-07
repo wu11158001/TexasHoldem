@@ -52,5 +52,18 @@ namespace TexasHoldemServer.Controller
         {
             return server.ExitRoom(client, pack);
         }
+
+        /// <summary>
+        /// 玩家遊戲行動
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        /// <returns></returns>
+        public MainPack UserGameAction(Server server, Client client, MainPack pack)
+        {
+            client.GetRoom.SetUserGameState(client, pack);
+            return null;
+        }
     }
 }
