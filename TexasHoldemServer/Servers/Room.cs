@@ -19,6 +19,8 @@ namespace TexasHoldemServer.Servers
 
         private const string computerName = "-1";
 
+        private int actionCount = 0;
+
         CancellationTokenSource cts;
         CancellationToken token;
 
@@ -44,6 +46,7 @@ namespace TexasHoldemServer.Servers
             roomState.bigBlindValue = bigBlindValue;
             roomState.result = new int[5];
             roomState.handPoker = new Dictionary<string, int[]>();
+            roomState.winners = new List<string>();
         }
 
         //房間訊息
@@ -142,16 +145,17 @@ namespace TexasHoldemServer.Servers
         /// <param name="client"></param>
         public void Exit(Server server, Client client)
         {
-            //房間只剩1人關閉房間
-            if (clientList.Count == 1)
+            clientList.Remove(client);
+            client.GetRoom = null;
+
+            //關閉房間
+            if (clientList.Count == 0)
             {
+                cts?.Cancel();
                 client.GetRoom = null;
                 server.RemoveRoom(this);
                 return;
             }
-
-            clientList.Remove(client);
-            client.GetRoom = null;
 
             MainPack pack = new MainPack();
             pack.ActionCode = ActionCode.OtherUserExitRoom;
@@ -209,6 +213,7 @@ namespace TexasHoldemServer.Servers
             public int smallBlindIndex;                                         //小盲玩家編號
             public string currBet;                                              //當前下注籌碼
             public bool isFirstActioner;                                        //是否首位行動玩家
+            public List<string> winners;                                        //贏家
         }
         public RoomState roomState;
 
@@ -258,6 +263,7 @@ namespace TexasHoldemServer.Servers
             gameProcessPack.TotalBetChips = roomState.totalBetChips;
             gameProcessPack.Result.AddRange(roomState.result);
             gameProcessPack.CurrBet = roomState.currBet;
+            gameProcessPack.Winners.AddRange(roomState.winners);
 
             foreach (var poker in roomState.handPoker)
             {
@@ -278,18 +284,10 @@ namespace TexasHoldemServer.Servers
         /// <summary>
         /// 開始遊戲
         /// </summary>
-        /// <param name="pack"></param>
         /// <returns></returns>
-        async public void StartGame(MainPack pack)
+        async public void StartGame()
         {
             //選擇大小盲
-            roomState.gameProcess = GameProcess.SetBlind;
-            roomState.actionUser = "-1";
-            roomState.smallBlindIndex = -1;
-            roomState.currBet = "0";
-            roomState.isFirstActioner = true;
-            roomState.totalBetChips = Utils.StringAddition((Convert.ToInt32(roomState.bigBlindValue) / 2).ToString(), roomState.bigBlindValue);
-
             SetBlinder();
             BroadcastGameStage();
 
@@ -309,6 +307,22 @@ namespace TexasHoldemServer.Servers
         /// </summary>
         private void SetBlinder()
         {
+            //初始化
+            ComputerInfo.BetChips = "0";
+            foreach (var user in clientList)
+            {
+                user.UserInfo.BetChips = "0";
+            }
+
+            actionCount = 2;
+            roomState.gameProcess = GameProcess.SetBlind;
+            roomState.actionUser = "-1";
+            roomState.smallBlindIndex = -1;
+            roomState.currBet = "0";
+            roomState.isFirstActioner = true;
+            roomState.winners.Clear();
+            roomState.totalBetChips = Utils.StringAddition((Convert.ToInt32(roomState.bigBlindValue) / 2).ToString(), roomState.bigBlindValue);
+
             //小盲玩家
             roomState.smallBlindIndex = roomState.smallBlindIndex + 1 >= clientList.Count ? -1 : roomState.smallBlindIndex + 1;
             roomState.smallBlinder = roomState.smallBlindIndex == -1 ? computerName : clientList[roomState.smallBlindIndex].UserInfo.NickName;
@@ -369,6 +383,7 @@ namespace TexasHoldemServer.Servers
         {
             int poker = 0;
             roomState.result = new int[5];
+            roomState.handPoker.Clear();
 
             //52張撲克
             List<int> pokerList = new List<int>();
@@ -426,7 +441,14 @@ namespace TexasHoldemServer.Servers
         /// 設定下位行動玩家
         /// </summary>
         async private void SetNextActionUser()
-        {           
+        {
+            if (clientList.Count <= 0)
+            {
+                return;
+            }
+
+            actionCount++;
+
             //設定行動玩家
             if (roomState.actionUser == computerName)
             {
@@ -498,10 +520,8 @@ namespace TexasHoldemServer.Servers
                 if (await IsNextRound() == false)
                 {
                     SetNextActionUser();
-                    BroadcastGameStage();
+                    SendActioner();
                 }
-                /*SetNextActionUser();
-                SendActioner();*/
             }
         }
 
@@ -515,8 +535,14 @@ namespace TexasHoldemServer.Servers
             cts?.Cancel();
 
             string betValue = pack.GameActionPack.BetValue;
-            string subtractCash = Utils.StringSubtract(betValue, client.UserInfo.BetChips);
-            string cash = Utils.StringSubtract(client.UserInfo.Cash, subtractCash);
+            string subtractCash = (Math.Abs(Convert.ToInt32( Utils.StringSubtract(betValue, client.UserInfo.BetChips)))).ToString();
+
+            Dictionary<string, string> dataDic = client.GetMySql.GetData(client.GetMySqlConnection,
+                                                                         "userdata", "account",
+                                                                         client.UserInfo.Account,
+                                                                         new string[] { "cash" });
+
+            string cash = Utils.StringSubtract(dataDic["cash"], subtractCash);
 
             client.UserInfo.Chips = Utils.StringSubtract(client.UserInfo.Chips, subtractCash);
             client.UserInfo.BetChips = betValue;
@@ -559,6 +585,11 @@ namespace TexasHoldemServer.Servers
         /// <returns></returns>
         private void SendActioner()
         {
+            if (clientList.Count <= 0)
+            {
+                return;
+            }
+
             cts = new CancellationTokenSource();
             token = cts.Token;
 
@@ -586,7 +617,7 @@ namespace TexasHoldemServer.Servers
                         return;
                     }
                 }
-            });
+            }, token);
         }
 
         /// <summary>
@@ -595,12 +626,19 @@ namespace TexasHoldemServer.Servers
         /// <returns></returns>
         async private Task<bool> IsNextRound()
         {
+            Console.WriteLine($"已行動人數:{actionCount}");
+            if (actionCount < clientList.Count + 1)
+            {
+                return false;
+            }
+
             string compareBet = ComputerInfo.BetChips;
             bool isNext = clientList.All(user => user.UserInfo.BetChips == compareBet);
             Console.WriteLine($"進入下階段:{isNext} : 當前:{roomState.gameProcess}");
 
             if (isNext)
             {
+                actionCount = 0;
                 roomState.isFirstActioner = true;
 
                 //當前狀態
@@ -638,14 +676,62 @@ namespace TexasHoldemServer.Servers
                         SetNextActionUser();
                         BroadcastGameStage();
                         break;
-                
-                    //河牌
+
+                    //遊戲結果
                     case GameProcess.River:
+                        roomState.gameProcess = GameProcess.GameResult;
+                        JudgeGameResult();
+                        BroadcastGameStage();
+
+                        await Task.Delay(5000);
+
+                        StartGame();
                         break;
                 }
             }
 
             return isNext;
+        }
+
+        /// <summary>
+        /// 判斷遊戲結果
+        /// </summary>
+        private void JudgeGameResult()
+        {
+            roomState.winners.Add(clientList[0].UserInfo.NickName);
+
+            int winChips = Convert.ToInt32(roomState.totalBetChips) / roomState.winners.Count;
+            foreach (var winner in roomState.winners)
+            {
+                for (int i = 0; i < clientList.Count; i++)
+                {
+                    if (clientList[i].UserInfo.NickName == winner)
+                    {
+                        //玩家獲勝
+                        Dictionary<string, string> dataDic = clientList[i].GetMySql.GetData(clientList[i].GetMySqlConnection, 
+                                                                                            "userdata", "account", 
+                                                                                            clientList[i].UserInfo.Account,
+                                                                                            new string[] { "cash"});
+                     
+                        string cash = Utils.StringAddition(dataDic["cash"], winChips.ToString());
+                        //修改資料庫金幣
+                        bool result = clientList[i].GetMySql.ReviseData(clientList[i].GetMySqlConnection,
+                                             "userdata",
+                                             "account",
+                                             clientList[i].UserInfo.Account,
+                                             new string[] { "cash" },
+                                             new string[] { cash }
+                                             );
+                        clientList[i].UserInfo.Chips = Utils.StringAddition(clientList[i].UserInfo.Chips, winChips.ToString());
+                        break;
+                    }
+                    else if(winner == computerName)
+                    {
+                        //電腦獲勝
+                        ComputerInfo.Chips = Utils.StringAddition(ComputerInfo.Chips, winChips.ToString());
+                    }
+                }
+            }            
         }
 
         /// <summary>

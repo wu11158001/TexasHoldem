@@ -115,24 +115,7 @@ namespace HotFix_Project
             AddBetValue_Tr.gameObject.SetActive(false);
             thisView.view.SendRequest(pack);
 
-            //初始狀態
-            BetChipsSample.gameObject.SetActive(false);
-            OperateButton_Tr.gameObject.SetActive(false);
-            foreach (var item in handPokerDic.Values)
-            {
-                item.Item1.gameObject.SetActive(false);
-            }
-            foreach (var item in betShipsDic)
-            {
-                item.Value.Item1.gameObject.SetActive(false);
-            }
-            foreach (var item in userInfoDic)
-            {
-                item.Value.Item4.gameObject.SetActive(false);
-                item.Value.Item5.text = "";                
-                item.Value.Item6.text = "";
-                item.Value.Item6.gameObject.SetActive(false);
-            }
+            GameInit();
         }
 
         private static void Start()
@@ -184,6 +167,35 @@ namespace HotFix_Project
             {
                 AddChips_Txt.text = value.ToString();
             });
+        }
+
+        /// <summary>
+        /// 遊戲重製
+        /// </summary>
+        private static void GameInit()
+        {
+            BetChipsSample.gameObject.SetActive(false);
+            OperateButton_Tr.gameObject.SetActive(false);
+            foreach (var item in handPokerDic.Values)
+            {
+                item.Item1.gameObject.SetActive(false);
+            }
+            foreach (var item in betShipsDic)
+            {
+                item.Value.Item1.gameObject.SetActive(false);
+            }
+            foreach (var item in userInfoDic)
+            {
+                item.Value.Item4.gameObject.SetActive(false);
+                item.Value.Item5.text = "";
+                item.Value.Item6.text = "";
+                item.Value.Item6.gameObject.SetActive(false);
+            }
+
+            for (int i = 0; i < pokersPool.Length; i++)
+            {
+                pokersPool[i].sprite = null;
+            }
         }
 
         /// <summary>
@@ -252,6 +264,9 @@ namespace HotFix_Project
             {                
                 //選擇大小盲
                 case GameProcess.SetBlind:
+                    Debug.Log("選擇大小盲");
+                    GameInit();
+
                     int smallSeat = 0, bigSeat = 0;
                     //小盲
                     if (seatDic.ContainsKey(pack.GameProcessPack.SmallBlinder))
@@ -286,6 +301,7 @@ namespace HotFix_Project
 
                 //翻牌前
                 case GameProcess.Preflop:
+                    Debug.Log("翻牌前");
                     //手牌
                     foreach (var user in pack.GameProcessPack.HandPoker)
                     {
@@ -321,6 +337,7 @@ namespace HotFix_Project
 
                 //翻牌
                 case GameProcess.Flop:
+                    Debug.Log("翻牌");
                     for (int i = 0; i < 3; i++)
                     {
                         result = pack.GameProcessPack.Result[i];
@@ -330,14 +347,21 @@ namespace HotFix_Project
 
                 //轉排
                 case GameProcess.Turn:
+                    Debug.Log("轉排");
                     result = pack.GameProcessPack.Result[3];
                     pokersPool[3].sprite = pokerSpiteList[result];
                     break;
 
                 //河牌
                 case GameProcess.River:
+                    Debug.Log("河牌");
                     result = pack.GameProcessPack.Result[4];
                     pokersPool[4].sprite = pokerSpiteList[result];
+                    break;
+
+                //遊戲結果
+                case GameProcess.GameResult:
+                    Debug.Log($"遊戲結果:{pack.GameProcessPack.Winners[0]}");
                     break;
             }
         }
@@ -356,7 +380,7 @@ namespace HotFix_Project
             Pass_Btn.gameObject.SetActive(selfBet == currBet);
             Follow_Btn.gameObject.SetActive(!pack.ActionerPack.IsFirstActioner);
             Add_Btn.gameObject.SetActive(true);
-            Debug.Log($"當前下注:{pack.GameProcessPack.CurrBet}/我的下注:{betShipsDic[seatDic[localUserName]].Item2.text}");
+
             string minAddValue = pack.GameProcessPack.CurrBet == betShipsDic[seatDic[localUserName]].Item2.text ? 
                                  Utils.StringAddition(pack.GameProcessPack.CurrBet,  pack.GameProcessPack.BigBlindValue) :
                                  pack.GameProcessPack.CurrBet;

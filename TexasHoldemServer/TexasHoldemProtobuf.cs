@@ -50,7 +50,7 @@ namespace TexasHoldemProtobuf {
             "mwEKDENvbXB1dGVyUGFjaxIQCghuaWNrTmFtZRgBIAEoCRIOCgZhdmF0YXIY",
             "AiABKAkSEQoJaGFuZFBva2VyGAMgAygFEhAKCGJldENoaXBzGAQgASgJEg0K",
             "BWNoaXBzGAUgASgJEjUKCWdhbWVTdGF0ZRgGIAEoDjIiLlRleGFzSG9sZGVt",
-            "UHJvdG9idWYuVXNlckdhbWVTdGF0ZSLeBAoPR2FtZVByb2Nlc3NQYWNrEjUK",
+            "UHJvdG9idWYuVXNlckdhbWVTdGF0ZSLvBAoPR2FtZVByb2Nlc3NQYWNrEjUK",
             "C2dhbWVQcm9jZXNzGAEgASgOMiAuVGV4YXNIb2xkZW1Qcm90b2J1Zi5HYW1l",
             "UHJvY2VzcxISCgphY3Rpb25Vc2VyGAIgASgJEhQKDHNtYWxsQmxpbmRlchgD",
             "IAEoCRISCgpiaWdCbGluZGVyGAQgASgJEhUKDWJpZ0JsaW5kVmFsdWUYBSAB",
@@ -60,30 +60,31 @@ namespace TexasHoldemProtobuf {
             "ZXhhc0hvbGRlbVByb3RvYnVmLkdhbWVQcm9jZXNzUGFjay5CZXRTaGlwc0Vu",
             "dHJ5EkYKCXVzZXJDaGlwcxgKIAMoCzIzLlRleGFzSG9sZGVtUHJvdG9idWYu",
             "R2FtZVByb2Nlc3NQYWNrLlVzZXJDaGlwc0VudHJ5Eg8KB2N1cnJCZXQYCyAB",
-            "KAkaTgoOSGFuZFBva2VyRW50cnkSCwoDa2V5GAEgASgJEisKBXZhbHVlGAIg",
-            "ASgLMhwuVGV4YXNIb2xkZW1Qcm90b2J1Zi5JbnRMaXN0OgI4ARovCg1CZXRT",
-            "aGlwc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEaMAoO",
-            "VXNlckNoaXBzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4",
-            "ASJ1Cg5HYW1lQWN0aW9uUGFjaxIWCg5hY3Rpb25OaWNrTmFtZRgBIAEoCRI5",
-            "Cg11c2VyR2FtZVN0YXRlGAIgASgOMiIuVGV4YXNIb2xkZW1Qcm90b2J1Zi5V",
-            "c2VyR2FtZVN0YXRlEhAKCGJldFZhbHVlGAMgASgJIkwKDEFjdGlvbmVyUGFj",
-            "axIQCghhY3Rpb25lchgBIAEoCRIRCgljb3VudGRvd24YAiABKAISFwoPaXNG",
-            "aXJzdEFjdGlvbmVyGAMgASgIIhkKB0ludExpc3QSDgoGdmFsdWVzGAEgAygF",
-            "KjwKC1JlcXVlc3RDb2RlEg8KC1JlcXVlc3ROb25lEAASCAoEVXNlchABEggK",
-            "BFJvb20QAhIICgRHYW1lEAMqlgIKCkFjdGlvbkNvZGUSDgoKQWN0aW9uTm9u",
-            "ZRAAEgkKBUxvZ29uEAESCQoFTG9naW4QAhIKCgZMb2dvdXQQAxIPCgtHZXRV",
-            "c2VySW5mbxAEEgwKCEpvaW5Sb29tEAUSEQoNUXVpY2tKb2luUm9vbRAGEhYK",
-            "ElVwZGF0ZVJvb21Vc2VySW5mbxAHEg4KClVwZGF0ZVJvb20QCBIVChFPdGhl",
-            "clVzZXJFeGl0Um9vbRAJEgwKCEV4aXRSb29tEAoSEgoOUmV2aXNlVXNlcklu",
-            "Zm8QCxINCglTdGFydEdhbWUQDBINCglHYW1lU3RhZ2UQDRISCg5TaG93VXNl",
-            "ckFjdGlvbhAOEhEKDUFjdGlvbmVyT3JkZXIQDypQCgpSZXR1cm5Db2RlEg4K",
-            "ClJldHVybk5vbmUQABILCgdTdWNjZWVkEAESCAoERmFpbBACEg4KCkR1cGxp",
-            "Y2F0ZWQQAxILCgdOb3RSb29tEAQqLwoMU2VuZE1vZGVDb2RlEgwKCE1vZGVO",
-            "b25lEAASEQoNUm9vbUJyb2FkY2FzdBABKlgKC0dhbWVQcm9jZXNzEg8KC1By",
-            "b2Nlc3NOb25lEAASDAoIU2V0QmxpbmQQARILCgdQcmVmbG9wEAISCAoERmxv",
-            "cBADEggKBFR1cm4QBBIJCgVSaXZlchAFKkgKDVVzZXJHYW1lU3RhdGUSDQoJ",
-            "U3RhdGVOb25lEAASCQoFQWJvcnQQARIICgRQYXNzEAISCgoGRm9sbG93EAMS",
-            "BwoDQWRkEARiBnByb3RvMw=="));
+            "KAkSDwoHd2lubmVycxgMIAMoCRpOCg5IYW5kUG9rZXJFbnRyeRILCgNrZXkY",
+            "ASABKAkSKwoFdmFsdWUYAiABKAsyHC5UZXhhc0hvbGRlbVByb3RvYnVmLklu",
+            "dExpc3Q6AjgBGi8KDUJldFNoaXBzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZh",
+            "bHVlGAIgASgJOgI4ARowCg5Vc2VyQ2hpcHNFbnRyeRILCgNrZXkYASABKAkS",
+            "DQoFdmFsdWUYAiABKAk6AjgBInUKDkdhbWVBY3Rpb25QYWNrEhYKDmFjdGlv",
+            "bk5pY2tOYW1lGAEgASgJEjkKDXVzZXJHYW1lU3RhdGUYAiABKA4yIi5UZXhh",
+            "c0hvbGRlbVByb3RvYnVmLlVzZXJHYW1lU3RhdGUSEAoIYmV0VmFsdWUYAyAB",
+            "KAkiTAoMQWN0aW9uZXJQYWNrEhAKCGFjdGlvbmVyGAEgASgJEhEKCWNvdW50",
+            "ZG93bhgCIAEoAhIXCg9pc0ZpcnN0QWN0aW9uZXIYAyABKAgiGQoHSW50TGlz",
+            "dBIOCgZ2YWx1ZXMYASADKAUqPAoLUmVxdWVzdENvZGUSDwoLUmVxdWVzdE5v",
+            "bmUQABIICgRVc2VyEAESCAoEUm9vbRACEggKBEdhbWUQAyqWAgoKQWN0aW9u",
+            "Q29kZRIOCgpBY3Rpb25Ob25lEAASCQoFTG9nb24QARIJCgVMb2dpbhACEgoK",
+            "BkxvZ291dBADEg8KC0dldFVzZXJJbmZvEAQSDAoISm9pblJvb20QBRIRCg1R",
+            "dWlja0pvaW5Sb29tEAYSFgoSVXBkYXRlUm9vbVVzZXJJbmZvEAcSDgoKVXBk",
+            "YXRlUm9vbRAIEhUKEU90aGVyVXNlckV4aXRSb29tEAkSDAoIRXhpdFJvb20Q",
+            "ChISCg5SZXZpc2VVc2VySW5mbxALEg0KCVN0YXJ0R2FtZRAMEg0KCUdhbWVT",
+            "dGFnZRANEhIKDlNob3dVc2VyQWN0aW9uEA4SEQoNQWN0aW9uZXJPcmRlchAP",
+            "KlAKClJldHVybkNvZGUSDgoKUmV0dXJuTm9uZRAAEgsKB1N1Y2NlZWQQARII",
+            "CgRGYWlsEAISDgoKRHVwbGljYXRlZBADEgsKB05vdFJvb20QBCovCgxTZW5k",
+            "TW9kZUNvZGUSDAoITW9kZU5vbmUQABIRCg1Sb29tQnJvYWRjYXN0EAEqaAoL",
+            "R2FtZVByb2Nlc3MSDwoLUHJvY2Vzc05vbmUQABIMCghTZXRCbGluZBABEgsK",
+            "B1ByZWZsb3AQAhIICgRGbG9wEAMSCAoEVHVybhAEEgkKBVJpdmVyEAUSDgoK",
+            "R2FtZVJlc3VsdBAGKkgKDVVzZXJHYW1lU3RhdGUSDQoJU3RhdGVOb25lEAAS",
+            "CQoFQWJvcnQQARIICgRQYXNzEAISCgoGRm9sbG93EAMSBwoDQWRkEARiBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::TexasHoldemProtobuf.RequestCode), typeof(global::TexasHoldemProtobuf.ActionCode), typeof(global::TexasHoldemProtobuf.ReturnCode), typeof(global::TexasHoldemProtobuf.SendModeCode), typeof(global::TexasHoldemProtobuf.GameProcess), typeof(global::TexasHoldemProtobuf.UserGameState), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -93,7 +94,7 @@ namespace TexasHoldemProtobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ReviseUserInfoPack), global::TexasHoldemProtobuf.ReviseUserInfoPack.Parser, new[]{ "ReviseName", "ReviseValue" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.RoomPack), global::TexasHoldemProtobuf.RoomPack.Parser, new[]{ "RoomName", "MaxCount", "CurrCount" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ComputerPack), global::TexasHoldemProtobuf.ComputerPack.Parser, new[]{ "NickName", "Avatar", "HandPoker", "BetChips", "Chips", "GameState" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameProcessPack), global::TexasHoldemProtobuf.GameProcessPack.Parser, new[]{ "GameProcess", "ActionUser", "SmallBlinder", "BigBlinder", "BigBlindValue", "TotalBetChips", "Result", "HandPoker", "BetShips", "UserChips", "CurrBet" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameProcessPack), global::TexasHoldemProtobuf.GameProcessPack.Parser, new[]{ "GameProcess", "ActionUser", "SmallBlinder", "BigBlinder", "BigBlindValue", "TotalBetChips", "Result", "HandPoker", "BetShips", "UserChips", "CurrBet", "Winners" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameActionPack), global::TexasHoldemProtobuf.GameActionPack.Parser, new[]{ "ActionNickName", "UserGameState", "BetValue" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ActionerPack), global::TexasHoldemProtobuf.ActionerPack.Parser, new[]{ "Actioner", "Countdown", "IsFirstActioner" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.IntList), global::TexasHoldemProtobuf.IntList.Parser, new[]{ "Values" }, null, null, null, null)
@@ -242,6 +243,10 @@ namespace TexasHoldemProtobuf {
     ///河牌
     /// </summary>
     [pbr::OriginalName("River")] River = 5,
+    /// <summary>
+    ///遊戲結果
+    /// </summary>
+    [pbr::OriginalName("GameResult")] GameResult = 6,
   }
 
   /// <summary>
@@ -1868,6 +1873,7 @@ namespace TexasHoldemProtobuf {
       betShips_ = other.betShips_.Clone();
       userChips_ = other.userChips_.Clone();
       currBet_ = other.currBet_;
+      winners_ = other.winners_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2026,6 +2032,19 @@ namespace TexasHoldemProtobuf {
       }
     }
 
+    /// <summary>Field number for the "winners" field.</summary>
+    public const int WinnersFieldNumber = 12;
+    private static readonly pb::FieldCodec<string> _repeated_winners_codec
+        = pb::FieldCodec.ForString(98);
+    private readonly pbc::RepeatedField<string> winners_ = new pbc::RepeatedField<string>();
+    /// <summary>
+    ///贏家
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<string> Winners {
+      get { return winners_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GameProcessPack);
@@ -2050,6 +2069,7 @@ namespace TexasHoldemProtobuf {
       if (!BetShips.Equals(other.BetShips)) return false;
       if (!UserChips.Equals(other.UserChips)) return false;
       if (CurrBet != other.CurrBet) return false;
+      if(!winners_.Equals(other.winners_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2067,6 +2087,7 @@ namespace TexasHoldemProtobuf {
       hash ^= BetShips.GetHashCode();
       hash ^= UserChips.GetHashCode();
       if (CurrBet.Length != 0) hash ^= CurrBet.GetHashCode();
+      hash ^= winners_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2112,6 +2133,7 @@ namespace TexasHoldemProtobuf {
         output.WriteRawTag(90);
         output.WriteString(CurrBet);
       }
+      winners_.WriteTo(output, _repeated_winners_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2145,6 +2167,7 @@ namespace TexasHoldemProtobuf {
       if (CurrBet.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(CurrBet);
       }
+      size += winners_.CalculateSize(_repeated_winners_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -2181,6 +2204,7 @@ namespace TexasHoldemProtobuf {
       if (other.CurrBet.Length != 0) {
         CurrBet = other.CurrBet;
       }
+      winners_.Add(other.winners_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -2235,6 +2259,10 @@ namespace TexasHoldemProtobuf {
           }
           case 90: {
             CurrBet = input.ReadString();
+            break;
+          }
+          case 98: {
+            winners_.AddEntriesFrom(input, _repeated_winners_codec);
             break;
           }
         }

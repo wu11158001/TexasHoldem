@@ -24,7 +24,7 @@ namespace TexasHoldemServer.Controller
         /// <returns></returns>
         public MainPack StartGame(Server server, Client client, MainPack pack)
         {
-            client.GetRoom.StartGame(pack);
+            client.GetRoom.StartGame();
             return null;
         }
 
