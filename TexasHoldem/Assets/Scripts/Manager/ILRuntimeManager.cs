@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 {
-    private const string downloadUrl = "http://192.168.1.172:8080//TexasHoldem/HotFix/";
+    private const string downloadUrl = "http://127.0.0.1:8080//TexasHoldem/HotFix/";
 
     public AppDomain appdomain;
     private MemoryStream msDll;
