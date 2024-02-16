@@ -82,9 +82,9 @@ namespace TexasHoldemProtobuf {
             "TW9kZUNvZGUSDAoITW9kZU5vbmUQABIRCg1Sb29tQnJvYWRjYXN0EAEqaAoL",
             "R2FtZVByb2Nlc3MSDwoLUHJvY2Vzc05vbmUQABIMCghTZXRCbGluZBABEgsK",
             "B1ByZWZsb3AQAhIICgRGbG9wEAMSCAoEVHVybhAEEgkKBVJpdmVyEAUSDgoK",
-            "R2FtZVJlc3VsdBAGKkgKDVVzZXJHYW1lU3RhdGUSDQoJU3RhdGVOb25lEAAS",
-            "CQoFQWJvcnQQARIICgRQYXNzEAISCgoGRm9sbG93EAMSBwoDQWRkEARiBnBy",
-            "b3RvMw=="));
+            "R2FtZVJlc3VsdBAGKlUKDVVzZXJHYW1lU3RhdGUSDQoJU3RhdGVOb25lEAAS",
+            "CwoHUGxheWluZxABEgkKBUFib3J0EAISCAoEUGFzcxADEgoKBkZvbGxvdxAE",
+            "EgcKA0FkZBAFYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::TexasHoldemProtobuf.RequestCode), typeof(global::TexasHoldemProtobuf.ActionCode), typeof(global::TexasHoldemProtobuf.ReturnCode), typeof(global::TexasHoldemProtobuf.SendModeCode), typeof(global::TexasHoldemProtobuf.GameProcess), typeof(global::TexasHoldemProtobuf.UserGameState), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -255,21 +255,25 @@ namespace TexasHoldemProtobuf {
   public enum UserGameState {
     [pbr::OriginalName("StateNone")] StateNone = 0,
     /// <summary>
+    ///遊戲中
+    /// </summary>
+    [pbr::OriginalName("Playing")] Playing = 1,
+    /// <summary>
     ///棄牌
     /// </summary>
-    [pbr::OriginalName("Abort")] Abort = 1,
+    [pbr::OriginalName("Abort")] Abort = 2,
     /// <summary>
     ///過牌
     /// </summary>
-    [pbr::OriginalName("Pass")] Pass = 2,
+    [pbr::OriginalName("Pass")] Pass = 3,
     /// <summary>
     ///跟注
     /// </summary>
-    [pbr::OriginalName("Follow")] Follow = 3,
+    [pbr::OriginalName("Follow")] Follow = 4,
     /// <summary>
-    ///加注
+    ///加注	
     /// </summary>
-    [pbr::OriginalName("Add")] Add = 4,
+    [pbr::OriginalName("Add")] Add = 5,
   }
 
   #endregion

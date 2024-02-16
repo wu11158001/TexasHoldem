@@ -47,6 +47,8 @@ namespace TexasHoldemServer.Servers
             roomState.result = new int[5];
             roomState.handPoker = new Dictionary<string, int[]>();
             roomState.winners = new List<string>();
+            roomState.actionUser = "-1";
+            roomState.smallBlindIndex = -1;
         }
 
         //房間訊息
@@ -313,15 +315,16 @@ namespace TexasHoldemServer.Servers
             {
                 user.UserInfo.BetChips = "0";
             }
-
             actionCount = 2;
             roomState.gameProcess = GameProcess.SetBlind;
-            roomState.actionUser = "-1";
-            roomState.smallBlindIndex = -1;
             roomState.currBet = "0";
             roomState.isFirstActioner = true;
             roomState.winners.Clear();
             roomState.totalBetChips = Utils.StringAddition((Convert.ToInt32(roomState.bigBlindValue) / 2).ToString(), roomState.bigBlindValue);
+            foreach (var user in clientList)
+            {
+                user.UserInfo.GameState = UserGameState.Playing;
+            }
 
             //小盲玩家
             roomState.smallBlindIndex = roomState.smallBlindIndex + 1 >= clientList.Count ? -1 : roomState.smallBlindIndex + 1;
@@ -348,6 +351,13 @@ namespace TexasHoldemServer.Servers
             {
                 ReviseUserInfo(bigBlinder, roomState.bigBlindValue);
             }
+            roomState.actionUser = roomState.bigBlinder;
+
+            //更改玩家遊戲狀態
+            foreach (var user in clientList)
+            {
+                user.UserInfo.GameState = UserGameState.Playing;
+            }
 
             //修改電腦訊息
             void ReviserComputer(string blindValue)
@@ -361,7 +371,6 @@ namespace TexasHoldemServer.Servers
             {
                 string chips = Utils.StringSubtract(clientList[userIndex].UserInfo.Chips, blindValue);
                 clientList[userIndex].UserInfo.Chips = chips;
-
                 clientList[userIndex].UserInfo.BetChips = Utils.StringAddition(clientList[userIndex].UserInfo.BetChips, blindValue);
 
                 string cash = Utils.StringSubtract(clientList[userIndex].UserInfo.Cash, blindValue);
@@ -449,18 +458,26 @@ namespace TexasHoldemServer.Servers
 
             actionCount++;
 
+            List<Client> playingList = GetPlayingUser();
+            if (playingList.Count == 0)
+            {
+                Console.WriteLine("剩下一位玩家,設定遊戲結果!");
+                SendGameResult();
+                return;
+            }
+
             //設定行動玩家
             if (roomState.actionUser == computerName)
             {
-                roomState.actionUser = clientList[0].UserInfo.NickName;
+                roomState.actionUser = playingList[0].UserInfo.NickName;
             }
             else
-            {
-                int currUser = clientList.Select((v, i) => (v, i))
-                                         .Where(name => name.v.UserInfo.NickName == roomState.actionUser)
-                                         .FirstOrDefault()
-                                         .i;
-                roomState.actionUser = currUser + 1 >= clientList.Count ? computerName : clientList[currUser].UserInfo.NickName;
+            {                
+                int currUser = playingList.Select((v, i) => (v, i))
+                                          .Where(name => name.v.UserInfo.NickName == roomState.actionUser)
+                                          .FirstOrDefault()
+                                          .i;
+                roomState.actionUser = currUser + 1 >= playingList.Count ? computerName : playingList[currUser + 1].UserInfo.NickName;
             }
             Console.WriteLine($"當前行動玩家:{roomState.actionUser}");
 
@@ -526,60 +543,6 @@ namespace TexasHoldemServer.Servers
         }
 
         /// <summary>
-        /// 玩家行動
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="pack"></param>
-        async public void UserAction(Client client, MainPack pack)
-        {
-            cts?.Cancel();
-
-            string betValue = pack.GameActionPack.BetValue;
-            string subtractCash = (Math.Abs(Convert.ToInt32( Utils.StringSubtract(betValue, client.UserInfo.BetChips)))).ToString();
-
-            Dictionary<string, string> dataDic = client.GetMySql.GetData(client.GetMySqlConnection,
-                                                                         "userdata", "account",
-                                                                         client.UserInfo.Account,
-                                                                         new string[] { "cash" });
-
-            string cash = Utils.StringSubtract(dataDic["cash"], subtractCash);
-
-            client.UserInfo.Chips = Utils.StringSubtract(client.UserInfo.Chips, subtractCash);
-            client.UserInfo.BetChips = betValue;
-            client.UserInfo.GameState = pack.GameActionPack.UserGameState;
-
-            roomState.isFirstActioner = false;
-            roomState.currBet = betValue;
-            roomState.totalBetChips = Utils.StringAddition(roomState.totalBetChips, subtractCash);
-
-            //扣除金幣
-            if (betValue != "0")
-            {
-                bool result = client.GetMySql.ReviseData(client.GetMySqlConnection,
-                                             "userdata",
-                                             "account",
-                                             client.UserInfo.Account,
-                                             new string[] { "cash" },
-                                             new string[] { cash }
-                                             );
-            }
-
-            pack.GameProcessPack = GetGameProcessPack();
-            pack.ComputerPack = GetComputerPack();
-            pack.GameActionPack.ActionNickName = client.UserInfo.NickName;
-
-            Broadcast(null, pack);
-
-            await Task.Delay(3000);
-
-            if (await IsNextRound() == false)
-            {
-                SetNextActionUser();
-                BroadcastGameStage();
-            }
-        }
-
-        /// <summary>
         /// 發送行動者指令
         /// </summary>
         /// <returns></returns>
@@ -593,7 +556,7 @@ namespace TexasHoldemServer.Servers
             cts = new CancellationTokenSource();
             token = cts.Token;
 
-            Task.Run(async() =>
+            Task.Run(async () =>
             {
                 MainPack pack = new MainPack();
                 pack.ActionCode = ActionCode.ActionerOrder;
@@ -621,11 +584,82 @@ namespace TexasHoldemServer.Servers
         }
 
         /// <summary>
+        /// 玩家行動
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="pack"></param>
+        async public void UserAction(Client client, MainPack pack)
+        {
+            cts?.Cancel();
+
+            string betValue = pack.GameActionPack.BetValue;
+            string subtractCash = (Math.Abs(Convert.ToInt32( Utils.StringSubtract(betValue, client.UserInfo.BetChips)))).ToString();
+
+            Dictionary<string, string> dataDic = client.GetMySql.GetData(client.GetMySqlConnection,
+                                                                         "userdata", "account",
+                                                                         client.UserInfo.Account,
+                                                                         new string[] { "cash" });
+
+            string cash = Utils.StringSubtract(dataDic["cash"], subtractCash);
+
+            client.UserInfo.Chips = Utils.StringSubtract(client.UserInfo.Chips, subtractCash);
+            client.UserInfo.BetChips = betValue;
+            client.UserInfo.GameState = pack.GameActionPack.UserGameState;
+            Console.WriteLine($"{client.UserInfo.NickName} 行動:{client.UserInfo.GameState}");
+
+            roomState.isFirstActioner = false;
+            roomState.currBet = Convert.ToInt32(betValue) < Convert.ToInt32(roomState.bigBlindValue) ? roomState.bigBlindValue : betValue;
+            roomState.totalBetChips = Utils.StringAddition(roomState.totalBetChips, subtractCash);
+
+            //扣除金幣
+            bool result = client.GetMySql.ReviseData(client.GetMySqlConnection,
+                                                     "userdata",
+                                                     "account",
+                                                     client.UserInfo.Account,
+                                                     new string[] { "cash" },
+                                                     new string[] { cash }
+                                                     );
+
+            pack.GameProcessPack = GetGameProcessPack();
+            pack.ComputerPack = GetComputerPack();
+            pack.GameActionPack.ActionNickName = client.UserInfo.NickName;
+
+            Broadcast(null, pack);
+
+            await Task.Delay(3000);
+
+            if (await IsNextRound() == false)
+            {
+                SetNextActionUser();
+                BroadcastGameStage();
+            }
+        }       
+
+        /// <summary>
+        /// 獲取遊戲中玩家
+        /// </summary>
+        /// <returns></returns>
+        private List<Client> GetPlayingUser()
+        {
+            List<Client> playUserList = new List<Client>();
+            foreach (var user in clientList)
+            {
+                if (user.UserInfo.GameState != UserGameState.StateNone &&
+                    user.UserInfo.GameState != UserGameState.Abort)
+                {
+                    playUserList.Add(user);
+                }
+            }
+
+            return playUserList;
+        }
+
+        /// <summary>
         /// 判斷是否進入下一階段
         /// </summary>
         /// <returns></returns>
         async private Task<bool> IsNextRound()
-        {
+        {          
             Console.WriteLine($"已行動人數:{actionCount}");
             if (actionCount < clientList.Count + 1)
             {
@@ -633,7 +667,7 @@ namespace TexasHoldemServer.Servers
             }
 
             string compareBet = ComputerInfo.BetChips;
-            bool isNext = clientList.All(user => user.UserInfo.BetChips == compareBet);
+            bool isNext = GetPlayingUser().All(user => user.UserInfo.BetChips == compareBet);
             Console.WriteLine($"進入下階段:{isNext} : 當前:{roomState.gameProcess}");
 
             if (isNext)
@@ -679,13 +713,7 @@ namespace TexasHoldemServer.Servers
 
                     //遊戲結果
                     case GameProcess.River:
-                        roomState.gameProcess = GameProcess.GameResult;
-                        JudgeGameResult();
-                        BroadcastGameStage();
-
-                        await Task.Delay(5000);
-
-                        StartGame();
+                        SendGameResult();
                         break;
                 }
             }
@@ -698,40 +726,58 @@ namespace TexasHoldemServer.Servers
         /// </summary>
         private void JudgeGameResult()
         {
-            roomState.winners.Add(clientList[0].UserInfo.NickName);
+            roomState.winners.Add(computerName);
 
             int winChips = Convert.ToInt32(roomState.totalBetChips) / roomState.winners.Count;
+            List<Client> playingList = GetPlayingUser();
             foreach (var winner in roomState.winners)
             {
-                for (int i = 0; i < clientList.Count; i++)
+                if (winner == computerName)
                 {
-                    if (clientList[i].UserInfo.NickName == winner)
+                    //電腦獲勝
+                    ComputerInfo.Chips = Utils.StringAddition(ComputerInfo.Chips, winChips.ToString());
+                }
+                else
+                {
+                    for (int i = 0; i < playingList.Count; i++)
                     {
-                        //玩家獲勝
-                        Dictionary<string, string> dataDic = clientList[i].GetMySql.GetData(clientList[i].GetMySqlConnection, 
-                                                                                            "userdata", "account", 
-                                                                                            clientList[i].UserInfo.Account,
-                                                                                            new string[] { "cash"});
-                     
-                        string cash = Utils.StringAddition(dataDic["cash"], winChips.ToString());
-                        //修改資料庫金幣
-                        bool result = clientList[i].GetMySql.ReviseData(clientList[i].GetMySqlConnection,
-                                             "userdata",
-                                             "account",
-                                             clientList[i].UserInfo.Account,
-                                             new string[] { "cash" },
-                                             new string[] { cash }
-                                             );
-                        clientList[i].UserInfo.Chips = Utils.StringAddition(clientList[i].UserInfo.Chips, winChips.ToString());
-                        break;
-                    }
-                    else if(winner == computerName)
-                    {
-                        //電腦獲勝
-                        ComputerInfo.Chips = Utils.StringAddition(ComputerInfo.Chips, winChips.ToString());
+                        if (playingList[i].UserInfo.NickName == winner)
+                        {
+                            //玩家獲勝
+                            Dictionary<string, string> dataDic = playingList[i].GetMySql.GetData(playingList[i].GetMySqlConnection,
+                                                                                                 "userdata", "account",
+                                                                                                 playingList[i].UserInfo.Account,
+                                                                                                 new string[] { "cash" });
+
+                            string cash = Utils.StringAddition(dataDic["cash"], winChips.ToString());
+                            //修改資料庫金幣
+                            bool result = playingList[i].GetMySql.ReviseData(playingList[i].GetMySqlConnection,
+                                                 "userdata",
+                                                 "account",
+                                                 playingList[i].UserInfo.Account,
+                                                 new string[] { "cash" },
+                                                 new string[] { cash }
+                                                 );
+                            playingList[i].UserInfo.Chips = Utils.StringAddition(playingList[i].UserInfo.Chips, winChips.ToString());
+                            break;
+                        }
                     }
                 }
             }            
+        }
+
+        /// <summary>
+        /// 發送遊戲結果
+        /// </summary>
+        async private void SendGameResult()
+        {
+            roomState.gameProcess = GameProcess.GameResult;
+            JudgeGameResult();
+            BroadcastGameStage();
+
+            await Task.Delay(5000);
+
+            StartGame();
         }
 
         /// <summary>

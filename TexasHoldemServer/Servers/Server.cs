@@ -89,6 +89,7 @@ namespace TexasHoldemServer.Servers
             client.UserInfo.GameSeat = srat;
             client.UserInfo.handPoker = new int[2];
             client.UserInfo.BetChips = "0";
+            client.UserInfo.GameState = UserGameState.StateNone;
         }
 
         /// <summary>

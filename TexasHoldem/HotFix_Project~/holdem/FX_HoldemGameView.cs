@@ -15,7 +15,7 @@ namespace HotFix_Project
 
         private static Button Exit_Btn, Abort_Btn, Pass_Btn, Follow_Btn, Add_Btn;
         private static Transform Seat_Tr, BetChips_Tr, BetChipsSample, PointTarget, OperateButton_Tr, AddBetValue_Tr;
-        private static Text TotalBetChips_Txt, AddChips_Txt, Add_Txt;
+        private static Text TotalBetChips_Txt, AddChips_Txt, Add_Txt, Waiting_Txt;
         private static Slider Add_Sl;
         private static Image[] pokersPool = new Image[5];
 
@@ -27,6 +27,7 @@ namespace HotFix_Project
         
         private static string localUserName;
         private static string currBetValue;
+        private static bool isGetUserInfo;
 
         /// <summary>
         /// 用戶訊息(座位, (頭像,暱稱,籌碼,遮罩,倒數, 行動文字))
@@ -66,6 +67,7 @@ namespace HotFix_Project
             TotalBetChips_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "TotalBetChips_Txt");
             AddChips_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "AddChips_Txt");
             Add_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Add_Txt");
+            Waiting_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Waiting_Txt");
             Seat_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "Seat_Tr");
 
             for (int i = 0; i < Seat_Tr.childCount; i++)
@@ -109,13 +111,23 @@ namespace HotFix_Project
 
         private static void OnEnable()
         {
+            seatDic.Clear();
+            Waiting_Txt.gameObject.SetActive(true);
+            isGetUserInfo = false;
+            foreach (var user in userInfoDic)
+            {
+                user.Value.Item1.sprite = null;
+                user.Value.Item2.text = "";
+                user.Value.Item3.text = "";
+            }
+
+            GameInit();
+
             MainPack pack = new MainPack();
             pack.RequestCode = RequestCode.User;
             pack.ActionCode = ActionCode.GetUserInfo;
             AddBetValue_Tr.gameObject.SetActive(false);
             thisView.view.SendRequest(pack);
-
-            GameInit();
         }
 
         private static void Start()
@@ -133,7 +145,7 @@ namespace HotFix_Project
             //棄牌按鈕
             Abort_Btn.onClick.AddListener(() =>
             {
-                SendUserGameAction(UserGameState.Abort, "0");
+                SendUserGameAction(UserGameState.Abort, betShipsDic[seatDic[localUserName]].Item2.text);
             });
 
             //過牌按鈕
@@ -173,7 +185,7 @@ namespace HotFix_Project
         /// 遊戲重製
         /// </summary>
         private static void GameInit()
-        {
+        {            
             BetChipsSample.gameObject.SetActive(false);
             OperateButton_Tr.gameObject.SetActive(false);
             foreach (var item in handPokerDic.Values)
@@ -217,6 +229,8 @@ namespace HotFix_Project
         /// <param name="betValue"></param>
         private static void SendUserGameAction(UserGameState gameState, string betValue)
         {
+            Debug.Log($"{localUserName} 行動:{gameState}");
+
             OperateButton_Tr.gameObject.SetActive(false);
             AddBetValue_Tr.gameObject.SetActive(false);
             Add_Txt.text = "加注";
@@ -265,6 +279,7 @@ namespace HotFix_Project
                 //選擇大小盲
                 case GameProcess.SetBlind:
                     Debug.Log("選擇大小盲");
+                    Waiting_Txt.gameObject.SetActive(false);
                     GameInit();
 
                     int smallSeat = 0, bigSeat = 0;
@@ -348,15 +363,21 @@ namespace HotFix_Project
                 //轉排
                 case GameProcess.Turn:
                     Debug.Log("轉排");
-                    result = pack.GameProcessPack.Result[3];
-                    pokersPool[3].sprite = pokerSpiteList[result];
+                    for (int i = 0; i < 4; i++)
+                    {
+                        result = pack.GameProcessPack.Result[i];
+                        pokersPool[i].sprite = pokerSpiteList[result];
+                    }
                     break;
 
                 //河牌
                 case GameProcess.River:
                     Debug.Log("河牌");
-                    result = pack.GameProcessPack.Result[4];
-                    pokersPool[4].sprite = pokerSpiteList[result];
+                    for (int i = 0; i < 5; i++)
+                    {
+                        result = pack.GameProcessPack.Result[i];
+                        pokersPool[i].sprite = pokerSpiteList[result];
+                    }
                     break;
 
                 //遊戲結果
@@ -436,11 +457,13 @@ namespace HotFix_Project
             {
                 //離開
                 case ActionCode.ExitRoom:
+                    Debug.Log("離開房間");
                     UIManager.Instance.ShowLoadingView(ViewType.LobbyView, true);
                     break;
 
                 //更新用戶訊息
                 case ActionCode.GetUserInfo:
+                    Debug.Log("更新用戶訊息");
                     localUserName = pack.UserInfoPack[0].NickName;
                     SendUpdateRoomInfo();
                     break;
@@ -459,6 +482,7 @@ namespace HotFix_Project
             {
                 //更新房間訊息
                 case ActionCode.UpdateRoomUserInfo:
+                    Debug.Log("更新房間訊息");                    
                     //玩家
                     foreach (var user in pack.UserInfoPack)
                     {
@@ -475,6 +499,10 @@ namespace HotFix_Project
                                         break;
                                     }
                                 }
+                            }
+                            else
+                            {
+                                seat = 0;
                             }
 
                             seatDic.Add(user.NickName, seat);
@@ -502,6 +530,8 @@ namespace HotFix_Project
 
                         thisView.view.SendRequest(pack);
                     }
+
+                    isGetUserInfo = true;
                     break;
 
                 //其他用戶離開房間
@@ -518,11 +548,21 @@ namespace HotFix_Project
 
                 //遊戲階段
                 case ActionCode.GameStage:
+                    if (!isGetUserInfo)
+                    {
+                        return;
+                    }
+
                     GameStage(pack);
                     break;
 
                 //演出玩家行動
                 case ActionCode.ShowUserAction:
+                    if (!isGetUserInfo)
+                    {
+                        return;
+                    }
+
                     userInfoDic[seat].Item4.gameObject.SetActive(false);
                     userInfoDic[seat].Item5.text = "";
 
@@ -565,7 +605,12 @@ namespace HotFix_Project
                     break;
 
                 //行動者指令
-                case ActionCode.ActionerOrder:                    
+                case ActionCode.ActionerOrder:
+                    if (!isGetUserInfo)
+                    {
+                        return;
+                    }
+
                     seat = seatDic[pack.ActionerPack.Actioner];
                     SetOperateButton(pack);
 
