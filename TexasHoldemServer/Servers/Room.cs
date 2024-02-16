@@ -402,17 +402,22 @@ namespace TexasHoldemServer.Servers
             }
 
             //牌面結果
-            for (int i = 0; i < 5; i++)
+            /*for (int i = 0; i < 5; i++)
             {
                 poker = new Random().Next(0, pokerList.Count);
                 roomState.result[i] = pokerList[poker];
                 Console.Write($"{new string(i == 0 ? "牌面結果:" : "")}{pokerList[poker]}, ");
                 pokerList.RemoveAt(poker);
             }
-            Console.WriteLine("\n");
+            Console.WriteLine("\n");*/
+            roomState.result[0] = 8;
+            roomState.result[1] = 20;
+            roomState.result[2] = 35;
+            roomState.result[3] = 18;
+            roomState.result[4] = 37;
 
             //玩家手牌
-            for (int i = 0; i < clientList.Count; i++)
+            /*for (int i = 0; i < clientList.Count; i++)
             {
                 clientList[i].UserInfo.handPoker = new int[2];
                 for (int j = 0; j < 2; j++)
@@ -424,7 +429,10 @@ namespace TexasHoldemServer.Servers
                 Console.WriteLine("\n");
 
                 roomState.handPoker.Add(clientList[i].UserInfo.NickName, clientList[i].UserInfo.handPoker);
-            }
+            }*/
+            clientList[0].UserInfo.handPoker[0] = 5;
+            clientList[0].UserInfo.handPoker[1] = 9;
+            roomState.handPoker.Add(clientList[0].UserInfo.NickName, clientList[0].UserInfo.handPoker);
 
             //電腦手牌
             ComputerInfo.HandPoker = new int[2];

@@ -134,6 +134,8 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
             });
         });
 
+        appdomain.DelegateManager.RegisterFunctionDelegate<System.Int32, System.Boolean>();
+        appdomain.DelegateManager.RegisterFunctionDelegate<System.Int32, System.Int32>();
     }
 
     private void OnDestroy()

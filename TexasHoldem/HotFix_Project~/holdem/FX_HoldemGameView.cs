@@ -24,7 +24,20 @@ namespace HotFix_Project
 
         private static int computerSeat = 1;
         private static string computerName = "-1";
-        
+        private static string[] shapeNames = new string[] 
+        {
+            "皇家同花順",
+            "同花順",          
+            "四條",
+            "葫蘆",
+            "同花",
+            "順子",
+            "三條",
+            "兩對",
+            "一對",
+            "高牌"
+        };
+
         private static string localUserName;
         private static string currBetValue;
         private static bool isGetUserInfo;
@@ -40,9 +53,9 @@ namespace HotFix_Project
         private static Dictionary<string, int> seatDic = new Dictionary<string, int>();
 
         /// <summary>
-        /// 手牌物件(座位, (父物件,手牌1,手牌2,蓋牌圖片物件))
+        /// 手牌物件(座位, (父物件,手牌1,手牌2,蓋牌圖片物件,牌行文字))
         /// </summary>
-        private static Dictionary<int, (Transform, Image, Image, Transform)> handPokerDic = new Dictionary<int, (Transform, Image, Image, Transform)>();
+        private static Dictionary<int, (Transform, Image, Image, Transform, Text)> handPokerDic = new Dictionary<int, (Transform, Image, Image, Transform, Text)>();
 
         /// <summary>
         /// 下注籌碼(座位, (下注籌碼物件, 下注籌碼文字))
@@ -86,7 +99,8 @@ namespace HotFix_Project
                 Image Poker1 = FindConponent.FindObj<Image>(Poker_Tr, "Poker1");
                 Image Poker2 = FindConponent.FindObj<Image>(Poker_Tr, "Poker2");
                 Transform Fold_Img = FindConponent.FindObj<Transform>(Poker_Tr, "Fold_Img");
-                handPokerDic.Add(i, (Poker_Tr, Poker1, Poker2, Fold_Img));
+                Text CardShape_Txt = FindConponent.FindObj<Text>(Poker_Tr, "CardShape_Txt");
+                handPokerDic.Add(i, (Poker_Tr, Poker1, Poker2, Fold_Img, CardShape_Txt));
 
                 Transform BetShips_Tr = FindConponent.FindObj<Transform>(Seat_Tr.GetChild(i), "BetShips_Tr");
                 Text BetShips_Txt = FindConponent.FindObj<Text>(BetShips_Tr, "BetShips_Txt");
@@ -274,6 +288,10 @@ namespace HotFix_Project
             UpdateComputer(pack.ComputerPack);
 
             int result = 0;
+            int[] handPoker;
+            int shape = 0;
+            List<int> poolPoker = new List<int>();
+
             switch (pack.GameProcessPack.GameProcess)
             {                
                 //選擇大小盲
@@ -327,11 +345,13 @@ namespace HotFix_Project
                             if (user.Key == localUserName)
                             {
                                 //本地玩家
-                                int[] handPoker = user.Value.Values.ToArray();
-                                
+                                handPoker = user.Value.Values.ToArray();                                
                                 handPokerDic[seatDic[user.Key]].Item2.sprite = pokerSpiteList[handPoker[0]];
                                 handPokerDic[seatDic[user.Key]].Item3.sprite = pokerSpiteList[handPoker[1]];
                                 handPokerDic[seatDic[user.Key]].Item4.gameObject.SetActive(false);
+
+                                shape = FX_JudgeShape.Instance.GetCardShape(handPoker.ToList(), null);
+                                handPokerDic[seatDic[user.Key]].Item5.text = shapeNames[shape];
                             }
                             else
                             {
@@ -353,20 +373,46 @@ namespace HotFix_Project
                 //翻牌
                 case GameProcess.Flop:
                     Debug.Log("翻牌");
+                    //牌池                    
                     for (int i = 0; i < 3; i++)
-                    {
+                    {                        
                         result = pack.GameProcessPack.Result[i];
                         pokersPool[i].sprite = pokerSpiteList[result];
+                        poolPoker.Add(result);
                     }
+
+                    //用戶牌型
+                    foreach (var user in pack.GameProcessPack.HandPoker)
+                    {
+                        if (user.Key == localUserName)
+                        {
+                            handPoker = user.Value.Values.ToArray();
+                            shape = FX_JudgeShape.Instance.GetCardShape(handPoker.ToList(), poolPoker);
+                            handPokerDic[seatDic[user.Key]].Item5.text = shapeNames[shape];
+                        }
+                    }                    
                     break;
 
                 //轉排
                 case GameProcess.Turn:
                     Debug.Log("轉排");
+                    //牌池
                     for (int i = 0; i < 4; i++)
                     {
                         result = pack.GameProcessPack.Result[i];
                         pokersPool[i].sprite = pokerSpiteList[result];
+                        poolPoker.Add(result);
+                    }
+
+                    //用戶牌型
+                    foreach (var user in pack.GameProcessPack.HandPoker)
+                    {
+                        if (user.Key == localUserName)
+                        {
+                            handPoker = user.Value.Values.ToArray();
+                            shape = FX_JudgeShape.Instance.GetCardShape(handPoker.ToList(), poolPoker);
+                            handPokerDic[seatDic[user.Key]].Item5.text = shapeNames[shape];
+                        }
                     }
                     break;
 
@@ -377,12 +423,43 @@ namespace HotFix_Project
                     {
                         result = pack.GameProcessPack.Result[i];
                         pokersPool[i].sprite = pokerSpiteList[result];
+                        poolPoker.Add(result);
+                    }
+
+                    //用戶牌型
+                    foreach (var user in pack.GameProcessPack.HandPoker)
+                    {
+                        if (user.Key == localUserName)
+                        {
+                            handPoker = user.Value.Values.ToArray();
+                            shape = FX_JudgeShape.Instance.GetCardShape(handPoker.ToList(), poolPoker);
+                            handPokerDic[seatDic[user.Key]].Item5.text = shapeNames[shape];
+                        }
                     }
                     break;
 
                 //遊戲結果
                 case GameProcess.GameResult:
                     Debug.Log($"遊戲結果:{pack.GameProcessPack.Winners[0]}");
+                    foreach (var user in pack.GameProcessPack.HandPoker)
+                    {
+                        handPokerDic[seatDic[user.Key]].Item2.gameObject.SetActive(true);
+                        handPokerDic[seatDic[user.Key]].Item3.gameObject.SetActive(true);
+                        handPokerDic[seatDic[user.Key]].Item4.gameObject.SetActive(false);
+
+                        handPoker = user.Value.Values.ToArray();
+                        handPokerDic[seatDic[user.Key]].Item2.sprite = pokerSpiteList[handPoker[0]];
+                        handPokerDic[seatDic[user.Key]].Item3.sprite = pokerSpiteList[handPoker[1]];
+                    }
+                    //電腦
+                    handPokerDic[computerSeat].Item1.gameObject.SetActive(true);
+                    handPokerDic[computerSeat].Item2.gameObject.SetActive(true);
+                    handPokerDic[computerSeat].Item3.gameObject.SetActive(true);
+                    handPokerDic[computerSeat].Item4.gameObject.SetActive(false);
+
+                    handPoker = pack.ComputerPack.HandPoker.ToArray();
+                    handPokerDic[seatDic[computerName]].Item2.sprite = pokerSpiteList[handPoker[0]];
+                    handPokerDic[seatDic[computerName]].Item3.sprite = pokerSpiteList[handPoker[1]];
                     break;
             }
         }
