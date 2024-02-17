@@ -18,7 +18,19 @@ namespace TexasHoldemServer.Servers
         private List<Client> clientList;
 
         private const string computerName = "-1";
-
+        private readonly string[] shapeNames = new string[]
+        {
+            "皇家同花順",
+            "同花順",
+            "四條",
+            "葫蘆",
+            "同花",
+            "順子",
+            "三條",
+            "兩對",
+            "一對",
+            "高牌"
+        };
         private int actionCount = 0;
 
         CancellationTokenSource cts;
@@ -39,7 +51,6 @@ namespace TexasHoldemServer.Servers
             ComputerInfo.NickName = "專業代打";
             ComputerInfo.Avatar = "0";
             ComputerInfo.Chips = initChips;
-            ComputerInfo.HandPoker = new int[5];
             ComputerInfo.BetChips = "0";
 
             roomState = new RoomState();
@@ -47,6 +58,7 @@ namespace TexasHoldemServer.Servers
             roomState.result = new int[5];
             roomState.handPoker = new Dictionary<string, int[]>();
             roomState.winners = new List<string>();
+            roomState.pokerShape = new Dictionary<string, int>();
             roomState.actionUser = "-1";
             roomState.smallBlindIndex = -1;
         }
@@ -216,6 +228,7 @@ namespace TexasHoldemServer.Servers
             public string currBet;                                              //當前下注籌碼
             public bool isFirstActioner;                                        //是否首位行動玩家
             public List<string> winners;                                        //贏家
+            public Dictionary<string, int> pokerShape;                          //所有玩家/電腦牌型(暱稱, 牌型)
         }
         public RoomState roomState;
 
@@ -225,9 +238,7 @@ namespace TexasHoldemServer.Servers
         public class ComputerData
         {
             public string NickName { get; set; }
-            public string Avatar { get; set; }
-            
-            public int[] HandPoker { get; set; }
+            public string Avatar { get; set; }           
             public string BetChips { get; set; }
             public string Chips { get; set; }
         }
@@ -243,7 +254,6 @@ namespace TexasHoldemServer.Servers
             computerPack.NickName = ComputerInfo.NickName;
             computerPack.Avatar = ComputerInfo.Avatar;
 
-            computerPack.HandPoker.AddRange(ComputerInfo.HandPoker);
             computerPack.BetChips = ComputerInfo.BetChips;
             computerPack.Chips = ComputerInfo.Chips;
 
@@ -280,6 +290,12 @@ namespace TexasHoldemServer.Servers
                 gameProcessPack.UserChips.Add(user.UserInfo.NickName, user.UserInfo.Chips);
             }
 
+            foreach (var poker in roomState.pokerShape)
+            {
+                Console.WriteLine($"{poker.Key} 牌型: {poker.Value}");
+                gameProcessPack.PokerShape.Add(poker.Key, shapeNames[poker.Value]);
+            }
+
             return gameProcessPack;
         }
 
@@ -298,10 +314,28 @@ namespace TexasHoldemServer.Servers
             await Task.Delay(2000);
 
             SetResult();
+            SetPokerShape(0);
             BroadcastGameStage();
 
             await Task.Delay(2000);
             SetNextActionUser();
+        }
+
+        /// <summary>
+        /// 設定玩家牌型
+        /// </summary>
+        /// <param name="poolCount"></param>
+        private void SetPokerShape(int poolCount)
+        {
+            roomState.pokerShape.Clear();
+            int shapeNum = 0;
+            int[] poolResult = poolCount == 0 ? null : roomState.result.Take(poolCount).ToArray();
+
+            foreach (var poker in roomState.handPoker)
+            {
+                shapeNum = PokerShape.Instance.GetCardShape(poker.Value, poolResult);
+                roomState.pokerShape.Add(poker.Key, shapeNum);
+            }
         }
 
         /// <summary>
@@ -398,7 +432,7 @@ namespace TexasHoldemServer.Servers
             List<int> pokerList = new List<int>();
             for (int i = 0; i < 52; i++)
             {
-                pokerList.Add(i + 1);
+                pokerList.Add(i);
             }
 
             //牌面結果
@@ -410,11 +444,12 @@ namespace TexasHoldemServer.Servers
                 pokerList.RemoveAt(poker);
             }
             Console.WriteLine("\n");*/
-            roomState.result[0] = 8;
-            roomState.result[1] = 20;
-            roomState.result[2] = 35;
-            roomState.result[3] = 18;
-            roomState.result[4] = 37;
+            roomState.result[0] = pokerList[16];
+            roomState.result[1] = pokerList[18];
+            roomState.result[2] = pokerList[33];
+            roomState.result[3] = pokerList[35];
+            roomState.result[4] = pokerList[50];
+
 
             //玩家手牌
             /*for (int i = 0; i < clientList.Count; i++)
@@ -430,19 +465,24 @@ namespace TexasHoldemServer.Servers
 
                 roomState.handPoker.Add(clientList[i].UserInfo.NickName, clientList[i].UserInfo.handPoker);
             }*/
-            clientList[0].UserInfo.handPoker[0] = 5;
-            clientList[0].UserInfo.handPoker[1] = 9;
+            clientList[0].UserInfo.handPoker[0] = 0;
+            clientList[0].UserInfo.handPoker[1] = 2;
             roomState.handPoker.Add(clientList[0].UserInfo.NickName, clientList[0].UserInfo.handPoker);
 
             //電腦手牌
-            ComputerInfo.HandPoker = new int[2];
-            for (int i = 0; i < 2; i++)
+            int[] ComputerInfoHandPoker = new int[2];
+            /*for (int i = 0; i < 2; i++)
             {
                 poker = Licensing();
-                ComputerInfo.HandPoker[i] = poker;
+                ComputerInfoHandPoker[i] = poker;                
                 Console.Write($"{new string(i == 0 ? $"電腦手牌:" : "")}{poker}, "); 
             }
-            Console.WriteLine("\n");
+            roomState.handPoker.Add(computerName, ComputerInfoHandPoker);
+            Console.WriteLine("\n");*/
+            ComputerInfoHandPoker[0] = 1;
+            ComputerInfoHandPoker[1] = 2;
+            roomState.handPoker.Add(computerName, ComputerInfoHandPoker);
+
 
             //發牌
             int Licensing()
@@ -689,6 +729,7 @@ namespace TexasHoldemServer.Servers
                     //翻牌前
                     case GameProcess.Preflop:
                         roomState.gameProcess = GameProcess.Flop;
+                        SetPokerShape(3);
                         BroadcastGameStage();
 
                         await Task.Delay(2000);
@@ -700,6 +741,7 @@ namespace TexasHoldemServer.Servers
                     //翻牌
                     case GameProcess.Flop:
                         roomState.gameProcess = GameProcess.Turn;
+                        SetPokerShape(4);
                         BroadcastGameStage();
 
                         await Task.Delay(2000);
@@ -711,6 +753,7 @@ namespace TexasHoldemServer.Servers
                     //轉牌
                     case GameProcess.Turn:
                         roomState.gameProcess = GameProcess.River;
+                        SetPokerShape(5);
                         BroadcastGameStage();
 
                         await Task.Delay(2000);
@@ -734,12 +777,144 @@ namespace TexasHoldemServer.Servers
         /// </summary>
         private void JudgeGameResult()
         {
-            roomState.winners.Add(computerName);
+            int minResult = roomState.pokerShape.Values.Min();
+            int minCount = roomState.pokerShape.Where(x => x.Value == minResult).Count();
+            if (minCount == 1)
+            {
+                string winner = roomState.pokerShape.FirstOrDefault(kv => kv.Value == minResult).Key;
+                roomState.winners.Add(winner);
+            }
+            else
+            {
+                //沒有棄牌玩家
+                Dictionary<string, int> surviveUser = new Dictionary<string, int>();
+                for (int i = 0; i < clientList.Count; i++)
+                {
+                    if (clientList[i].UserInfo.GameState != UserGameState.Abort &&
+                        clientList[i].UserInfo.GameState != UserGameState.StateNone)
+                    {
+                        string nickName = clientList[i].UserInfo.NickName;
+                        surviveUser.Add(nickName, roomState.pokerShape[nickName]);
+                    }
+                }
+                surviveUser.Add(computerName, roomState.pokerShape[computerName]);
+
+                if (surviveUser.Count > 1)
+                {
+                    //比較相同結果玩家
+                    List<string> winnerList = surviveUser.Where(kv => kv.Value == minResult)
+                                                         .Select(kv => kv.Key)
+                                                         .ToList();
+
+                    Dictionary<string, int[]> winDic = new Dictionary<string, int[]>();
+                    foreach (var win in winnerList)
+                    {
+                        winDic.Add(win, roomState.handPoker[win]);
+                    }
+
+                    if (minResult == 0)
+                    {
+                        //皇家桐花順
+                        foreach (var win in winnerList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                    else if (minResult == 1)
+                    {
+                        //同花順                    
+                        List<string> winList = PokerShape.Instance.CompareStraightSuit(winDic, roomState.result);
+                        foreach (var win in winList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                    else if (minResult == 2)
+                    {
+                        //4條
+                        List<string> winList = PokerShape.Instance.ComparePair(winDic, roomState.result, 4);
+                        foreach (var win in winList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                    else if (minResult == 3)
+                    {
+                        //葫蘆
+                        List<string> winList = PokerShape.Instance.CompareGourd(winDic, roomState.result);
+                        foreach (var win in winList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                    else if (minResult == 4)
+                    {
+                        //同花
+                        List<string> winList = PokerShape.Instance.CompareSameSuit(winDic, roomState.result);
+                        foreach (var win in winList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                    else if (minResult == 5)
+                    {
+                        //順子
+                        List<string> winList = PokerShape.Instance.CompareStraight(winDic, roomState.result);
+                        foreach (var win in winList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                    else if (minResult == 6)
+                    {
+                        //三條
+                        List<string> winList = PokerShape.Instance.ComparePair(winDic, roomState.result, 3);
+                        foreach (var win in winList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                    else if (minResult == 7)
+                    {
+                        //兩對
+                        List<string> winList = PokerShape.Instance.CompareDoublePair(winDic, roomState.result);
+                        foreach (var win in winList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                    else if (minResult == 8)
+                    {
+                        //一對
+                        List<string> winList = PokerShape.Instance.ComparePair(winDic, roomState.result, 2);
+                        foreach (var win in winList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                    else
+                    {
+                        //高牌
+                        List<string> winList = PokerShape.Instance.CompareHighCard(winDic, roomState.result);
+                        foreach (var win in winList)
+                        {
+                            roomState.winners.Add(win);
+                        }
+                    }
+                }
+                else
+                {
+                    //剩下1名玩家
+                    roomState.winners.Add(surviveUser.Keys.FirstOrDefault());
+                }                
+            }
 
             int winChips = Convert.ToInt32(roomState.totalBetChips) / roomState.winners.Count;
             List<Client> playingList = GetPlayingUser();
             foreach (var winner in roomState.winners)
             {
+                Console.WriteLine($"獲勝者:{winner}");
+
                 if (winner == computerName)
                 {
                     //電腦獲勝
