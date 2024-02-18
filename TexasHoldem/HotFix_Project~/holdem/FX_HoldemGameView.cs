@@ -28,11 +28,12 @@ namespace HotFix_Project
         private static string localUserName;
         private static string currBetValue;
         private static bool isGetUserInfo;
+        private static bool isAbort;
 
         /// <summary>
-        /// 用戶訊息(座位, (1頭像, 2暱稱, 3籌碼, 4遮罩, 5倒數, 6行動文字))
+        /// 用戶訊息(座位, (1頭像, 2暱稱, 3籌碼, 4遮罩, 5倒數, 6行動文字, 7贏家文字))
         /// </summary>
-        private static Dictionary<int, (Image, Text, Text, Image, Text, Text)> userInfoDic = new Dictionary<int, (Image, Text, Text, Image, Text, Text)>();
+        private static Dictionary<int, (Image, Text, Text, Image, Text, Text, Text)> userInfoDic = new Dictionary<int, (Image, Text, Text, Image, Text, Text, Text)>();
 
         /// <summary>
         /// 用戶位置(1暱稱, 2座位)
@@ -79,7 +80,8 @@ namespace HotFix_Project
                 Image Mask_Img = FindConponent.FindObj<Image>(Seat_Tr.GetChild(i), "Mask_Img");
                 Text CountDown_Txt = FindConponent.FindObj<Text>(Seat_Tr.GetChild(i), "CountDown_Txt");
                 Text Action_Txt = FindConponent.FindObj<Text>(Seat_Tr.GetChild(i), "Action_Txt");
-                userInfoDic.Add(i, (Avatar_Img, NickName_Txt, Chips_Txt, Mask_Img, CountDown_Txt, Action_Txt));
+                Text Win_Txt = FindConponent.FindObj<Text>(Seat_Tr.GetChild(i), "Win_Txt");
+                userInfoDic.Add(i, (Avatar_Img, NickName_Txt, Chips_Txt, Mask_Img, CountDown_Txt, Action_Txt, Win_Txt));
 
                 //手牌
                 Transform Poker_Tr = FindConponent.FindObj<Transform>(Seat_Tr.GetChild(i), "Poker_Tr");
@@ -146,6 +148,7 @@ namespace HotFix_Project
             //棄牌按鈕
             Abort_Btn.onClick.AddListener(() =>
             {
+                isAbort = true;
                 SendUserGameAction(UserGameState.Abort, betShipsDic[seatDic[localUserName]].Item2.text);
             });
 
@@ -186,7 +189,8 @@ namespace HotFix_Project
         /// 遊戲重製
         /// </summary>
         private static void GameInit()
-        {            
+        {
+            isAbort = false;
             BetChipsSample.gameObject.SetActive(false);
             OperateButton_Tr.gameObject.SetActive(false);
             foreach (var item in handPokerDic.Values)
@@ -204,6 +208,7 @@ namespace HotFix_Project
                 item.Value.Item5.text = "";
                 item.Value.Item6.text = "";
                 item.Value.Item6.gameObject.SetActive(false);
+                item.Value.Item7.gameObject.SetActive(false);
             }
 
             for (int i = 0; i < pokersPool.Length; i++)
@@ -215,7 +220,7 @@ namespace HotFix_Project
         /// <summary>
         /// 發送更新房間玩家訊息
         /// </summary>
-        private static void SendUpdateRoomInfo()
+        private static void SendUpdateRoomUserInfo()
         {
             MainPack pack = new MainPack();
             pack.RequestCode = RequestCode.Game;
@@ -264,6 +269,70 @@ namespace HotFix_Project
             betShipsDic[computerSeat].Item2.text = computerPack.BetChips;
         }
 
+
+        /// <summary>
+        /// 設定操作按鈕
+        /// </summary>
+        private static void SetOperateButton(MainPack pack)
+        {
+            if (pack.ActionerPack.Actioner != localUserName) return;
+
+            OperateButton_Tr.gameObject.SetActive(true);
+
+            int currBet = Convert.ToInt32(pack.GameProcessPack.CurrBet);
+            int selfBet = Convert.ToInt32(betShipsDic[seatDic[localUserName]].Item2.text);
+
+            Abort_Btn.gameObject.SetActive(true);
+            Pass_Btn.gameObject.SetActive(selfBet == currBet);
+            Follow_Btn.gameObject.SetActive(!pack.ActionerPack.IsFirstActioner && selfBet < currBet);
+            Add_Btn.gameObject.SetActive(true);
+
+            string minAddValue = pack.GameProcessPack.CurrBet == betShipsDic[seatDic[localUserName]].Item2.text ?
+                                 Utils.StringAddition(pack.GameProcessPack.CurrBet, pack.GameProcessPack.BigBlindValue) :
+                                 pack.GameProcessPack.CurrBet;
+            Add_Sl.minValue = float.Parse(minAddValue);
+            Add_Sl.maxValue = float.Parse(userInfoDic[seatDic[localUserName]].Item3.text);
+            Add_Sl.value = float.Parse(minAddValue);
+        }
+
+        /// <summary>
+        /// 更新下注籌碼
+        /// </summary>
+        /// <param name="pack"></param>
+        private static void UpdateBetShips(MainPack pack)
+        {
+            //總下注籌碼
+            TotalBetChips_Txt.text = $"{pack.GameProcessPack.TotalBetChips}";
+
+            //下注籌碼
+            foreach (var betChips in pack.GameProcessPack.BetShips)
+            {
+                int seat = betChips.Key == computerName ? computerSeat : seatDic[betChips.Key];
+                betShipsDic[seat].Item1.gameObject.SetActive(true);
+                betShipsDic[seat].Item2.text = betChips.Value;
+            }
+            //籌碼
+            foreach (var chips in pack.GameProcessPack.UserChips)
+            {
+                int seat = chips.Key == computerName ? computerSeat : seatDic[chips.Key];
+                userInfoDic[seat].Item3.text = chips.Value;
+            }
+        }
+
+        /// <summary>
+        /// 產生下注籌碼
+        /// </summary>
+        /// <param name="seat"></param>
+        /// <param name="shipsValus"></param>
+        private static void CreateBetShips(int seat, string shipsValus)
+        {
+            Transform obj = GameObject.Instantiate(BetChipsSample);
+            obj.SetParent(BetChips_Tr);
+            obj.position = Seat_Tr.GetChild(seat).position;
+            obj.gameObject.SetActive(true);
+            obj.GetComponent<BetChipsAction>().SetChipsValue(shipsValus, PointTarget);
+        }
+
         /// <summary>
         /// 遊戲階段
         /// </summary>
@@ -272,12 +341,18 @@ namespace HotFix_Project
         {            
             currBetValue = pack.GameProcessPack.CurrBet;
 
-            UpdateBetShips(pack);
-            UpdateComputer(pack.ComputerPack);
+            foreach (var user in userInfoDic)
+            {
+                if (!isAbort)
+                {
+                    user.Value.Item4.gameObject.SetActive(false);
+                    user.Value.Item6.gameObject.SetActive(false);
+                }                
+                user.Value.Item5.text = "";                
+            }
 
             int result = 0;
             int[] handPoker;
-            int shape = 0;
             List<int> poolPoker = new List<int>();
 
             //用戶牌型
@@ -321,6 +396,13 @@ namespace HotFix_Project
                         {
                             bigSeat = computerSeat;
                         }
+                    }
+
+                    //開啟下注籌碼
+                    foreach (var betChips in pack.GameProcessPack.BetShips)
+                    {
+                        int seat = betChips.Key == computerName ? computerSeat : seatDic[betChips.Key];
+                        betShipsDic[seat].Item1.gameObject.SetActive(true);
                     }
 
                     int smallBlindVluue = Convert.ToInt32(pack.GameProcessPack.BigBlindValue) / 2;
@@ -415,12 +497,12 @@ namespace HotFix_Project
                     foreach (var winner in pack.GameProcessPack.Winners)
                     {
                         Debug.Log($"獲勝:{winner}");
-                        userInfoDic[seatDic[winner]].Item4.gameObject.SetActive(true);
-                        userInfoDic[seatDic[winner]].Item5.text = "獲勝";
+                        userInfoDic[seatDic[winner]].Item7.gameObject.SetActive(true);
                     }
                     //顯示手牌
                     foreach (var user in pack.GameProcessPack.HandPoker)
                     {
+                        handPokerDic[seatDic[user.Key]].Item1.gameObject.SetActive(true);
                         handPokerDic[seatDic[user.Key]].Item2.gameObject.SetActive(true);
                         handPokerDic[seatDic[user.Key]].Item3.gameObject.SetActive(true);
                         handPokerDic[seatDic[user.Key]].Item4.gameObject.SetActive(false);
@@ -433,68 +515,12 @@ namespace HotFix_Project
                     {
                         handPokerDic[seatDic[poker.Key]].Item5.gameObject.SetActive(true);
                     }
+                    foreach (var bet in betShipsDic)
+                    {
+                        bet.Value.Item1.gameObject.SetActive(false);
+                    }
                     break;
             }
-        }
-
-        /// <summary>
-        /// 設定操作按鈕
-        /// </summary>
-        private static void SetOperateButton(MainPack pack)
-        {
-            OperateButton_Tr.gameObject.SetActive(pack.ActionerPack.Actioner == localUserName);
-
-            int currBet = Convert.ToInt32(pack.GameProcessPack.CurrBet);
-            int selfBet = Convert.ToInt32(betShipsDic[seatDic[localUserName]].Item2.text);
-
-            Abort_Btn.gameObject.SetActive(true);
-            Pass_Btn.gameObject.SetActive(selfBet == currBet);
-            Follow_Btn.gameObject.SetActive(!pack.ActionerPack.IsFirstActioner);
-            Add_Btn.gameObject.SetActive(true);
-
-            string minAddValue = pack.GameProcessPack.CurrBet == betShipsDic[seatDic[localUserName]].Item2.text ? 
-                                 Utils.StringAddition(pack.GameProcessPack.CurrBet,  pack.GameProcessPack.BigBlindValue) :
-                                 pack.GameProcessPack.CurrBet;
-            Add_Sl.minValue = float.Parse(minAddValue);
-            Add_Sl.maxValue = float.Parse(userInfoDic[seatDic[localUserName]].Item3.text);
-        }
-
-        /// <summary>
-        /// 更新下注籌碼
-        /// </summary>
-        /// <param name="pack"></param>
-        private static void UpdateBetShips(MainPack pack)
-        {
-            //總下注籌碼
-            TotalBetChips_Txt.text = $"{pack.GameProcessPack.TotalBetChips}";
-
-            //下注籌碼
-            foreach (var betChips in pack.GameProcessPack.BetShips)
-            {
-                int seat = betChips.Key == computerName ? computerSeat : seatDic[betChips.Key];
-                betShipsDic[seat].Item1.gameObject.SetActive(true);
-                betShipsDic[seat].Item2.text = betChips.Value;
-            }
-            //籌碼
-            foreach (var chips in pack.GameProcessPack.UserChips)
-            {
-                int seat = chips.Key == computerName ? computerSeat : seatDic[chips.Key];
-                userInfoDic[seat].Item3.text = chips.Value;
-            }
-        }
-
-        /// <summary>
-        /// 產生下注籌碼
-        /// </summary>
-        /// <param name="seat"></param>
-        /// <param name="shipsValus"></param>
-        private static void CreateBetShips(int seat, string shipsValus)
-        {
-            Transform obj = GameObject.Instantiate(BetChipsSample);
-            obj.SetParent(BetChips_Tr);
-            obj.position = Seat_Tr.GetChild(seat).position;
-            obj.gameObject.SetActive(true);
-            obj.GetComponent<BetChipsAction>().SetChipsValue(shipsValus, PointTarget);
         }
 
         /// <summary>
@@ -515,7 +541,7 @@ namespace HotFix_Project
                 case ActionCode.GetUserInfo:
                     Debug.Log("更新用戶訊息");
                     localUserName = pack.UserInfoPack[0].NickName;
-                    SendUpdateRoomInfo();
+                    SendUpdateRoomUserInfo();
                     break;
             }
         }
@@ -527,7 +553,6 @@ namespace HotFix_Project
         private static void HandleBroadcast(MainPack pack)
         {
             int seat = 0;
-
             switch (pack.ActionCode)
             {
                 //更新房間訊息
@@ -592,26 +617,25 @@ namespace HotFix_Project
                         userInfoDic[seat].Item1.sprite = null;
                         userInfoDic[seat].Item2.text = "";
                         userInfoDic[seat].Item3.text = "";
+                        userInfoDic[seat].Item4.gameObject.SetActive(false);
+                        betShipsDic[seat].Item1.gameObject.SetActive(false);
+                        handPokerDic[seat].Item4.gameObject.SetActive(false);
                         seatDic.Remove(pack.UserInfoPack[0].NickName);
                     }
                     break;
 
                 //遊戲階段
                 case ActionCode.GameStage:
-                    if (!isGetUserInfo)
-                    {
-                        return;
-                    }
+                    if (!isGetUserInfo) return;
 
+                    UpdateBetShips(pack);
+                    UpdateComputer(pack.ComputerPack);
                     GameStage(pack);
                     break;
 
                 //演出玩家行動
                 case ActionCode.ShowUserAction:
-                    if (!isGetUserInfo)
-                    {
-                        return;
-                    }
+                    if (!isGetUserInfo) return;
 
                     userInfoDic[seat].Item4.gameObject.SetActive(false);
                     userInfoDic[seat].Item5.text = "";
@@ -628,25 +652,26 @@ namespace HotFix_Project
                             showActionStr = "棄牌";
                             userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(true);
                             userInfoDic[seatDic[nickName]].Item4.fillAmount = 1;
-                            userInfoDic[seatDic[nickName]].Item5.text = "棄牌";
                             break;
+
                         case UserGameState.Pass:
                             showActionStr = "過牌";
-                            userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(true);
-                            userInfoDic[seatDic[nickName]].Item4.fillAmount = 1;
-                            userInfoDic[seatDic[nickName]].Item5.text = "過牌";
+                            userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(false);                            
                             break;
+
                         case UserGameState.Follow:
                             showActionStr = "跟注";
+                            userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(false);
                             CreateBetShips(seatDic[nickName], betValue);
                             break;
+
                         case UserGameState.Add:
-                            showActionStr = "加注";
+                            showActionStr = "加注";                            
+                            userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(false);
                             CreateBetShips(seatDic[nickName], betValue);
-                            break;
-                        default:
                             break;
                     }
+                    userInfoDic[seatDic[nickName]].Item5.text = "";
                     userInfoDic[seatDic[nickName]].Item6.gameObject.SetActive(true);
                     userInfoDic[seatDic[nickName]].Item6.text = showActionStr;
 
@@ -656,10 +681,7 @@ namespace HotFix_Project
 
                 //行動者指令
                 case ActionCode.ActionerOrder:
-                    if (!isGetUserInfo)
-                    {
-                        return;
-                    }
+                    if (!isGetUserInfo) return;
 
                     seat = seatDic[pack.ActionerPack.Actioner];
                     SetOperateButton(pack);
