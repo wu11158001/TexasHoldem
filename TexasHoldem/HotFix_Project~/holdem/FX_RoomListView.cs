@@ -13,7 +13,7 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Text RoomName_Txt, Count_Txt;
+        private static Text RoomName_Txt, Count_Txt, Blind_Txt;
         private static Image Count_Img;
         private static Button Join_Btn;
 
@@ -25,6 +25,7 @@ namespace HotFix_Project
 
             RoomName_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "RoomName_Txt");
             Count_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Count_Txt");
+            Blind_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Blind_Txt");
             Count_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Count_Img");
             Join_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Join_Btn");
         }
@@ -56,6 +57,7 @@ namespace HotFix_Project
             RoomName_Txt.text = $"{roomName}.";
             Count_Txt.text = $"{roomPack.CurrCount + 1} / {roomPack.MaxCount + 1}";
             Count_Img.fillAmount = (float)(roomPack.CurrCount + 1) / (float)(roomPack.MaxCount + 1);
+            Blind_Txt.text = $"{Convert.ToInt32(roomPack.RoomBigBlind) / 2}/{roomPack.RoomBigBlind}";
         }
 
         /// <summary>

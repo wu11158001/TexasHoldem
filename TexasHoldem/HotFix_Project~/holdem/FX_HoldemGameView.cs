@@ -31,9 +31,9 @@ namespace HotFix_Project
         private static bool isAbort;
 
         /// <summary>
-        /// 用戶訊息(座位, (1頭像, 2暱稱, 3籌碼, 4遮罩, 5倒數, 6行動文字, 7贏家文字))
+        /// 用戶訊息(座位, (1頭像, 2暱稱, 3籌碼, 4遮罩, 5倒數, 6行動文字, 7贏家文字, 8玩家籌碼物件))
         /// </summary>
-        private static Dictionary<int, (Image, Text, Text, Image, Text, Text, Text)> userInfoDic = new Dictionary<int, (Image, Text, Text, Image, Text, Text, Text)>();
+        private static Dictionary<int, (Image, Text, Text, Image, Text, Text, Text, Transform)> userInfoDic = new Dictionary<int, (Image, Text, Text, Image, Text, Text, Text, Transform)>();
 
         /// <summary>
         /// 用戶位置(1暱稱, 2座位)
@@ -81,7 +81,8 @@ namespace HotFix_Project
                 Text CountDown_Txt = FindConponent.FindObj<Text>(Seat_Tr.GetChild(i), "CountDown_Txt");
                 Text Action_Txt = FindConponent.FindObj<Text>(Seat_Tr.GetChild(i), "Action_Txt");
                 Text Win_Txt = FindConponent.FindObj<Text>(Seat_Tr.GetChild(i), "Win_Txt");
-                userInfoDic.Add(i, (Avatar_Img, NickName_Txt, Chips_Txt, Mask_Img, CountDown_Txt, Action_Txt, Win_Txt));
+                Transform UserChips_Tr = FindConponent.FindObj<Transform>(Seat_Tr.GetChild(i), "UserChips_Tr");
+                userInfoDic.Add(i, (Avatar_Img, NickName_Txt, Chips_Txt, Mask_Img, CountDown_Txt, Action_Txt, Win_Txt, UserChips_Tr));
 
                 //手牌
                 Transform Poker_Tr = FindConponent.FindObj<Transform>(Seat_Tr.GetChild(i), "Poker_Tr");
@@ -119,9 +120,10 @@ namespace HotFix_Project
             isGetUserInfo = false;
             foreach (var user in userInfoDic)
             {
-                user.Value.Item1.sprite = null;
+                user.Value.Item1.gameObject.SetActive(false);
                 user.Value.Item2.text = "";
                 user.Value.Item3.text = "";
+                user.Value.Item8.gameObject.SetActive(false);
             }
 
             GameInit();
@@ -262,10 +264,12 @@ namespace HotFix_Project
         {
             betShipsDic[computerSeat].Item1.gameObject.SetActive(true);
 
+            userInfoDic[computerSeat].Item1.gameObject.SetActive(true);
             userInfoDic[computerSeat].Item1.sprite = avatarSpriteList[Convert.ToInt32(computerPack.Avatar)];
             userInfoDic[computerSeat].Item2.text = computerPack.NickName;
-
             userInfoDic[computerSeat].Item3.text = computerPack.Chips;
+            userInfoDic[computerSeat].Item8.gameObject.SetActive(true);
+
             betShipsDic[computerSeat].Item2.text = computerPack.BetChips;
         }
 
@@ -275,7 +279,7 @@ namespace HotFix_Project
         /// </summary>
         private static void SetOperateButton(MainPack pack)
         {
-            if (pack.ActionerPack.Actioner != localUserName) return;
+            if (pack.ActionerPack.Actioner != localUserName || OperateButton_Tr.gameObject.activeSelf) return;
 
             OperateButton_Tr.gameObject.SetActive(true);
 
@@ -320,17 +324,21 @@ namespace HotFix_Project
         }
 
         /// <summary>
-        /// 產生下注籌碼
+        /// 產生籌碼物件
         /// </summary>
         /// <param name="seat"></param>
         /// <param name="shipsValus"></param>
-        private static void CreateBetShips(int seat, string shipsValus)
+        /// <param name="isBet">下注/獲勝籌碼</param>
+        private static void CreateBetShips(int seat, string shipsValus, bool isBet = true)
         {
             Transform obj = GameObject.Instantiate(BetChipsSample);
             obj.SetParent(BetChips_Tr);
-            obj.position = Seat_Tr.GetChild(seat).position;
+            obj.localScale = new Vector3(1, 1, 1);
+            obj.GetComponent<RectTransform>().eulerAngles = Vector3.zero;           
             obj.gameObject.SetActive(true);
-            obj.GetComponent<BetChipsAction>().SetChipsValue(shipsValus, PointTarget);
+            obj.localPosition = isBet ? Seat_Tr.GetChild(seat).localPosition : PointTarget.localPosition;
+            Transform target = isBet ? PointTarget : Seat_Tr.GetChild(seat);
+            obj.GetComponent<BetChipsAction>().SetChipsValue(shipsValus, target);
         }
 
         /// <summary>
@@ -498,6 +506,7 @@ namespace HotFix_Project
                     {
                         Debug.Log($"獲勝:{winner}");
                         userInfoDic[seatDic[winner]].Item7.gameObject.SetActive(true);
+                        CreateBetShips(seatDic[winner], pack.GameProcessPack.WinChips, false);
                     }
                     //顯示手牌
                     foreach (var user in pack.GameProcessPack.HandPoker)
@@ -581,9 +590,11 @@ namespace HotFix_Project
                             }
 
                             seatDic.Add(user.NickName, seat);
+                            userInfoDic[seat].Item1.gameObject.SetActive(true);
                             userInfoDic[seat].Item1.sprite = avatarSpriteList[Convert.ToInt32(user.Avatar)];
                             userInfoDic[seat].Item2.text = user.NickName;
                             userInfoDic[seat].Item3.text = user.Chips;
+                            userInfoDic[seat].Item8.gameObject.SetActive(true);
                         }
                     }
 
@@ -614,10 +625,11 @@ namespace HotFix_Project
                     if (seatDic.ContainsKey(pack.UserInfoPack[0].NickName))
                     {
                         seat = seatDic[pack.UserInfoPack[0].NickName];
-                        userInfoDic[seat].Item1.sprite = null;
+                        userInfoDic[seat].Item1.gameObject.SetActive(false);
                         userInfoDic[seat].Item2.text = "";
                         userInfoDic[seat].Item3.text = "";
                         userInfoDic[seat].Item4.gameObject.SetActive(false);
+                        userInfoDic[seat].Item8.gameObject.SetActive(false);
                         betShipsDic[seat].Item1.gameObject.SetActive(false);
                         handPokerDic[seat].Item4.gameObject.SetActive(false);
                         seatDic.Remove(pack.UserInfoPack[0].NickName);

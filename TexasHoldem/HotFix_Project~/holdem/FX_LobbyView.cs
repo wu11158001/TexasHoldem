@@ -175,6 +175,7 @@ namespace HotFix_Project
                 case ActionCode.CreateRoom:
                     if (pack.ReturnCode == ReturnCode.Succeed)
                     {
+                        CreateRoom_Tr.gameObject.SetActive(false);
                         UIManager.Instance.ShowLoadingView(ViewType.HoldemGameView);
                     }
                     else

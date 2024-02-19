@@ -16,7 +16,7 @@ namespace HotFix_Project
         private static Transform PointTarget;
         private static Text BetValue_Txt;
 
-        private static float distanceX = 350;
+        private static float distanceX = 320;
         private static float distanceY = 120;
 
         //紀錄移動物件(物件, (移除時間, 移動時間, 文字物件))
@@ -44,13 +44,13 @@ namespace HotFix_Project
                     }
 
                     //向目標點移動
-                    if ((move.Key.position.x > PointTarget.position.x + distanceX || move.Key.position.x < PointTarget.position.x - distanceX) ||
-                        (move.Key.position.y > PointTarget.position.y + distanceY || move.Key.position.y < PointTarget.position.y - distanceY))
+                    if ((move.Key.localPosition.x > PointTarget.localPosition.x + distanceX || move.Key.localPosition.x < PointTarget.localPosition.x - distanceX) ||
+                        (move.Key.localPosition.y > PointTarget.localPosition.y + distanceY || move.Key.localPosition.y < PointTarget.localPosition.y - distanceY))
                     {
                         float progress = (Time.time - move.Value.Item2) / 40;
-                        float posX = Mathf.Lerp(move.Key.position.x, PointTarget.position.x, progress);
-                        float posY = Mathf.Lerp(move.Key.position.y, PointTarget.position.y, progress);
-                        move.Key.position = new Vector2(posX, posY);
+                        float posX = Mathf.Lerp(move.Key.localPosition.x, PointTarget.localPosition.x, progress);
+                        float posY = Mathf.Lerp(move.Key.localPosition.y, PointTarget.localPosition.y, progress);
+                        move.Key.localPosition = new Vector2(posX, posY);
                     }
                     else
                     {
@@ -66,12 +66,10 @@ namespace HotFix_Project
         /// <param name="value"></param>
         private static void SetChipsValue(string value, Transform pointTarget)
         {
-            Transform BetValue_Tr = FindConponent.FindObj<RectTransform>(thisView.view.transform, "BetValue_Tr");
-            BetValue_Tr.gameObject.SetActive(false);
-
             PointTarget = pointTarget;
             BetValue_Txt.text = value;
-            moveDic.Add(thisView.obj.transform, (DateTime.Now, Time.time, BetValue_Tr));
+            BetValue_Txt.gameObject.SetActive(false);
+            moveDic.Add(thisView.obj.transform, (DateTime.Now, Time.time, BetValue_Txt.transform));
         }
     }
 }

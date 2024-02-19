@@ -70,6 +70,7 @@ namespace TexasHoldemServer.Servers
             get
             {
                 roomInfo.CurrCount = clientList.Count;
+                roomInfo.RoomBigBlind = roomState.bigBlindValue;
                 return roomInfo;
             }
         }
@@ -240,6 +241,7 @@ namespace TexasHoldemServer.Servers
             public string currBet;                                              //當前下注籌碼
             public bool isFirstActioner;                                        //是否首位行動玩家
             public List<string> winners;                                        //贏家
+            public string winChips;                                             //贏得籌碼值
             public Dictionary<string, int> pokerShape;                          //所有玩家/電腦牌型(暱稱, 牌型)
         }
         public RoomState roomState;
@@ -288,6 +290,7 @@ namespace TexasHoldemServer.Servers
             gameProcessPack.Result.AddRange(roomState.result);
             gameProcessPack.CurrBet = roomState.currBet;
             gameProcessPack.Winners.AddRange(roomState.winners);
+            gameProcessPack.WinChips = roomState.winChips;
 
             foreach (var poker in roomState.handPoker)
             {
@@ -391,6 +394,7 @@ namespace TexasHoldemServer.Servers
             actionCount = 2;
             roomState.gameProcess = GameProcess.SetBlind;
             roomState.currBet = "0";
+            roomState.winChips = "0";
             roomState.isFirstActioner = true;
             roomState.winners.Clear();
             roomState.totalBetChips = Utils.StringAddition((Convert.ToInt32(roomState.bigBlindValue) / 2).ToString(), roomState.bigBlindValue);
@@ -537,6 +541,7 @@ namespace TexasHoldemServer.Servers
             if (playingList.Count == 0)
             {
                 Console.WriteLine("剩下一位玩家,設定遊戲結果!");
+                cts?.Cancel();
                 SendGameResult();
                 return;
             }
@@ -721,10 +726,19 @@ namespace TexasHoldemServer.Servers
 
             await Task.Delay(3000);
 
+            List<Client> playingList = GetPlayingUser();
+            if (playingList.Count == 0)
+            {
+                Console.WriteLine("剩下一位玩家,設定遊戲結果!");
+                cts?.Cancel();
+                SendGameResult();
+                return;
+            }
+
             if (await IsNextRound() == false)
             {
                 SetNextActionUser();
-                BroadcastGameStage();
+                SendActioner();
             }
         }       
 
@@ -780,7 +794,7 @@ namespace TexasHoldemServer.Servers
                         await Task.Delay(2000);
 
                         SetNextActionUser();
-                        BroadcastGameStage();
+                        SendActioner();
                         break;
 
                     //翻牌
@@ -792,7 +806,7 @@ namespace TexasHoldemServer.Servers
                         await Task.Delay(2000);
 
                         SetNextActionUser();
-                        BroadcastGameStage();
+                        SendActioner();
                         break;
 
                     //轉牌
@@ -804,7 +818,7 @@ namespace TexasHoldemServer.Servers
                         await Task.Delay(2000);
 
                         SetNextActionUser();
-                        BroadcastGameStage();
+                        SendActioner();
                         break;
 
                     //遊戲結果
@@ -956,6 +970,8 @@ namespace TexasHoldemServer.Servers
             }
 
             int winChips = Convert.ToInt32(roomState.totalBetChips) / roomState.winners.Count;
+            roomState.winChips = winChips.ToString();
+
             foreach (var winner in roomState.winners)
             {
                 Console.WriteLine($"獲勝者:{winner}");
