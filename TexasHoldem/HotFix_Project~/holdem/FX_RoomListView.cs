@@ -34,6 +34,8 @@ namespace HotFix_Project
         {
             Join_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
+
                 MainPack pack = new MainPack();
                 pack.ActionCode = ActionCode.JoinRoom;
                 pack.RequestCode = RequestCode.Room;

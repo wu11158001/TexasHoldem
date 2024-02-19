@@ -38,16 +38,19 @@ public class ABManager : UnitySingleton<ABManager>
                                              .Where(file => !file.EndsWith(".meta"))
                                              .ToArray();
 
-        // 加載本地資源到 loadedAssetBundles 字典中
+        // 加載本地資源到 AssetBundles 字典中
         foreach (string filePath in assetBundleFiles)
         {
             string abName = Path.GetFileNameWithoutExtension(filePath);
+            Debug.Log($"加載本地資源:{abName}");
+
             if (!abDic.ContainsKey(filePath))
             {
                 AssetBundle ab = AssetBundle.LoadFromFile(filePath);
                 if (ab != null)
                 {
                     abDic.Add(abName, ab);
+                    AudioManager.Instance.AddClip(abName, ab);
                 }
                 else
                 {
@@ -400,6 +403,7 @@ public class ABManager : UnitySingleton<ABManager>
             if (!abDic.ContainsKey(abName))
             {
                 abDic.Add(abName, ab);
+                AudioManager.Instance.AddClip(abName, ab);
             }
         }
         else

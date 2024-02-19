@@ -67,6 +67,7 @@ namespace HotFix_Project
         {
             NickName_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
                 ReviseNickName_Tr.gameObject.SetActive(true);
                 NickName_IF.text = "";
                 NickName_IF.Select();
@@ -79,12 +80,13 @@ namespace HotFix_Project
 
             Confirm_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
                 ClickConfirm();
-
             });
 
             Avatar_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
                 if (AvatarListMask_Tr.gameObject.activeSelf)
                 {
                     AvatarListSwitch = false;
@@ -100,9 +102,14 @@ namespace HotFix_Project
 
         private static void Update()
         {
-            if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+            //修改暱稱確認
+            if (ReviseNickName_Tr.gameObject.activeSelf)
             {
-                ClickConfirm();
+                if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+                {
+                    AudioManager.Instance.PlayButtonClick();
+                    ClickConfirm();
+                }
             }
 
             //頭像列表開關
@@ -168,6 +175,8 @@ namespace HotFix_Project
                     //修改頭像
                     avatarObj.GetComponent<Button>().onClick.AddListener(delegate
                     {
+                        AudioManager.Instance.PlayButtonClick();
+
                         MainPack pack = new MainPack();
                         pack.RequestCode = RequestCode.User;
                         pack.ActionCode = ActionCode.ReviseUserInfo;

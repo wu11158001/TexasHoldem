@@ -150,6 +150,8 @@ namespace HotFix_Project
             //棄牌按鈕
             Abort_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
+
                 isAbort = true;
                 SendUserGameAction(UserGameState.Abort, betShipsDic[seatDic[localUserName]].Item2.text);
             });
@@ -157,18 +159,22 @@ namespace HotFix_Project
             //過牌按鈕
             Pass_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
+
                 SendUserGameAction(UserGameState.Pass, currBetValue);
             });
 
             //跟注按鈕
             Follow_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
                 SendUserGameAction(UserGameState.Follow, currBetValue);
             });
 
             //加注按鈕
             Add_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
                 if (AddBetValue_Tr.gameObject.activeSelf)
                 {
                     SendUserGameAction(UserGameState.Add, Add_Sl.value.ToString());                    
@@ -415,6 +421,8 @@ namespace HotFix_Project
 
                     int smallBlindVluue = Convert.ToInt32(pack.GameProcessPack.BigBlindValue) / 2;
                     int bigBlindVluue = Convert.ToInt32(pack.GameProcessPack.BigBlindValue);
+
+                    AudioManager.Instance.PlaySound("ChipsMove");
                     CreateBetShips(smallSeat, smallBlindVluue.ToString());
                     CreateBetShips(bigSeat, bigBlindVluue.ToString());
                     break;
@@ -502,6 +510,7 @@ namespace HotFix_Project
                 //遊戲結果
                 case GameProcess.GameResult:
                     Debug.Log($"遊戲結果");
+                    AudioManager.Instance.PlaySound("ChipsMove");
                     foreach (var winner in pack.GameProcessPack.Winners)
                     {
                         Debug.Log($"獲勝:{winner}");
@@ -674,12 +683,14 @@ namespace HotFix_Project
 
                         case UserGameState.Follow:
                             showActionStr = "跟注";
+                            AudioManager.Instance.PlaySound("ChipsMove");
                             userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(false);
                             CreateBetShips(seatDic[nickName], betValue);
                             break;
 
                         case UserGameState.Add:
-                            showActionStr = "加注";                            
+                            showActionStr = "加注";
+                            AudioManager.Instance.PlaySound("ChipsMove");
                             userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(false);
                             CreateBetShips(seatDic[nickName], betValue);
                             break;

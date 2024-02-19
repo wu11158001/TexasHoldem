@@ -54,6 +54,8 @@ namespace HotFix_Project
 
             QuickStart_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
+
                 MainPack pack = new MainPack();
                 pack.RequestCode = RequestCode.Room;
                 pack.ActionCode = ActionCode.QuickJoinRoom;
@@ -63,6 +65,8 @@ namespace HotFix_Project
 
             CreateRoom_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
+
                 CreateRoom_Tr.gameObject.SetActive(true);
             });
 
@@ -73,6 +77,8 @@ namespace HotFix_Project
 
             BlindConfirm_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
+
                 string bigBlind = "";
                 switch(SelectBlind_Dd.value)
                 {

@@ -40,6 +40,8 @@ namespace HotFix_Project
         {
             Logout_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
+
                 MainPack pack = new MainPack();
                 pack.RequestCode = RequestCode.User;
                 pack.ActionCode = ActionCode.Logout;
@@ -48,6 +50,7 @@ namespace HotFix_Project
 
             Holdem_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
                 ABManager.Instance.CheckAB("holdem", ClickHoldemBtn);         
             });
         }
@@ -107,6 +110,7 @@ namespace HotFix_Project
             UIManager.Instance.ShowConfirmView(() =>
             {
                 Debug.Log($"開始下載資源 holdem");
+
                 Download_Tr.gameObject.SetActive(false);
                 DownLoadProgress_Tr.gameObject.SetActive(true);
                 Progress_Img.fillAmount = 0;

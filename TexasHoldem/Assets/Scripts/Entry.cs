@@ -11,6 +11,9 @@ public class Entry : UnitySingleton<Entry>
     {
         base.Awake();
 
+        GameObject audioManaager = new GameObject();
+        audioManaager.name = "AudioManager";
+        audioManaager.AddComponent<AudioManager>();
         gameObject.AddComponent<ViewABName>();
         gameObject.AddComponent<ILRuntimeManager>();
         gameObject.AddComponent<ABManager>();
@@ -30,5 +33,7 @@ public class Entry : UnitySingleton<Entry>
 
         await UIManager.Instance.CreateToolsView();
         await UIManager.Instance.ShowView(ViewType.LoginView);
+
+        AudioManager.Instance.PlayBGM();
     }
 }

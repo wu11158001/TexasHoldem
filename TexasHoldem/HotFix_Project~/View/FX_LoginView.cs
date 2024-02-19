@@ -50,12 +50,14 @@ namespace HotFix_Project
             //發送按鈕
             Send_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
                 ClickSend();
             });
 
             //切換按鈕
             Switch_Btn.onClick.AddListener(() =>
             {
+                AudioManager.Instance.PlayButtonClick();
                 ModeType modeType = currentMode == ModeType.login ? ModeType.logon : ModeType.login;
                 SwichMode(modeType);
             });
@@ -72,6 +74,7 @@ namespace HotFix_Project
 
             if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
             {
+                AudioManager.Instance.PlayButtonClick();
                 ClickSend();
             }
         }
