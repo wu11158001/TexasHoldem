@@ -15,7 +15,7 @@ namespace HotFix_Project
 
         private static Button Exit_Btn, Abort_Btn, Pass_Btn, Follow_Btn, Add_Btn;
         private static Transform Seat_Tr, BetChips_Tr, BetChipsSample, PointTarget, OperateButton_Tr, AddBetValue_Tr;
-        private static Text TotalBetChips_Txt, AddChips_Txt, Add_Txt, Waiting_Txt;
+        private static Text TotalBetChips_Txt, AddChips_Txt, Add_Txt, Tip_Txt;
         private static Slider Add_Sl;
         private static Image[] pokersPool = new Image[5];
 
@@ -68,7 +68,7 @@ namespace HotFix_Project
             TotalBetChips_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "TotalBetChips_Txt");
             AddChips_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "AddChips_Txt");
             Add_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Add_Txt");
-            Waiting_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Waiting_Txt");
+            Tip_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Tip_Txt");
             Seat_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "Seat_Tr");
 
             for (int i = 0; i < Seat_Tr.childCount; i++)
@@ -115,7 +115,7 @@ namespace HotFix_Project
         private static void OnEnable()
         {
             seatDic.Clear();
-            Waiting_Txt.gameObject.SetActive(true);
+            Tip_Txt.text = "等待下一局...";
             isGetUserInfo = false;
             foreach (var user in userInfoDic)
             {
@@ -369,7 +369,7 @@ namespace HotFix_Project
                 //選擇大小盲
                 case GameProcess.SetBlind:
                     Debug.Log("選擇大小盲");
-                    Waiting_Txt.gameObject.SetActive(false);
+                    Tip_Txt.text = "";
                     GameInit();
 
                     int smallSeat = 0, bigSeat = 0;
@@ -639,6 +639,7 @@ namespace HotFix_Project
 
                     userInfoDic[seat].Item4.gameObject.SetActive(false);
                     userInfoDic[seat].Item5.text = "";
+                    Tip_Txt.text = "";
 
                     string betValue = pack.GameActionPack.BetValue;
                     string nickName = pack.GameActionPack.ActionNickName;
@@ -689,6 +690,10 @@ namespace HotFix_Project
                     userInfoDic[seat].Item4.gameObject.SetActive(true);
                     userInfoDic[seat].Item4.fillAmount = (8.0f - pack.ActionerPack.Countdown) / 8.0f;                   
                     userInfoDic[seat].Item5.text = pack.ActionerPack.Countdown.ToString("F0");
+                    if (pack.ActionerPack.Countdown < 5)
+                    {
+                        Tip_Txt.text = "倒數結束棄牌!";
+                    }
                     break;
             }
         }

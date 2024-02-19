@@ -655,6 +655,24 @@ namespace TexasHoldemServer.Servers
                         return;
                     }
                 }
+
+                //倒數結束棄牌
+                Client client = null;
+                for (int i = 0; i < clientList.Count; i++)
+                {
+                    if (clientList[i].UserInfo.NickName == roomState.actionUser)
+                    {
+                        client = clientList[i];
+                        break;
+                    }
+                }
+                GameActionPack gameActionPack = new GameActionPack();
+                gameActionPack.UserGameState = UserGameState.Abort;
+                gameActionPack.BetValue = client.UserInfo.BetChips;
+                MainPack abortpack = new MainPack();
+                abortpack.ActionCode = ActionCode.ShowUserAction;
+                abortpack.GameActionPack = gameActionPack;
+                UserAction(client, abortpack);
             }, token);
         }
 

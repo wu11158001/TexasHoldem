@@ -16,8 +16,10 @@ namespace HotFix_Project
         private static FX_BaseView thisView;
 
         private static Button Logout_Btn, Holdem_Btn;
-        private static GameObject Download_Obj, DownLoadProgress_Obj;
+        private static Transform Download_Tr, DownLoadProgress_Tr;
         private static Image Progress_Img;
+
+        private static float currProccess;
 
         private static void Init(BaseView baseView, GameObject viewObj)
         {
@@ -25,11 +27,11 @@ namespace HotFix_Project
 
             Logout_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Logout_Btn");
             Holdem_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Holdem_Btn");
-            DownLoadProgress_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "DownLoadProgress_Obj").gameObject;            
-            Download_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "Download_Obj").gameObject;            
+            DownLoadProgress_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "DownLoadProgress_Tr");            
+            Download_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "Download_Tr");            
             Progress_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Progress_Img");
 
-            DownLoadProgress_Obj.SetActive(false);
+            DownLoadProgress_Tr.gameObject.SetActive(false);
 
             ABManager.Instance.CheckAB("holdem", SwitchDownloadObj);
         }
@@ -48,6 +50,24 @@ namespace HotFix_Project
             {
                 ABManager.Instance.CheckAB("holdem", ClickHoldemBtn);         
             });
+        }
+
+        private static void Update()
+        {
+            //下載進度
+            if (DownLoadProgress_Tr.gameObject.activeSelf)
+            {
+                if (Progress_Img.fillAmount < currProccess)
+                {
+                    Progress_Img.fillAmount += 1 * Time.deltaTime;
+                }
+
+                if (Progress_Img.fillAmount == 1)
+                {
+                    ABManager.Instance.CheckAB("holdem", SwitchDownloadObj);
+                    DownLoadProgress_Tr.gameObject.SetActive(false);
+                }
+            }
         }
 
         /// <summary>
@@ -72,7 +92,7 @@ namespace HotFix_Project
         /// <param name="isdownload"></param>
         private static void SwitchDownloadObj(bool isdownload)
         {
-            Download_Obj.SetActive(!isdownload);
+            Download_Tr.gameObject.SetActive(!isdownload);
         }
 
         /// <summary>
@@ -83,10 +103,11 @@ namespace HotFix_Project
         {
             Debug.Log($"下載資源大小:" + size);
             double megabytes = (double)size / (1024 * 1024);
-            DownLoadProgress_Obj.SetActive(true);
 
             UIManager.Instance.ShowConfirmView(() =>
             {
+                DownLoadProgress_Tr.gameObject.SetActive(true);
+                Progress_Img.fillAmount = 0;
                 ABManager.Instance.DownloadAB("holdem", DownloadProgress);
             },
             $"下載熱更資源: {megabytes.ToString("F2")} M"
@@ -101,12 +122,7 @@ namespace HotFix_Project
         private static void DownloadProgress(float progress)
         {
             Debug.Log($"下載進度:{progress}%");
-            Progress_Img.fillAmount = progress;
-            if (progress == 100)
-            {
-                ABManager.Instance.CheckAB("holdem", SwitchDownloadObj);
-                DownLoadProgress_Obj.SetActive(false);
-            }
+            currProccess = progress; 
         }
 
         /// <summary>

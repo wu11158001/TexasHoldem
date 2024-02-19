@@ -13,15 +13,20 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Transform ReviseNickName_Tr, AvatarSample_Tr;
+        private static Transform ReviseNickName_Tr, AvatarSample_Btn;
         private static Button NickName_Btn, Cancel_Btn, Confirm_Btn, Avatar_Btn;
-        private static Text NickName_Txt, Cash_Txt;
+        private static Text NickName_Txt, Chips_Txt;
         private static InputField NickName_IF;
-        private static RectTransform AvatarList_Rt;
+        private static RectTransform AvatarList_Rt, AvatarListMask_Tr;
         private static Image Avatar_Img;
 
-        private static float avatarListWidth;
+        private static bool AvatarListSwitch;
+        private static GridLayoutGroup avatarGridLayout;
+        private static int avatarWidthCound = 5;
+        private static float initAvatarListHeight;
         private static Vector2 avatarItemSize;
+        private static Vector2 avatarTargetSize;
+        private static Vector2 avatarTempSize;
 
         private static Sprite[] avatarList;
 
@@ -30,18 +35,19 @@ namespace HotFix_Project
             thisView = new FX_BaseView().SetObj(baseView, viewObj);
 
             ReviseNickName_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "ReviseNickName_Tr");
-            AvatarSample_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "AvatarSample_Tr");
+            AvatarListMask_Tr = FindConponent.FindObj<RectTransform>(thisView.view.transform, "AvatarListMask_Tr");
+            AvatarSample_Btn = FindConponent.FindObj<Transform>(thisView.view.transform, "AvatarSample_Btn");
             AvatarList_Rt = FindConponent.FindObj<RectTransform>(thisView.view.transform, "AvatarList_Rt");
             NickName_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "NickName_Btn");
             Cancel_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Cancel_Btn");
             Confirm_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Confirm_Btn");
             Avatar_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Avatar_Btn");
             NickName_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "NickName_Txt");
-            Cash_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Cash_Txt");
+            Chips_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Chips_Txt");
             NickName_IF = FindConponent.FindObj<InputField>(thisView.view.transform, "NickName_IF");
             Avatar_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Avatar_Img");
 
-            AvatarSample_Tr.gameObject.SetActive(false);
+            AvatarSample_Btn.gameObject.SetActive(false);
 
             LoadAvatar();   
         }
@@ -49,7 +55,7 @@ namespace HotFix_Project
         private static void OnEnable()
         {
             ReviseNickName_Tr.gameObject.SetActive(false);
-            AvatarList_Rt.gameObject.SetActive(false);
+            AvatarListMask_Tr.gameObject.SetActive(false);
 
             MainPack pack = new MainPack();
             pack.RequestCode = RequestCode.User;
@@ -79,14 +85,15 @@ namespace HotFix_Project
 
             Avatar_Btn.onClick.AddListener(() =>
             {
-                if (AvatarList_Rt.gameObject.activeSelf)
+                if (AvatarListMask_Tr.gameObject.activeSelf)
                 {
-                    AvatarList_Rt.gameObject.SetActive(false);
+                    AvatarListSwitch = false;
                 }
                 else
                 {
-                    AvatarList_Rt.gameObject.SetActive(true);
-                    AvatarList_Rt.sizeDelta = new Vector2(0, avatarItemSize.y);
+                    AvatarListSwitch = true;
+                    AvatarListMask_Tr.gameObject.SetActive(true);
+                    avatarTempSize = new Vector2(0, initAvatarListHeight);                    
                 }                
             });
         }
@@ -98,13 +105,41 @@ namespace HotFix_Project
                 ClickConfirm();
             }
 
-            if (AvatarList_Rt.gameObject.activeSelf)
+            //頭像列表開關
+            if (AvatarListSwitch)
             {
-                if (AvatarList_Rt.rect.width < avatarListWidth)
+                if (avatarTempSize.x < avatarTargetSize.x)
                 {
-                    float width = AvatarList_Rt.rect.width + 10;
-                    AvatarList_Rt.sizeDelta = new Vector2(width, avatarItemSize.y);
+                    avatarTempSize.x += 10;
                 }
+                else
+                {
+                    if (avatarTempSize.y < avatarTargetSize.y)
+                    {
+                        avatarTempSize.y += 5;
+                    }
+                }        
+                AvatarListMask_Tr.sizeDelta = new Vector2(avatarTempSize.x, avatarTempSize.y);
+            }
+
+            if (AvatarListMask_Tr.gameObject.activeSelf && !AvatarListSwitch)
+            {
+                if (AvatarListMask_Tr.sizeDelta.y > initAvatarListHeight)
+                {                    
+                    avatarTempSize.y -= 5; 
+                }
+                else
+                {
+                    if (AvatarListMask_Tr.sizeDelta.x > 0)
+                    {
+                        avatarTempSize.x -= 10;
+                    }
+                    else
+                    {
+                        AvatarListMask_Tr.gameObject.SetActive(false);
+                    }
+                }
+                AvatarListMask_Tr.sizeDelta = new Vector2(avatarTempSize.x, avatarTempSize.y);
             }
         }
 
@@ -114,7 +149,7 @@ namespace HotFix_Project
         private static void LoadAvatar()
         {
             HorizontalLayoutGroup group = AvatarList_Rt.GetComponent<HorizontalLayoutGroup>();
-            avatarItemSize = AvatarSample_Tr.GetComponent<RectTransform>().rect.size;
+            avatarItemSize = AvatarSample_Btn.GetComponent<RectTransform>().rect.size;
             AvatarList_Rt.sizeDelta = new Vector2(0, avatarItemSize.y);
             ABManager.Instance.LoadSprite("entry", "AvatarList", (avatars) =>
             {
@@ -124,10 +159,9 @@ namespace HotFix_Project
                 {
                     int currentIndex = i;
 
-                    GameObject avatarObj = GameObject.Instantiate<GameObject>(AvatarSample_Tr.gameObject);
+                    GameObject avatarObj = GameObject.Instantiate<GameObject>(AvatarSample_Btn.gameObject);
                     avatarObj.transform.SetParent(AvatarList_Rt);
                     avatarObj.SetActive(true);
-                    avatarListWidth += avatarItemSize.x + group.spacing;
                     Image img = FindConponent.FindObj<Image>(avatarObj.transform, "Item_Img");
                     img.sprite = avatarList[i];
 
@@ -146,6 +180,14 @@ namespace HotFix_Project
                         thisView.view.SendRequest(pack);
                     });
                 }
+
+                //設定頭像列表目標大小
+                avatarGridLayout = AvatarList_Rt.GetComponent<GridLayoutGroup>();
+                avatarTargetSize = new Vector2(avatarGridLayout.spacing.x + (avatarGridLayout.cellSize.x + avatarGridLayout.spacing.x) * avatarWidthCound,
+                                               avatarGridLayout.spacing.y + (avatarGridLayout.cellSize.y + avatarGridLayout.spacing.y) * ((avatarList.Length / avatarWidthCound) + 1));
+
+                initAvatarListHeight = avatarGridLayout.cellSize.y + (avatarGridLayout.spacing.y * 2);
+                AvatarList_Rt.sizeDelta = new Vector2(avatarTargetSize.x, avatarTargetSize.y);
             });
         }
 
@@ -190,7 +232,7 @@ namespace HotFix_Project
                 //更新用戶訊息
                 case ActionCode.GetUserInfo:
                     NickName_Txt.text = pack.UserInfoPack[0].NickName;
-                    Cash_Txt.text = pack.UserInfoPack[0].Cash;
+                    Chips_Txt.text = FX_Utils.Instance.SetChipsStr(pack.UserInfoPack[0].Cash);
                     Avatar_Img.sprite = avatarList[Convert.ToInt32(pack.UserInfoPack[0].Avatar)];
                     break;
 
@@ -201,8 +243,8 @@ namespace HotFix_Project
                         string reviseValue = pack.ReviseUserInfoPack.ReviseValue;
                         switch (pack.ReviseUserInfoPack.ReviseName)
                         {
-                            case "avatar":                                
-                                AvatarList_Rt.gameObject.SetActive(false);
+                            case "avatar":
+                                AvatarListMask_Tr.gameObject.SetActive(false);
                                 Avatar_Img.sprite = avatarList[Convert.ToInt32(reviseValue)];
                                 break;
 
@@ -233,8 +275,7 @@ namespace HotFix_Project
                             case "nickname":
                                 UIManager.Instance.ShowTip("更換頭像失敗!!!");
                                 break;
-                        }
-                        
+                        }                        
                     }
                     break;
             }
