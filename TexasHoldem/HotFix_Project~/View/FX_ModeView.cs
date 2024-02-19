@@ -106,6 +106,8 @@ namespace HotFix_Project
 
             UIManager.Instance.ShowConfirmView(() =>
             {
+                Debug.Log($"開始下載資源 holdem");
+                Download_Tr.gameObject.SetActive(false);
                 DownLoadProgress_Tr.gameObject.SetActive(true);
                 Progress_Img.fillAmount = 0;
                 ABManager.Instance.DownloadAB("holdem", DownloadProgress);

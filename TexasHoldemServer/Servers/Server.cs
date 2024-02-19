@@ -138,7 +138,7 @@ namespace TexasHoldemServer.Servers
         /// <param name="initChips"></param>
         /// <param name="bigBlindValue"></param>
         /// <returns></returns>
-        private MainPack CreateRoom(Client client, MainPack pack, string initChips, string bigBlindValue)
+        public MainPack CreateRoom(Client client, MainPack pack, string initChips, string bigBlindValue)
         {
             try
             {

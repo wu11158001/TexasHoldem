@@ -14,9 +14,9 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Button Back_Btn, QuickStart_Btn;
-        private static Transform RoomList_Tr;
-        private static GameObject RoomListSample_Obj;
+        private static Button Back_Btn, QuickStart_Btn, CreateRoom_Btn, BlindCancel_Btn, BlindConfirm_Btn;
+        private static Transform RoomList_Tr, RoomListSample_Tr, CreateRoom_Tr;
+        private static Dropdown SelectBlind_Dd;
 
         private static Timer updateRoomTimer;
 
@@ -28,10 +28,16 @@ namespace HotFix_Project
 
             Back_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Back_Btn");
             QuickStart_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "QuickStart_Btn");
+            CreateRoom_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "CreateRoom_Btn");
+            BlindCancel_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "BlindCancel_Btn");
+            BlindConfirm_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "BlindConfirm_Btn");
+            SelectBlind_Dd = FindConponent.FindObj<Dropdown>(thisView.view.transform, "SelectBlind_Dd");
             RoomList_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "RoomList_Tr");
-            RoomListSample_Obj = FindConponent.FindObj<Transform>(thisView.view.transform, "RoomListSample_Obj").gameObject;
+            RoomListSample_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "RoomListSample_Tr");
+            CreateRoom_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "CreateRoom_Tr");
 
-            RoomListSample_Obj.SetActive(false);
+            RoomListSample_Tr.gameObject.SetActive(false);
+            CreateRoom_Tr.gameObject.SetActive(false);
         }
 
         private static void OnEnable()
@@ -52,6 +58,44 @@ namespace HotFix_Project
                 pack.RequestCode = RequestCode.Room;
                 pack.ActionCode = ActionCode.QuickJoinRoom;
 
+                thisView.view.SendRequest(pack);
+            });
+
+            CreateRoom_Btn.onClick.AddListener(() =>
+            {
+                CreateRoom_Tr.gameObject.SetActive(true);
+            });
+
+            BlindCancel_Btn.onClick.AddListener(() =>
+            {
+                CreateRoom_Tr.gameObject.SetActive(false);
+            });
+
+            BlindConfirm_Btn.onClick.AddListener(() =>
+            {
+                string bigBlind = "";
+                switch(SelectBlind_Dd.value)
+                {
+                    case 0:
+                        bigBlind = "50";
+                        break;
+                    case 1:
+                        bigBlind = "100";
+                        break;
+                    case 2:
+                        bigBlind = "2000";
+                        break;
+
+                }
+
+                MainPack pack = new MainPack();
+                pack.RequestCode = RequestCode.Room;
+                pack.ActionCode = ActionCode.CreateRoom;
+
+                RoomPack roomPack = new RoomPack();
+                roomPack.RoomBigBlind = bigBlind;
+
+                pack.RoomPack.Add(roomPack);
                 thisView.view.SendRequest(pack);
             });
         }
@@ -86,7 +130,7 @@ namespace HotFix_Project
 
             foreach (var room in pack.RoomPack)
             {
-                GameObject obj = GameObject.Instantiate(RoomListSample_Obj);
+                GameObject obj = GameObject.Instantiate(RoomListSample_Tr.gameObject);
                 RoomListView roomView = obj.GetComponent<RoomListView>();
                 roomView.transform.SetParent(RoomList_Tr);
                 roomView.gameObject.SetActive(true);
@@ -123,7 +167,19 @@ namespace HotFix_Project
                     }
                     else
                     {
-                        Debug.LogError("快速開局錯誤!!!");
+                        UIManager.Instance.ShowTip("籌碼不足!!!");
+                    }
+                    break;
+
+                //創建房間
+                case ActionCode.CreateRoom:
+                    if (pack.ReturnCode == ReturnCode.Succeed)
+                    {
+                        UIManager.Instance.ShowLoadingView(ViewType.HoldemGameView);
+                    }
+                    else
+                    {
+                        UIManager.Instance.ShowTip("籌碼不足!!!");
                     }
                     break;
             }

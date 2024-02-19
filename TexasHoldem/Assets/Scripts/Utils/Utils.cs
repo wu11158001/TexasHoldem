@@ -18,7 +18,7 @@ public static class Utils
         Sum(v1.Length - 1, v2.Length - 1, false);
         return sb.ToString();
 
-        // 相加
+        //相加
         void Sum(int index1, int index2, bool isCarry)
         {
             if (index1 < 0 && index2 < 0 && !isCarry)
@@ -88,5 +88,55 @@ public static class Utils
 
             Subtract(index1 - 1, index2 - 1, isBorrow);
         }
+    }
+
+    /// <summary>
+    /// 字串乘法
+    /// </summary>
+    /// <param name="v1"></param>
+    /// <param name="v2"></param>
+    /// <returns></returns>
+    public static string StringMultiplication(string v1, string v2)
+    {
+        if (string.IsNullOrEmpty(v1) || string.IsNullOrEmpty(v2))
+        {
+            return "0";//若有一個為空字符串，則結果為0
+        }
+
+        int m = v1.Length;
+        int n = v2.Length;
+        int[] result = new int[m + n];
+
+        //進行乘法運算
+        for (int i = m - 1; i >= 0; i--)
+        {
+            for (int j = n - 1; j >= 0; j--)
+            {
+                int num1 = v1[i] - '0';
+                int num2 = v2[j] - '0';
+                int mul = num1 * num2;
+                int sum = mul + result[i + j + 1];
+
+                result[i + j] += sum / 10; //進位
+                result[i + j + 1] = sum % 10;
+            }
+        }
+
+        //將結果轉為字符串
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < result.Length; i++)
+        {
+            int digit = result[i];
+            sb.Append(digit);
+        }
+
+        //移除前導零
+        int startIndex = 0;
+        while (startIndex <= sb.Length - 1 && sb[startIndex] == '0')
+        {
+            startIndex++;
+        }
+
+        return sb.ToString().Substring(startIndex);
     }
 }

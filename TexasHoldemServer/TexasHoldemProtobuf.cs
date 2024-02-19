@@ -45,48 +45,49 @@ namespace TexasHoldemProtobuf {
             "DFVzZXJJbmZvUGFjaxIQCghHYW1lU2VhdBgBIAEoBRIQCghuaWNrTmFtZRgC",
             "IAEoCRIOCgZhdmF0YXIYAyABKAkSDAoEY2FzaBgEIAEoCRINCgVjaGlwcxgF",
             "IAEoCSI9ChJSZXZpc2VVc2VySW5mb1BhY2sSEgoKcmV2aXNlTmFtZRgBIAEo",
-            "CRITCgtyZXZpc2VWYWx1ZRgCIAEoCSJBCghSb29tUGFjaxIQCghyb29tTmFt",
-            "ZRgBIAEoCRIQCghtYXhDb3VudBgCIAEoBRIRCglDdXJyQ291bnQYAyABKAUi",
-            "iAEKDENvbXB1dGVyUGFjaxIQCghuaWNrTmFtZRgBIAEoCRIOCgZhdmF0YXIY",
-            "AiABKAkSEAoIYmV0Q2hpcHMYAyABKAkSDQoFY2hpcHMYBCABKAkSNQoJZ2Ft",
-            "ZVN0YXRlGAUgASgOMiIuVGV4YXNIb2xkZW1Qcm90b2J1Zi5Vc2VyR2FtZVN0",
-            "YXRlIuwFCg9HYW1lUHJvY2Vzc1BhY2sSNQoLZ2FtZVByb2Nlc3MYASABKA4y",
-            "IC5UZXhhc0hvbGRlbVByb3RvYnVmLkdhbWVQcm9jZXNzEhIKCmFjdGlvblVz",
-            "ZXIYAiABKAkSFAoMc21hbGxCbGluZGVyGAMgASgJEhIKCmJpZ0JsaW5kZXIY",
-            "BCABKAkSFQoNYmlnQmxpbmRWYWx1ZRgFIAEoCRIVCg10b3RhbEJldENoaXBz",
-            "GAYgASgJEg4KBnJlc3VsdBgHIAMoBRJGCgloYW5kUG9rZXIYCCADKAsyMy5U",
-            "ZXhhc0hvbGRlbVByb3RvYnVmLkdhbWVQcm9jZXNzUGFjay5IYW5kUG9rZXJF",
-            "bnRyeRJECghiZXRTaGlwcxgJIAMoCzIyLlRleGFzSG9sZGVtUHJvdG9idWYu",
-            "R2FtZVByb2Nlc3NQYWNrLkJldFNoaXBzRW50cnkSRgoJdXNlckNoaXBzGAog",
-            "AygLMjMuVGV4YXNIb2xkZW1Qcm90b2J1Zi5HYW1lUHJvY2Vzc1BhY2suVXNl",
-            "ckNoaXBzRW50cnkSSAoKcG9rZXJTaGFwZRgLIAMoCzI0LlRleGFzSG9sZGVt",
-            "UHJvdG9idWYuR2FtZVByb2Nlc3NQYWNrLlBva2VyU2hhcGVFbnRyeRIPCgdj",
-            "dXJyQmV0GAwgASgJEg8KB3dpbm5lcnMYDSADKAkaTgoOSGFuZFBva2VyRW50",
-            "cnkSCwoDa2V5GAEgASgJEisKBXZhbHVlGAIgASgLMhwuVGV4YXNIb2xkZW1Q",
-            "cm90b2J1Zi5JbnRMaXN0OgI4ARovCg1CZXRTaGlwc0VudHJ5EgsKA2tleRgB",
-            "IAEoCRINCgV2YWx1ZRgCIAEoCToCOAEaMAoOVXNlckNoaXBzRW50cnkSCwoD",
-            "a2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ARoxCg9Qb2tlclNoYXBlRW50",
-            "cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASJ1Cg5HYW1lQWN0",
-            "aW9uUGFjaxIWCg5hY3Rpb25OaWNrTmFtZRgBIAEoCRI5Cg11c2VyR2FtZVN0",
-            "YXRlGAIgASgOMiIuVGV4YXNIb2xkZW1Qcm90b2J1Zi5Vc2VyR2FtZVN0YXRl",
-            "EhAKCGJldFZhbHVlGAMgASgJIkwKDEFjdGlvbmVyUGFjaxIQCghhY3Rpb25l",
-            "chgBIAEoCRIRCgljb3VudGRvd24YAiABKAISFwoPaXNGaXJzdEFjdGlvbmVy",
-            "GAMgASgIIhkKB0ludExpc3QSDgoGdmFsdWVzGAEgAygFKjwKC1JlcXVlc3RD",
-            "b2RlEg8KC1JlcXVlc3ROb25lEAASCAoEVXNlchABEggKBFJvb20QAhIICgRH",
-            "YW1lEAMqlgIKCkFjdGlvbkNvZGUSDgoKQWN0aW9uTm9uZRAAEgkKBUxvZ29u",
-            "EAESCQoFTG9naW4QAhIKCgZMb2dvdXQQAxIPCgtHZXRVc2VySW5mbxAEEgwK",
-            "CEpvaW5Sb29tEAUSEQoNUXVpY2tKb2luUm9vbRAGEhYKElVwZGF0ZVJvb21V",
-            "c2VySW5mbxAHEg4KClVwZGF0ZVJvb20QCBIVChFPdGhlclVzZXJFeGl0Um9v",
-            "bRAJEgwKCEV4aXRSb29tEAoSEgoOUmV2aXNlVXNlckluZm8QCxINCglTdGFy",
-            "dEdhbWUQDBINCglHYW1lU3RhZ2UQDRISCg5TaG93VXNlckFjdGlvbhAOEhEK",
-            "DUFjdGlvbmVyT3JkZXIQDypQCgpSZXR1cm5Db2RlEg4KClJldHVybk5vbmUQ",
-            "ABILCgdTdWNjZWVkEAESCAoERmFpbBACEg4KCkR1cGxpY2F0ZWQQAxILCgdO",
-            "b3RSb29tEAQqLwoMU2VuZE1vZGVDb2RlEgwKCE1vZGVOb25lEAASEQoNUm9v",
-            "bUJyb2FkY2FzdBABKmgKC0dhbWVQcm9jZXNzEg8KC1Byb2Nlc3NOb25lEAAS",
-            "DAoIU2V0QmxpbmQQARILCgdQcmVmbG9wEAISCAoERmxvcBADEggKBFR1cm4Q",
-            "BBIJCgVSaXZlchAFEg4KCkdhbWVSZXN1bHQQBipVCg1Vc2VyR2FtZVN0YXRl",
-            "Eg0KCVN0YXRlTm9uZRAAEgsKB1BsYXlpbmcQARIJCgVBYm9ydBACEggKBFBh",
-            "c3MQAxIKCgZGb2xsb3cQBBIHCgNBZGQQBWIGcHJvdG8z"));
+            "CRITCgtyZXZpc2VWYWx1ZRgCIAEoCSJXCghSb29tUGFjaxIQCghyb29tTmFt",
+            "ZRgBIAEoCRIUCgxSb29tQmlnQmxpbmQYAiABKAkSEAoIbWF4Q291bnQYAyAB",
+            "KAUSEQoJQ3VyckNvdW50GAQgASgFIogBCgxDb21wdXRlclBhY2sSEAoIbmlj",
+            "a05hbWUYASABKAkSDgoGYXZhdGFyGAIgASgJEhAKCGJldENoaXBzGAMgASgJ",
+            "Eg0KBWNoaXBzGAQgASgJEjUKCWdhbWVTdGF0ZRgFIAEoDjIiLlRleGFzSG9s",
+            "ZGVtUHJvdG9idWYuVXNlckdhbWVTdGF0ZSLsBQoPR2FtZVByb2Nlc3NQYWNr",
+            "EjUKC2dhbWVQcm9jZXNzGAEgASgOMiAuVGV4YXNIb2xkZW1Qcm90b2J1Zi5H",
+            "YW1lUHJvY2VzcxISCgphY3Rpb25Vc2VyGAIgASgJEhQKDHNtYWxsQmxpbmRl",
+            "chgDIAEoCRISCgpiaWdCbGluZGVyGAQgASgJEhUKDWJpZ0JsaW5kVmFsdWUY",
+            "BSABKAkSFQoNdG90YWxCZXRDaGlwcxgGIAEoCRIOCgZyZXN1bHQYByADKAUS",
+            "RgoJaGFuZFBva2VyGAggAygLMjMuVGV4YXNIb2xkZW1Qcm90b2J1Zi5HYW1l",
+            "UHJvY2Vzc1BhY2suSGFuZFBva2VyRW50cnkSRAoIYmV0U2hpcHMYCSADKAsy",
+            "Mi5UZXhhc0hvbGRlbVByb3RvYnVmLkdhbWVQcm9jZXNzUGFjay5CZXRTaGlw",
+            "c0VudHJ5EkYKCXVzZXJDaGlwcxgKIAMoCzIzLlRleGFzSG9sZGVtUHJvdG9i",
+            "dWYuR2FtZVByb2Nlc3NQYWNrLlVzZXJDaGlwc0VudHJ5EkgKCnBva2VyU2hh",
+            "cGUYCyADKAsyNC5UZXhhc0hvbGRlbVByb3RvYnVmLkdhbWVQcm9jZXNzUGFj",
+            "ay5Qb2tlclNoYXBlRW50cnkSDwoHY3VyckJldBgMIAEoCRIPCgd3aW5uZXJz",
+            "GA0gAygJGk4KDkhhbmRQb2tlckVudHJ5EgsKA2tleRgBIAEoCRIrCgV2YWx1",
+            "ZRgCIAEoCzIcLlRleGFzSG9sZGVtUHJvdG9idWYuSW50TGlzdDoCOAEaLwoN",
+            "QmV0U2hpcHNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgB",
+            "GjAKDlVzZXJDaGlwc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEo",
+            "CToCOAEaMQoPUG9rZXJTaGFwZUVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1",
+            "ZRgCIAEoCToCOAEidQoOR2FtZUFjdGlvblBhY2sSFgoOYWN0aW9uTmlja05h",
+            "bWUYASABKAkSOQoNdXNlckdhbWVTdGF0ZRgCIAEoDjIiLlRleGFzSG9sZGVt",
+            "UHJvdG9idWYuVXNlckdhbWVTdGF0ZRIQCghiZXRWYWx1ZRgDIAEoCSJMCgxB",
+            "Y3Rpb25lclBhY2sSEAoIYWN0aW9uZXIYASABKAkSEQoJY291bnRkb3duGAIg",
+            "ASgCEhcKD2lzRmlyc3RBY3Rpb25lchgDIAEoCCIZCgdJbnRMaXN0Eg4KBnZh",
+            "bHVlcxgBIAMoBSo8CgtSZXF1ZXN0Q29kZRIPCgtSZXF1ZXN0Tm9uZRAAEggK",
+            "BFVzZXIQARIICgRSb29tEAISCAoER2FtZRADKqYCCgpBY3Rpb25Db2RlEg4K",
+            "CkFjdGlvbk5vbmUQABIJCgVMb2dvbhABEgkKBUxvZ2luEAISCgoGTG9nb3V0",
+            "EAMSDwoLR2V0VXNlckluZm8QBBIOCgpDcmVhdGVSb29tEAUSDAoISm9pblJv",
+            "b20QBhIRCg1RdWlja0pvaW5Sb29tEAcSFgoSVXBkYXRlUm9vbVVzZXJJbmZv",
+            "EAgSDgoKVXBkYXRlUm9vbRAJEhUKEU90aGVyVXNlckV4aXRSb29tEAoSDAoI",
+            "RXhpdFJvb20QCxISCg5SZXZpc2VVc2VySW5mbxAMEg0KCVN0YXJ0R2FtZRAN",
+            "Eg0KCUdhbWVTdGFnZRAOEhIKDlNob3dVc2VyQWN0aW9uEA8SEQoNQWN0aW9u",
+            "ZXJPcmRlchAQKlAKClJldHVybkNvZGUSDgoKUmV0dXJuTm9uZRAAEgsKB1N1",
+            "Y2NlZWQQARIICgRGYWlsEAISDgoKRHVwbGljYXRlZBADEgsKB05vdFJvb20Q",
+            "BCovCgxTZW5kTW9kZUNvZGUSDAoITW9kZU5vbmUQABIRCg1Sb29tQnJvYWRj",
+            "YXN0EAEqaAoLR2FtZVByb2Nlc3MSDwoLUHJvY2Vzc05vbmUQABIMCghTZXRC",
+            "bGluZBABEgsKB1ByZWZsb3AQAhIICgRGbG9wEAMSCAoEVHVybhAEEgkKBVJp",
+            "dmVyEAUSDgoKR2FtZVJlc3VsdBAGKlUKDVVzZXJHYW1lU3RhdGUSDQoJU3Rh",
+            "dGVOb25lEAASCwoHUGxheWluZxABEgkKBUFib3J0EAISCAoEUGFzcxADEgoK",
+            "BkZvbGxvdxAEEgcKA0FkZBAFYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::TexasHoldemProtobuf.RequestCode), typeof(global::TexasHoldemProtobuf.ActionCode), typeof(global::TexasHoldemProtobuf.ReturnCode), typeof(global::TexasHoldemProtobuf.SendModeCode), typeof(global::TexasHoldemProtobuf.GameProcess), typeof(global::TexasHoldemProtobuf.UserGameState), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -94,7 +95,7 @@ namespace TexasHoldemProtobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.LoginPack), global::TexasHoldemProtobuf.LoginPack.Parser, new[]{ "Account", "Password", "Avatar" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.UserInfoPack), global::TexasHoldemProtobuf.UserInfoPack.Parser, new[]{ "GameSeat", "NickName", "Avatar", "Cash", "Chips" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ReviseUserInfoPack), global::TexasHoldemProtobuf.ReviseUserInfoPack.Parser, new[]{ "ReviseName", "ReviseValue" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.RoomPack), global::TexasHoldemProtobuf.RoomPack.Parser, new[]{ "RoomName", "MaxCount", "CurrCount" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.RoomPack), global::TexasHoldemProtobuf.RoomPack.Parser, new[]{ "RoomName", "RoomBigBlind", "MaxCount", "CurrCount" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ComputerPack), global::TexasHoldemProtobuf.ComputerPack.Parser, new[]{ "NickName", "Avatar", "BetChips", "Chips", "GameState" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameProcessPack), global::TexasHoldemProtobuf.GameProcessPack.Parser, new[]{ "GameProcess", "ActionUser", "SmallBlinder", "BigBlinder", "BigBlindValue", "TotalBetChips", "Result", "HandPoker", "BetShips", "UserChips", "PokerShape", "CurrBet", "Winners" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, null, null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameActionPack), global::TexasHoldemProtobuf.GameActionPack.Parser, new[]{ "ActionNickName", "UserGameState", "BetValue" }, null, null, null, null),
@@ -144,49 +145,53 @@ namespace TexasHoldemProtobuf {
     /// </summary>
     [pbr::OriginalName("GetUserInfo")] GetUserInfo = 4,
     /// <summary>
+    ///創建房間
+    /// </summary>
+    [pbr::OriginalName("CreateRoom")] CreateRoom = 5,
+    /// <summary>
     ///加入指定房間
     /// </summary>
-    [pbr::OriginalName("JoinRoom")] JoinRoom = 5,
+    [pbr::OriginalName("JoinRoom")] JoinRoom = 6,
     /// <summary>
     ///快速加入房間
     /// </summary>
-    [pbr::OriginalName("QuickJoinRoom")] QuickJoinRoom = 6,
+    [pbr::OriginalName("QuickJoinRoom")] QuickJoinRoom = 7,
     /// <summary>
     ///更新房間用戶訊息
     /// </summary>
-    [pbr::OriginalName("UpdateRoomUserInfo")] UpdateRoomUserInfo = 7,
+    [pbr::OriginalName("UpdateRoomUserInfo")] UpdateRoomUserInfo = 8,
     /// <summary>
     ///刷新房間列表
     /// </summary>
-    [pbr::OriginalName("UpdateRoom")] UpdateRoom = 8,
+    [pbr::OriginalName("UpdateRoom")] UpdateRoom = 9,
     /// <summary>
     ///其他用戶離開房間
     /// </summary>
-    [pbr::OriginalName("OtherUserExitRoom")] OtherUserExitRoom = 9,
+    [pbr::OriginalName("OtherUserExitRoom")] OtherUserExitRoom = 10,
     /// <summary>
     ///離開房間
     /// </summary>
-    [pbr::OriginalName("ExitRoom")] ExitRoom = 10,
+    [pbr::OriginalName("ExitRoom")] ExitRoom = 11,
     /// <summary>
     ///修改用戶資料
     /// </summary>
-    [pbr::OriginalName("ReviseUserInfo")] ReviseUserInfo = 11,
+    [pbr::OriginalName("ReviseUserInfo")] ReviseUserInfo = 12,
     /// <summary>
     ///開始遊戲
     /// </summary>
-    [pbr::OriginalName("StartGame")] StartGame = 12,
+    [pbr::OriginalName("StartGame")] StartGame = 13,
     /// <summary>
     ///遊戲階段
     /// </summary>
-    [pbr::OriginalName("GameStage")] GameStage = 13,
+    [pbr::OriginalName("GameStage")] GameStage = 14,
     /// <summary>
     ///演出玩家行動
     /// </summary>
-    [pbr::OriginalName("ShowUserAction")] ShowUserAction = 14,
+    [pbr::OriginalName("ShowUserAction")] ShowUserAction = 15,
     /// <summary>
     ///行動者指令
     /// </summary>
-    [pbr::OriginalName("ActionerOrder")] ActionerOrder = 15,
+    [pbr::OriginalName("ActionerOrder")] ActionerOrder = 16,
   }
 
   public enum ReturnCode {
@@ -1389,6 +1394,7 @@ namespace TexasHoldemProtobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public RoomPack(RoomPack other) : this() {
       roomName_ = other.roomName_;
+      roomBigBlind_ = other.roomBigBlind_;
       maxCount_ = other.maxCount_;
       currCount_ = other.currCount_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -1413,8 +1419,22 @@ namespace TexasHoldemProtobuf {
       }
     }
 
+    /// <summary>Field number for the "RoomBigBlind" field.</summary>
+    public const int RoomBigBlindFieldNumber = 2;
+    private string roomBigBlind_ = "";
+    /// <summary>
+    ///大盲
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string RoomBigBlind {
+      get { return roomBigBlind_; }
+      set {
+        roomBigBlind_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "maxCount" field.</summary>
-    public const int MaxCountFieldNumber = 2;
+    public const int MaxCountFieldNumber = 3;
     private int maxCount_;
     /// <summary>
     ///房間最大人數
@@ -1428,7 +1448,7 @@ namespace TexasHoldemProtobuf {
     }
 
     /// <summary>Field number for the "CurrCount" field.</summary>
-    public const int CurrCountFieldNumber = 3;
+    public const int CurrCountFieldNumber = 4;
     private int currCount_;
     /// <summary>
     ///房間當前人數
@@ -1455,6 +1475,7 @@ namespace TexasHoldemProtobuf {
         return true;
       }
       if (RoomName != other.RoomName) return false;
+      if (RoomBigBlind != other.RoomBigBlind) return false;
       if (MaxCount != other.MaxCount) return false;
       if (CurrCount != other.CurrCount) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -1464,6 +1485,7 @@ namespace TexasHoldemProtobuf {
     public override int GetHashCode() {
       int hash = 1;
       if (RoomName.Length != 0) hash ^= RoomName.GetHashCode();
+      if (RoomBigBlind.Length != 0) hash ^= RoomBigBlind.GetHashCode();
       if (MaxCount != 0) hash ^= MaxCount.GetHashCode();
       if (CurrCount != 0) hash ^= CurrCount.GetHashCode();
       if (_unknownFields != null) {
@@ -1483,12 +1505,16 @@ namespace TexasHoldemProtobuf {
         output.WriteRawTag(10);
         output.WriteString(RoomName);
       }
+      if (RoomBigBlind.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(RoomBigBlind);
+      }
       if (MaxCount != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(MaxCount);
       }
       if (CurrCount != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteInt32(CurrCount);
       }
       if (_unknownFields != null) {
@@ -1501,6 +1527,9 @@ namespace TexasHoldemProtobuf {
       int size = 0;
       if (RoomName.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomName);
+      }
+      if (RoomBigBlind.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomBigBlind);
       }
       if (MaxCount != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxCount);
@@ -1521,6 +1550,9 @@ namespace TexasHoldemProtobuf {
       }
       if (other.RoomName.Length != 0) {
         RoomName = other.RoomName;
+      }
+      if (other.RoomBigBlind.Length != 0) {
+        RoomBigBlind = other.RoomBigBlind;
       }
       if (other.MaxCount != 0) {
         MaxCount = other.MaxCount;
@@ -1543,11 +1575,15 @@ namespace TexasHoldemProtobuf {
             RoomName = input.ReadString();
             break;
           }
-          case 16: {
-            MaxCount = input.ReadInt32();
+          case 18: {
+            RoomBigBlind = input.ReadString();
             break;
           }
           case 24: {
+            MaxCount = input.ReadInt32();
+            break;
+          }
+          case 32: {
             CurrCount = input.ReadInt32();
             break;
           }
