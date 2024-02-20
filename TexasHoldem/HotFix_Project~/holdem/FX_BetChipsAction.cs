@@ -16,8 +16,8 @@ namespace HotFix_Project
         private static Transform PointTarget;
         private static Text BetValue_Txt;
 
-        private static float distanceX = 320;
-        private static float distanceY = 120;
+        private static float distanceX = 330;
+        private static float distanceY = 150;
 
         //紀錄移動物件(物件, (移除時間, 移動時間, 文字物件))
         private static Dictionary<Transform, (DateTime, float, Transform)> moveDic = new Dictionary<Transform, (DateTime, float, Transform)>();
@@ -67,7 +67,7 @@ namespace HotFix_Project
         private static void SetChipsValue(string value, Transform pointTarget)
         {
             PointTarget = pointTarget;
-            BetValue_Txt.text = value;
+            BetValue_Txt.text = FX_Utils.Instance.SetChipsStr(value);
             BetValue_Txt.gameObject.SetActive(false);
             moveDic.Add(thisView.obj.transform, (DateTime.Now, Time.time, BetValue_Txt.transform));
         }

@@ -9,9 +9,41 @@ public class AudioManager : UnitySingleton<AudioManager>
 {
     private AudioSource audioSource;
 
-
     private List<string> loadedABName = new List<string>();
     private List<AudioClip> clipList = new List<AudioClip>();
+
+    private string localMusic = "Holdem_MusicVolume";
+    public float TempMusic { get; set; }
+    private float musicVolume;
+    public float MusicVolume 
+    {
+        get
+        { 
+            return musicVolume;
+        }
+        set
+        {
+            musicVolume = value;
+            audioSource.volume = value;
+            PlayerPrefs.SetFloat(localMusic, value);
+        }
+    }
+
+    private string localSound = "Holdem_SoundVolume";
+    public float TempSound { get; set; }
+    private float soundVolume;
+    public float SoundVolume
+    {
+        get
+        {
+            return soundVolume;
+        }
+        set
+        {
+            soundVolume = value;
+            PlayerPrefs.SetFloat(localSound, value);
+        }
+    }
 
     public override void Awake()
     {
@@ -21,6 +53,27 @@ public class AudioManager : UnitySingleton<AudioManager>
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+
+        //載入本地音量       
+        if (PlayerPrefs.HasKey(localMusic))
+        {
+            MusicVolume = PlayerPrefs.GetFloat(localMusic);
+        }
+        else
+        {
+            MusicVolume = 1.0f;
+            PlayerPrefs.SetFloat(localMusic, 1);
+        }
+
+        if (PlayerPrefs.HasKey(localSound))
+        {
+            SoundVolume = PlayerPrefs.GetFloat(localSound);
+        }
+        else
+        {
+            SoundVolume = 1.0f;
+            PlayerPrefs.SetFloat(localSound, 1);
+        }
     }
 
     /// <summary>
@@ -39,10 +92,17 @@ public class AudioManager : UnitySingleton<AudioManager>
         {
             if (!clipList.Contains(clip))
             {
-                Debug.Log($"添加音效:{clip.name}");
                 clipList.Add(clip);
             }
         }
+    }
+
+    /// <summary>
+    /// 播放按鈕音效
+    /// </summary>
+    public void PlayButtonClick()
+    {
+        PlaySound("ButtonClick");
     }
 
     /// <summary>
@@ -57,6 +117,7 @@ public class AudioManager : UnitySingleton<AudioManager>
                 audioSource.clip = clipList[i];
                 audioSource.Play();
                 audioSource.loop = true;
+                audioSource.volume = MusicVolume;
                 return;
             }
         }
@@ -68,8 +129,11 @@ public class AudioManager : UnitySingleton<AudioManager>
     /// 播放音效
     /// </summary>
     /// <param name="clipName"></param>
-    public void PlaySound(string clipName)
+    /// <param name="rate"></param>
+    public void PlaySound(string clipName, float rate = 1)
     {
+        if (SoundVolume == 0) return;
+
         for (int i = 0; i < clipList.Count; i++)
         {
             if (clipList[i].name == clipName)
@@ -77,8 +141,8 @@ public class AudioManager : UnitySingleton<AudioManager>
                 GameObject obj = new GameObject();
                 obj.transform.SetParent(gameObject.transform);
                 AudioSource source = obj.AddComponent<AudioSource>();
-                source.clip = clipList.ToList().Where(x => x.name == clipName).First();
-                source.volume = 0.6f;
+                source.clip = clipList[i];
+                source.volume = SoundVolume * rate;
                 source.Play();
 
                 RemoveSound(source);
@@ -87,14 +151,6 @@ public class AudioManager : UnitySingleton<AudioManager>
         }
 
         Debug.LogError($"未找到音效:{clipName}");
-    }
-
-    /// <summary>
-    /// 播放按鈕音效
-    /// </summary>
-    public void PlayButtonClick()
-    {
-        PlaySound("ButtonClick");
     }
 
     /// <summary>

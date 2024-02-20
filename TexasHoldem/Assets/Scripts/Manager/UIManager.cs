@@ -18,6 +18,7 @@ public class UIManager : UnitySingleton<UIManager>
         ViewType.LoadingView,
         ViewType.WaitView,
         ViewType.ConfirmView,
+        ViewType.SettingView,
     };
     private Dictionary<ViewType, BaseView> toolsViewDic = new Dictionary<ViewType, BaseView>();
 
@@ -41,6 +42,8 @@ public class UIManager : UnitySingleton<UIManager>
 
             await Task.Delay(1);
         }
+
+        Debug.Log("工具類View 創建完成。");
     }
 
     /// <summary>
@@ -48,7 +51,7 @@ public class UIManager : UnitySingleton<UIManager>
     /// </summary>
     /// <param name="viewType"></param>
     /// <returns></returns>
-    private BaseView ShowToolView(ViewType viewType)
+    public BaseView ShowToolView(ViewType viewType)
     {
         BaseView view = null;
         if (toolsViewDic.ContainsKey(viewType))

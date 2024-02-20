@@ -36,4 +36,10 @@ public class Entry : UnitySingleton<Entry>
 
         AudioManager.Instance.PlayBGM();
     }
+
+    private void OnDestroy()
+    {
+        AssetBundle.UnloadAllAssetBundles(false);
+        Debug.Log("移除AB資源");
+    }
 }

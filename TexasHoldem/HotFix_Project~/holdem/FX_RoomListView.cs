@@ -59,7 +59,8 @@ namespace HotFix_Project
             RoomName_Txt.text = $"{roomName}.";
             Count_Txt.text = $"{roomPack.CurrCount + 1} / {roomPack.MaxCount + 1}";
             Count_Img.fillAmount = (float)(roomPack.CurrCount + 1) / (float)(roomPack.MaxCount + 1);
-            Blind_Txt.text = $"{Convert.ToInt32(roomPack.RoomBigBlind) / 2}/{roomPack.RoomBigBlind}";
+            Blind_Txt.text = $"{FX_Utils.Instance.SetChipsStr((Convert.ToInt32(roomPack.RoomBigBlind) / 2).ToString())}/" +
+                             $"{FX_Utils.Instance.SetChipsStr(roomPack.RoomBigBlind)}";
         }
 
         /// <summary>

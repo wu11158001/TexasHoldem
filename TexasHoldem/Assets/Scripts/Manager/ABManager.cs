@@ -68,7 +68,7 @@ public class ABManager : UnitySingleton<ABManager>
     /// <param name="resourceDirectory"></param>
     public void CreateDirectory(string resourceDirectory)
     {
-        if (!Directory.Exists(Path.Combine(Application.streamingAssetsPath, resourceDirectory)))
+        if (!Directory.Exists(resourceDirectory))
         {
             Directory.CreateDirectory(resourceDirectory);
         }        

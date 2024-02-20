@@ -3,9 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.IO;
+
 
 public static class Utils
 {
+    /// <summary>
+    /// 判斷是否為數字或英文字母
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public static bool IsAlphaNumeric(string str)
+    {
+        Regex regex = new Regex("^[a-zA-Z0-9]+$");
+        return regex.IsMatch(str);
+    }
+
     /// <summary>
     /// 字串加法
     /// </summary>

@@ -14,7 +14,7 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Button Back_Btn, QuickStart_Btn, CreateRoom_Btn, BlindCancel_Btn, BlindConfirm_Btn;
+        private static Button Back_Btn, QuickStart_Btn, CreateRoom_Btn, BlindCancel_Btn, BlindConfirm_Btn, Setting_Btn;
         private static Transform RoomList_Tr, RoomListSample_Tr, CreateRoom_Tr;
         private static Dropdown SelectBlind_Dd;
 
@@ -31,6 +31,7 @@ namespace HotFix_Project
             CreateRoom_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "CreateRoom_Btn");
             BlindCancel_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "BlindCancel_Btn");
             BlindConfirm_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "BlindConfirm_Btn");
+            Setting_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Setting_Btn");
             SelectBlind_Dd = FindConponent.FindObj<Dropdown>(thisView.view.transform, "SelectBlind_Dd");
             RoomList_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "RoomList_Tr");
             RoomListSample_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "RoomListSample_Tr");
@@ -47,11 +48,19 @@ namespace HotFix_Project
 
         private static void Start()
         {
+            //返回按鈕
             Back_Btn.onClick.AddListener(() =>
             {
                 UIManager.Instance.ShowLoadingView(ViewType.LobbyView, true);
             });
 
+            //設置按鈕
+            Setting_Btn.onClick.AddListener(() =>
+            {
+                UIManager.Instance.ShowToolView(ViewType.SettingView);
+            });
+
+            //快速開局
             QuickStart_Btn.onClick.AddListener(() =>
             {
                 AudioManager.Instance.PlayButtonClick();
@@ -63,6 +72,7 @@ namespace HotFix_Project
                 thisView.view.SendRequest(pack);
             });
 
+            //創建房間
             CreateRoom_Btn.onClick.AddListener(() =>
             {
                 AudioManager.Instance.PlayButtonClick();
@@ -70,11 +80,13 @@ namespace HotFix_Project
                 CreateRoom_Tr.gameObject.SetActive(true);
             });
 
+            //關閉大小盲View
             BlindCancel_Btn.onClick.AddListener(() =>
             {
                 CreateRoom_Tr.gameObject.SetActive(false);
             });
 
+            //大小盲確認
             BlindConfirm_Btn.onClick.AddListener(() =>
             {
                 AudioManager.Instance.PlayButtonClick();

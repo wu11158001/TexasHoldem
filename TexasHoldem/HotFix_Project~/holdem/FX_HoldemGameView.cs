@@ -13,7 +13,7 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Button Exit_Btn, Abort_Btn, Pass_Btn, Follow_Btn, Add_Btn;
+        private static Button Exit_Btn, Abort_Btn, Pass_Btn, Follow_Btn, Add_Btn, Setting_Btn;
         private static Transform Seat_Tr, BetChips_Tr, BetChipsSample, PointTarget, OperateButton_Tr, AddBetValue_Tr;
         private static Text TotalBetChips_Txt, AddChips_Txt, Add_Txt, Tip_Txt;
         private static Slider Add_Sl;
@@ -59,6 +59,7 @@ namespace HotFix_Project
             Pass_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Pass_Btn");
             Follow_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Follow_Btn");
             Add_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Add_Btn");
+            Setting_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Setting_Btn");
             Add_Sl = FindConponent.FindObj<Slider>(thisView.view.transform, "Add_Sl");
             BetChips_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "BetChips_Tr");
             BetChipsSample = FindConponent.FindObj<Transform>(thisView.view.transform, "BetChipsSample");
@@ -145,6 +146,12 @@ namespace HotFix_Project
                 pack.ActionCode = ActionCode.ExitRoom;                
 
                 thisView.view.SendRequest(pack);
+            });
+
+            //設置按鈕
+            Setting_Btn.onClick.AddListener(() =>
+            {
+                UIManager.Instance.ShowToolView(ViewType.SettingView);
             });
 
             //棄牌按鈕
@@ -273,10 +280,10 @@ namespace HotFix_Project
             userInfoDic[computerSeat].Item1.gameObject.SetActive(true);
             userInfoDic[computerSeat].Item1.sprite = avatarSpriteList[Convert.ToInt32(computerPack.Avatar)];
             userInfoDic[computerSeat].Item2.text = computerPack.NickName;
-            userInfoDic[computerSeat].Item3.text = computerPack.Chips;
+            userInfoDic[computerSeat].Item3.text = FX_Utils.Instance.SetChipsStr(computerPack.Chips);
             userInfoDic[computerSeat].Item8.gameObject.SetActive(true);
 
-            betShipsDic[computerSeat].Item2.text = computerPack.BetChips;
+            betShipsDic[computerSeat].Item2.text = FX_Utils.Instance.SetChipsStr(computerPack.BetChips);
         }
 
 
@@ -312,20 +319,20 @@ namespace HotFix_Project
         private static void UpdateBetShips(MainPack pack)
         {
             //總下注籌碼
-            TotalBetChips_Txt.text = $"{pack.GameProcessPack.TotalBetChips}";
+            TotalBetChips_Txt.text = $"{FX_Utils.Instance.SetChipsStr(pack.GameProcessPack.TotalBetChips)}";
 
             //下注籌碼
             foreach (var betChips in pack.GameProcessPack.BetShips)
             {
                 int seat = betChips.Key == computerName ? computerSeat : seatDic[betChips.Key];
                 betShipsDic[seat].Item1.gameObject.SetActive(true);
-                betShipsDic[seat].Item2.text = betChips.Value;
+                betShipsDic[seat].Item2.text = FX_Utils.Instance.SetChipsStr(betChips.Value);
             }
-            //籌碼
+            //擁有籌碼
             foreach (var chips in pack.GameProcessPack.UserChips)
             {
                 int seat = chips.Key == computerName ? computerSeat : seatDic[chips.Key];
-                userInfoDic[seat].Item3.text = chips.Value;
+                userInfoDic[seat].Item3.text = FX_Utils.Instance.SetChipsStr(chips.Value);
             }
         }
 
@@ -422,7 +429,7 @@ namespace HotFix_Project
                     int smallBlindVluue = Convert.ToInt32(pack.GameProcessPack.BigBlindValue) / 2;
                     int bigBlindVluue = Convert.ToInt32(pack.GameProcessPack.BigBlindValue);
 
-                    AudioManager.Instance.PlaySound("ChipsMove");
+                    AudioManager.Instance.PlaySound("ChipsMove", 0.5f);
                     CreateBetShips(smallSeat, smallBlindVluue.ToString());
                     CreateBetShips(bigSeat, bigBlindVluue.ToString());
                     break;
@@ -510,7 +517,7 @@ namespace HotFix_Project
                 //遊戲結果
                 case GameProcess.GameResult:
                     Debug.Log($"遊戲結果");
-                    AudioManager.Instance.PlaySound("ChipsMove");
+                    AudioManager.Instance.PlaySound("ChipsMove", 0.5f);
                     foreach (var winner in pack.GameProcessPack.Winners)
                     {
                         Debug.Log($"獲勝:{winner}");
@@ -683,14 +690,14 @@ namespace HotFix_Project
 
                         case UserGameState.Follow:
                             showActionStr = "跟注";
-                            AudioManager.Instance.PlaySound("ChipsMove");
+                            AudioManager.Instance.PlaySound("ChipsMove", 0.5f);
                             userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(false);
                             CreateBetShips(seatDic[nickName], betValue);
                             break;
 
                         case UserGameState.Add:
                             showActionStr = "加注";
-                            AudioManager.Instance.PlaySound("ChipsMove");
+                            AudioManager.Instance.PlaySound("ChipsMove", 0.5f);
                             userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(false);
                             CreateBetShips(seatDic[nickName], betValue);
                             break;

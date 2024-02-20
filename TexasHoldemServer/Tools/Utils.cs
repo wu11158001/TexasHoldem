@@ -2,12 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TexasHoldemServer.Tools
 {
     public static class Utils
     {
+        /// <summary>
+        /// 判斷是否為數字或英文字母
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsAlphaNumeric(string str)
+        {
+            Regex regex = new Regex("^[a-zA-Z0-9]+$");
+            return regex.IsMatch(str);
+        }
+
         /// <summary>
         /// 字串加法
         /// </summary>

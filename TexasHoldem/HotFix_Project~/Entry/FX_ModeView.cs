@@ -15,7 +15,7 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
-        private static Button Logout_Btn, Holdem_Btn;
+        private static Button Logout_Btn, Holdem_Btn, Setting_Btn;
         private static Transform Download_Tr, DownLoadProgress_Tr;
         private static Image Progress_Img;
 
@@ -27,6 +27,7 @@ namespace HotFix_Project
 
             Logout_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Logout_Btn");
             Holdem_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Holdem_Btn");
+            Setting_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Setting_Btn");
             DownLoadProgress_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "DownLoadProgress_Tr");            
             Download_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "Download_Tr");            
             Progress_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Progress_Img");
@@ -38,6 +39,7 @@ namespace HotFix_Project
 
         private static void Start()
         {
+            //登出按鈕
             Logout_Btn.onClick.AddListener(() =>
             {
                 AudioManager.Instance.PlayButtonClick();
@@ -48,6 +50,13 @@ namespace HotFix_Project
                 thisView.view.SendRequest(pack);
             });
 
+            //設置按鈕
+            Setting_Btn.onClick.AddListener(() =>
+            {
+                UIManager.Instance.ShowToolView(ViewType.SettingView);
+            });
+
+            //德州撲克進入
             Holdem_Btn.onClick.AddListener(() =>
             {
                 AudioManager.Instance.PlayButtonClick();

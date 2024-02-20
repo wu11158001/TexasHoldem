@@ -80,14 +80,15 @@ namespace TexasHoldemProtobuf {
             "VXBkYXRlUm9vbVVzZXJJbmZvEAgSDgoKVXBkYXRlUm9vbRAJEhUKEU90aGVy",
             "VXNlckV4aXRSb29tEAoSDAoIRXhpdFJvb20QCxISCg5SZXZpc2VVc2VySW5m",
             "bxAMEg0KCVN0YXJ0R2FtZRANEg0KCUdhbWVTdGFnZRAOEhIKDlNob3dVc2Vy",
-            "QWN0aW9uEA8SEQoNQWN0aW9uZXJPcmRlchAQKlAKClJldHVybkNvZGUSDgoK",
+            "QWN0aW9uEA8SEQoNQWN0aW9uZXJPcmRlchAQKmEKClJldHVybkNvZGUSDgoK",
             "UmV0dXJuTm9uZRAAEgsKB1N1Y2NlZWQQARIICgRGYWlsEAISDgoKRHVwbGlj",
-            "YXRlZBADEgsKB05vdFJvb20QBCovCgxTZW5kTW9kZUNvZGUSDAoITW9kZU5v",
-            "bmUQABIRCg1Sb29tQnJvYWRjYXN0EAEqaAoLR2FtZVByb2Nlc3MSDwoLUHJv",
-            "Y2Vzc05vbmUQABIMCghTZXRCbGluZBABEgsKB1ByZWZsb3AQAhIICgRGbG9w",
-            "EAMSCAoEVHVybhAEEgkKBVJpdmVyEAUSDgoKR2FtZVJlc3VsdBAGKlUKDVVz",
-            "ZXJHYW1lU3RhdGUSDQoJU3RhdGVOb25lEAASCwoHUGxheWluZxABEgkKBUFi",
-            "b3J0EAISCAoEUGFzcxADEgoKBkZvbGxvdxAEEgcKA0FkZBAFYgZwcm90bzM="));
+            "YXRlZBADEgsKB05vdFJvb20QBBIPCgtXcm9uZ0Zvcm1hdBAFKi8KDFNlbmRN",
+            "b2RlQ29kZRIMCghNb2RlTm9uZRAAEhEKDVJvb21Ccm9hZGNhc3QQASpoCgtH",
+            "YW1lUHJvY2VzcxIPCgtQcm9jZXNzTm9uZRAAEgwKCFNldEJsaW5kEAESCwoH",
+            "UHJlZmxvcBACEggKBEZsb3AQAxIICgRUdXJuEAQSCQoFUml2ZXIQBRIOCgpH",
+            "YW1lUmVzdWx0EAYqVQoNVXNlckdhbWVTdGF0ZRINCglTdGF0ZU5vbmUQABIL",
+            "CgdQbGF5aW5nEAESCQoFQWJvcnQQAhIICgRQYXNzEAMSCgoGRm9sbG93EAQS",
+            "BwoDQWRkEAViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::TexasHoldemProtobuf.RequestCode), typeof(global::TexasHoldemProtobuf.ActionCode), typeof(global::TexasHoldemProtobuf.ReturnCode), typeof(global::TexasHoldemProtobuf.SendModeCode), typeof(global::TexasHoldemProtobuf.GameProcess), typeof(global::TexasHoldemProtobuf.UserGameState), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -212,6 +213,10 @@ namespace TexasHoldemProtobuf {
     ///房間不存在
     /// </summary>
     [pbr::OriginalName("NotRoom")] NotRoom = 4,
+    /// <summary>
+    ///格式錯誤
+    /// </summary>
+    [pbr::OriginalName("WrongFormat")] WrongFormat = 5,
   }
 
   /// <summary>

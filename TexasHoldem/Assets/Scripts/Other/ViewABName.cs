@@ -14,6 +14,7 @@ public class ViewABName : UnitySingleton<ViewABName>
         abPathDic.Add(ViewType.LoadingView, "entry");
         abPathDic.Add(ViewType.WaitView, "entry");
         abPathDic.Add(ViewType.ConfirmView, "entry");
+        abPathDic.Add(ViewType.SettingView, "entry");
         abPathDic.Add(ViewType.LoginView, "entry");
         abPathDic.Add(ViewType.ModeView, "entry");
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TexasHoldemProtobuf;
 using TexasHoldemServer.Servers;
+using TexasHoldemServer.Tools;
 
 namespace TexasHoldemServer.Controller
 {
@@ -55,6 +56,14 @@ namespace TexasHoldemServer.Controller
         /// <returns></returns>
         public MainPack Logon(Server servers, Client client, MainPack pack)
         {
+            //格式錯誤
+            if (!Utils.IsAlphaNumeric(pack.LoginPack.Account) || !Utils.IsAlphaNumeric(pack.LoginPack.Password))
+            {
+                pack.ReturnCode = ReturnCode.WrongFormat;
+                return pack;
+            }
+
+
             if (client.GetMySql.CheckData(client.GetMySqlConnection, tableName, new string[] { "account" }, new string[] { pack.LoginPack.Account }))
             {
                 pack.ReturnCode = ReturnCode.Duplicated;

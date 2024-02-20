@@ -823,6 +823,8 @@ namespace TexasHoldemServer.Servers
 
                     //遊戲結果
                     case GameProcess.River:
+                        await Task.Delay(2000);
+
                         SendGameResult();
                         break;
                 }
@@ -1019,7 +1021,7 @@ namespace TexasHoldemServer.Servers
             JudgeGameResult();      
             BroadcastGameStage();
 
-            await Task.Delay(5000);
+            await Task.Delay(6000);
 
             StartGame();
         }
