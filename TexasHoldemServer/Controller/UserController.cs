@@ -186,6 +186,20 @@ namespace TexasHoldemServer.Controller
                                                      reviseValue
                                                      );
 
+            if (result)
+            {
+                switch (pack.ReviseUserInfoPack.ReviseName)
+                {
+                    case "nickname":
+                        client.UserInfo.NickName = reviseValue[0];
+                        break;
+
+                    case "avatar":
+                        client.UserInfo.Avatar = reviseValue[0];
+                        break;
+                }
+            }
+
             pack.ReturnCode = result == true ? ReturnCode.Succeed : ReturnCode.Fail;
             return pack;
         }

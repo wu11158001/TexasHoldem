@@ -15,9 +15,10 @@ namespace HotFix_Project
 
         private static Button Exit_Btn, Abort_Btn, Pass_Btn, Follow_Btn, Add_Btn, Setting_Btn;
         private static Transform Seat_Tr, BetChips_Tr, BetChipsSample, PointTarget, OperateButton_Tr, AddBetValue_Tr;
-        private static Text TotalBetChips_Txt, AddChips_Txt, Add_Txt, Tip_Txt;
+        private static Text TotalBetChips_Txt, AddChips_Txt, Add_Txt, Tip_Txt, Follow_Txt;
         private static Slider Add_Sl;
         private static Image[] pokersPool = new Image[5];
+        private static Button[] betPercentButtons = new Button[4];
 
         private static Sprite[] avatarSpriteList;
         private static Sprite[] pokerSpiteList;
@@ -70,7 +71,14 @@ namespace HotFix_Project
             AddChips_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "AddChips_Txt");
             Add_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Add_Txt");
             Tip_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Tip_Txt");
+            Follow_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Follow_Txt");
             Seat_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "Seat_Tr");
+
+            //下注百分比按鈕
+            betPercentButtons[0] =FindConponent.FindObj<Button>(thisView.view.transform, "AllIn_Btn");
+            betPercentButtons[1] = FindConponent.FindObj<Button>(thisView.view.transform, "75Percent_Btn");
+            betPercentButtons[2] = FindConponent.FindObj<Button>(thisView.view.transform, "50Percent_Btn");
+            betPercentButtons[3] = FindConponent.FindObj<Button>(thisView.view.transform, "25Percent_Btn");
 
             for (int i = 0; i < Seat_Tr.childCount; i++)
             {
@@ -118,6 +126,7 @@ namespace HotFix_Project
         {
             seatDic.Clear();
             Tip_Txt.text = "等待下一局...";
+            TotalBetChips_Txt.text = "0";
             isGetUserInfo = false;
             foreach (var user in userInfoDic)
             {
@@ -160,7 +169,7 @@ namespace HotFix_Project
                 AudioManager.Instance.PlayButtonClick();
 
                 isAbort = true;
-                SendUserGameAction(UserGameState.Abort, betShipsDic[seatDic[localUserName]].Item2.text);
+                SendUserGameAction(UserGameState.Abort, betShipsDic[seatDic[localUserName]].Item2.text.Replace(",", ""));
             });
 
             //過牌按鈕
@@ -196,7 +205,7 @@ namespace HotFix_Project
             //加注滑條
             Add_Sl.onValueChanged.AddListener((value) =>
             {
-                AddChips_Txt.text = value.ToString();
+                AddChips_Txt.text = FX_Utils.Instance.SetChipsStr(value.ToString());
             });
         }
 
@@ -292,24 +301,58 @@ namespace HotFix_Project
         /// </summary>
         private static void SetOperateButton(MainPack pack)
         {
-            if (pack.ActionerPack.Actioner != localUserName || OperateButton_Tr.gameObject.activeSelf) return;
+            if (pack.ActionerPack.Actioner != localUserName || OperateButton_Tr.gameObject.activeSelf || isAbort) return;
 
             OperateButton_Tr.gameObject.SetActive(true);
 
             int currBet = Convert.ToInt32(pack.GameProcessPack.CurrBet);
-            int selfBet = Convert.ToInt32(betShipsDic[seatDic[localUserName]].Item2.text);
+            int selfBet = Convert.ToInt32(betShipsDic[seatDic[localUserName]].Item2.text.Replace(",", ""));
+            float userChips = float.Parse(userInfoDic[seatDic[localUserName]].Item3.text);
 
             Abort_Btn.gameObject.SetActive(true);
             Pass_Btn.gameObject.SetActive(selfBet == currBet);
             Follow_Btn.gameObject.SetActive(!pack.ActionerPack.IsFirstActioner && selfBet < currBet);
+            Follow_Txt.text = $"跟注\n{currBet}";
             Add_Btn.gameObject.SetActive(true);
 
-            string minAddValue = pack.GameProcessPack.CurrBet == betShipsDic[seatDic[localUserName]].Item2.text ?
+            string minAddValue = pack.GameProcessPack.CurrBet == betShipsDic[seatDic[localUserName]].Item2.text.Replace(",", "") ?
                                  Utils.StringAddition(pack.GameProcessPack.CurrBet, pack.GameProcessPack.BigBlindValue) :
                                  pack.GameProcessPack.CurrBet;
             Add_Sl.minValue = float.Parse(minAddValue);
-            Add_Sl.maxValue = float.Parse(userInfoDic[seatDic[localUserName]].Item3.text);
+            Add_Sl.maxValue = userChips;
             Add_Sl.value = float.Parse(minAddValue);
+
+            //加註百分比按鈕
+            foreach (var percentBtn in betPercentButtons)
+            {
+                percentBtn.onClick.RemoveAllListeners();
+            }
+            betPercentButtons[0].onClick.AddListener(() =>
+            {
+                Add_Sl.value = float.Parse(userInfoDic[seatDic[localUserName]].Item3.text);
+            });
+            betPercentButtons[1].onClick.AddListener(() =>
+            {
+                SetPercent(userChips, float.Parse(minAddValue), 0.75f);
+            });
+            betPercentButtons[2].onClick.AddListener(() =>
+            {
+                SetPercent(userChips, float.Parse(minAddValue), 0.5f);
+            });
+            betPercentButtons[3].onClick.AddListener(() =>
+            {
+                SetPercent(userChips, float.Parse(minAddValue), 0.25f);
+            });
+        }
+
+        /// <summary>
+        /// 下注百分比
+        /// </summary>
+        /// <param name="userChips"></param>
+        /// <param name="percent"></param>
+        private static void SetPercent(float userChips, float minAddValue, float percent)
+        {
+            Add_Sl.value = ((userChips - minAddValue) * percent) + minAddValue;
         }
 
         /// <summary>
@@ -362,14 +405,14 @@ namespace HotFix_Project
         {            
             currBetValue = pack.GameProcessPack.CurrBet;
 
-            foreach (var user in userInfoDic)
+            foreach (var user in pack.GameProcessPack.UserStates)
             {
-                if (!isAbort)
+                if (user.Value != UserGameState.Abort)
                 {
-                    user.Value.Item4.gameObject.SetActive(false);
-                    user.Value.Item6.gameObject.SetActive(false);
-                }                
-                user.Value.Item5.text = "";                
+                    userInfoDic[seatDic[user.Key]].Item4.gameObject.SetActive(false);
+                    userInfoDic[seatDic[user.Key]].Item6.gameObject.SetActive(false);
+                }
+                userInfoDic[seatDic[user.Key]].Item5.text = "";
             }
 
             int result = 0;
@@ -429,7 +472,7 @@ namespace HotFix_Project
                     int smallBlindVluue = Convert.ToInt32(pack.GameProcessPack.BigBlindValue) / 2;
                     int bigBlindVluue = Convert.ToInt32(pack.GameProcessPack.BigBlindValue);
 
-                    AudioManager.Instance.PlaySound("ChipsMove", 0.5f);
+                    AudioManager.Instance.PlaySound("ChipsMove");
                     CreateBetShips(smallSeat, smallBlindVluue.ToString());
                     CreateBetShips(bigSeat, bigBlindVluue.ToString());
                     break;
@@ -517,7 +560,7 @@ namespace HotFix_Project
                 //遊戲結果
                 case GameProcess.GameResult:
                     Debug.Log($"遊戲結果");
-                    AudioManager.Instance.PlaySound("ChipsMove", 0.5f);
+                    AudioManager.Instance.PlaySound("ChipsMove");
                     foreach (var winner in pack.GameProcessPack.Winners)
                     {
                         Debug.Log($"獲勝:{winner}");
@@ -543,6 +586,10 @@ namespace HotFix_Project
                     foreach (var bet in betShipsDic)
                     {
                         bet.Value.Item1.gameObject.SetActive(false);
+                    }
+                    foreach (var user in userInfoDic)
+                    {
+                        user.Value.Item6.text = "";
                     }
                     break;
             }
@@ -665,13 +712,10 @@ namespace HotFix_Project
                 case ActionCode.ShowUserAction:
                     if (!isGetUserInfo) return;
 
-                    userInfoDic[seat].Item4.gameObject.SetActive(false);
-                    userInfoDic[seat].Item5.text = "";
-                    Tip_Txt.text = "";
+                    currBetValue = pack.GameProcessPack.CurrBet;                    
 
                     string betValue = pack.GameActionPack.BetValue;
                     string nickName = pack.GameActionPack.ActionNickName;
-                    string totalBet = pack.GameProcessPack.TotalBetChips;
                     string showActionStr = "";
                     switch (pack.GameActionPack.UserGameState)
                     {
@@ -681,6 +725,7 @@ namespace HotFix_Project
                             showActionStr = "棄牌";
                             userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(true);
                             userInfoDic[seatDic[nickName]].Item4.fillAmount = 1;
+                            handPokerDic[seatDic[nickName]].Item4.gameObject.SetActive(false);
                             break;
 
                         case UserGameState.Pass:
@@ -690,14 +735,14 @@ namespace HotFix_Project
 
                         case UserGameState.Follow:
                             showActionStr = "跟注";
-                            AudioManager.Instance.PlaySound("ChipsMove", 0.5f);
+                            AudioManager.Instance.PlaySound("ChipsMove");
                             userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(false);
                             CreateBetShips(seatDic[nickName], betValue);
                             break;
 
                         case UserGameState.Add:
                             showActionStr = "加注";
-                            AudioManager.Instance.PlaySound("ChipsMove", 0.5f);
+                            AudioManager.Instance.PlaySound("ChipsMove");
                             userInfoDic[seatDic[nickName]].Item4.gameObject.SetActive(false);
                             CreateBetShips(seatDic[nickName], betValue);
                             break;
@@ -705,6 +750,7 @@ namespace HotFix_Project
                     userInfoDic[seatDic[nickName]].Item5.text = "";
                     userInfoDic[seatDic[nickName]].Item6.gameObject.SetActive(true);
                     userInfoDic[seatDic[nickName]].Item6.text = showActionStr;
+                    Tip_Txt.text = "";
 
                     UpdateBetShips(pack);
                     UpdateComputer(pack.ComputerPack);
@@ -714,15 +760,24 @@ namespace HotFix_Project
                 case ActionCode.ActionerOrder:
                     if (!isGetUserInfo) return;
 
+                    TotalBetChips_Txt.text = pack.GameProcessPack.TotalBetChips;
+
                     seat = seatDic[pack.ActionerPack.Actioner];
                     SetOperateButton(pack);
 
                     userInfoDic[seat].Item4.gameObject.SetActive(true);
                     userInfoDic[seat].Item4.fillAmount = (8.0f - pack.ActionerPack.Countdown) / 8.0f;                   
                     userInfoDic[seat].Item5.text = pack.ActionerPack.Countdown.ToString("F0");
-                    if (pack.ActionerPack.Countdown < 5)
+                    if (pack.ActionerPack.Actioner == localUserName && pack.ActionerPack.Countdown < 5)
                     {
                         Tip_Txt.text = "倒數結束棄牌!";
+                    }
+                    if (OperateButton_Tr.gameObject.activeSelf && pack.ActionerPack.Countdown <= 0)
+                    {
+                        OperateButton_Tr.gameObject.SetActive(false);
+                        AddBetValue_Tr.gameObject.SetActive(false);
+                        userInfoDic[seatDic[localUserName]].Item5.text = "";
+                        userInfoDic[seatDic[localUserName]].Item6.text = "棄牌";
                     }
                     break;
             }

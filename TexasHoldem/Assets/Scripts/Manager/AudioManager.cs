@@ -90,11 +90,8 @@ public class AudioManager : UnitySingleton<AudioManager>
             List<AudioClip> downloadClips = ab.Value.LoadAllAssets<AudioClip>().ToList();
 
             foreach (var clip in downloadClips)
-            {
-                if (!clipList.Contains(clip))
-                {
-                    clipList.Add(clip);
-                }
+            {                
+                clipList.Add(clip);
             }
         }
         
@@ -127,6 +124,7 @@ public class AudioManager : UnitySingleton<AudioManager>
             }
         }
 
+        GetClips();
         Debug.LogError($"未找到BGM");
     }
 
@@ -134,8 +132,7 @@ public class AudioManager : UnitySingleton<AudioManager>
     /// 播放音效
     /// </summary>
     /// <param name="clipName"></param>
-    /// <param name="rate"></param>
-    public void PlaySound(string clipName, float rate = 1)
+    public void PlaySound(string clipName)
     {
         if (SoundVolume == 0) return;
 
@@ -147,7 +144,7 @@ public class AudioManager : UnitySingleton<AudioManager>
                 obj.transform.SetParent(gameObject.transform);
                 AudioSource source = obj.AddComponent<AudioSource>();
                 source.clip = clipList[i];
-                source.volume = SoundVolume * rate;
+                source.volume = SoundVolume;
                 source.Play();
 
                 RemoveSound(source);
@@ -155,6 +152,7 @@ public class AudioManager : UnitySingleton<AudioManager>
             }
         }
 
+        GetClips();
         Debug.LogError($"未找到音效:{clipName}");
     }
 

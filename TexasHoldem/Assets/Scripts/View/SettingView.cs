@@ -9,6 +9,11 @@ public class SettingView : BaseView
         base.Awake();
     }
 
+    public override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
     public override void Start()
     {
         base.Start();

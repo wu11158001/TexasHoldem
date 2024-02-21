@@ -152,6 +152,7 @@ namespace HotFix_Project
                 RoomListView roomView = obj.GetComponent<RoomListView>();
                 roomView.transform.SetParent(RoomList_Tr);
                 roomView.gameObject.SetActive(true);
+                roomView.transform.localScale = Vector3.one;
                 roomView.SetRoomInfo(room);
                 roomList.Add(obj);
             }

@@ -36,9 +36,13 @@ namespace HotFix_Project
 
             ABManager.Instance.LoadSprite("entry", "Sound", (sound) =>
             {
-                soundList = sound;
-                SetShow();
+                soundList = sound;                
             });
+        }
+
+        private static void OnEnable()
+        {
+            SetShow();
         }
 
         private static void Start()
@@ -109,8 +113,11 @@ namespace HotFix_Project
             Music_Txt.text = $"{(AudioManager.Instance.MusicVolume * 100).ToString("F0")}%";
             Sound_Txt.text = $"{(AudioManager.Instance.SoundVolume * 100).ToString("F0")}%";
 
-            Music_Img.sprite = AudioManager.Instance.MusicVolume == 0 ? soundList[1] : soundList[0];
-            Sound_Img.sprite = AudioManager.Instance.SoundVolume == 0 ? soundList[3] : soundList[2];
+            if (soundList != null && soundList.Length > 0)
+            {
+                Music_Img.sprite = AudioManager.Instance.MusicVolume == 0 ? soundList[1] : soundList[0];
+                Sound_Img.sprite = AudioManager.Instance.SoundVolume == 0 ? soundList[3] : soundList[2];
+            }
         }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace HotFix_Project
         private static Button NickName_Btn, Cancel_Btn, Confirm_Btn, Avatar_Btn;
         private static Text NickName_Txt, Chips_Txt;
         private static InputField NickName_IF;
-        private static RectTransform AvatarList_Rt, AvatarListMask_Tr;
+        private static RectTransform AvatarList_Rt, AvatarList_Tr;
         private static Image Avatar_Img;
 
         private static bool AvatarListSwitch;
@@ -35,7 +35,7 @@ namespace HotFix_Project
             thisView = new FX_BaseView().SetObj(baseView, viewObj);
 
             ReviseNickName_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "ReviseNickName_Tr");
-            AvatarListMask_Tr = FindConponent.FindObj<RectTransform>(thisView.view.transform, "AvatarListMask_Tr");
+            AvatarList_Tr = FindConponent.FindObj<RectTransform>(thisView.view.transform, "AvatarList_Tr");
             AvatarSample_Btn = FindConponent.FindObj<Transform>(thisView.view.transform, "AvatarSample_Btn");
             AvatarList_Rt = FindConponent.FindObj<RectTransform>(thisView.view.transform, "AvatarList_Rt");
             NickName_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "NickName_Btn");
@@ -55,7 +55,7 @@ namespace HotFix_Project
         private static void OnEnable()
         {
             ReviseNickName_Tr.gameObject.SetActive(false);
-            AvatarListMask_Tr.gameObject.SetActive(false);
+            AvatarList_Tr.gameObject.SetActive(false);
 
             MainPack pack = new MainPack();
             pack.RequestCode = RequestCode.User;
@@ -87,14 +87,14 @@ namespace HotFix_Project
             Avatar_Btn.onClick.AddListener(() =>
             {
                 AudioManager.Instance.PlayButtonClick();
-                if (AvatarListMask_Tr.gameObject.activeSelf)
+                if (AvatarList_Tr.gameObject.activeSelf)
                 {
                     AvatarListSwitch = false;
                 }
                 else
                 {
                     AvatarListSwitch = true;
-                    AvatarListMask_Tr.gameObject.SetActive(true);
+                    AvatarList_Tr.gameObject.SetActive(true);
                     avatarTempSize = new Vector2(0, initAvatarListHeight);                    
                 }                
             });
@@ -126,27 +126,27 @@ namespace HotFix_Project
                         avatarTempSize.y += 10;
                     }
                 }        
-                AvatarListMask_Tr.sizeDelta = new Vector2(avatarTempSize.x, avatarTempSize.y);
+                AvatarList_Tr.sizeDelta = new Vector2(avatarTempSize.x, avatarTempSize.y);
             }
 
-            if (AvatarListMask_Tr.gameObject.activeSelf && !AvatarListSwitch)
+            if (AvatarList_Tr.gameObject.activeSelf && !AvatarListSwitch)
             {
-                if (AvatarListMask_Tr.sizeDelta.y > initAvatarListHeight)
+                if (AvatarList_Tr.sizeDelta.y > initAvatarListHeight)
                 {                    
                     avatarTempSize.y -= 10; 
                 }
                 else
                 {
-                    if (AvatarListMask_Tr.sizeDelta.x > 0)
+                    if (AvatarList_Tr.sizeDelta.x > 0)
                     {
                         avatarTempSize.x -= 15;
                     }
                     else
                     {
-                        AvatarListMask_Tr.gameObject.SetActive(false);
+                        AvatarList_Tr.gameObject.SetActive(false);
                     }
                 }
-                AvatarListMask_Tr.sizeDelta = new Vector2(avatarTempSize.x, avatarTempSize.y);
+                AvatarList_Tr.sizeDelta = new Vector2(avatarTempSize.x, avatarTempSize.y);
             }
         }
 
@@ -168,6 +168,7 @@ namespace HotFix_Project
 
                     GameObject avatarObj = GameObject.Instantiate<GameObject>(AvatarSample_Btn.gameObject);
                     avatarObj.transform.SetParent(AvatarList_Rt);
+                    avatarObj.transform.localScale = Vector3.one;
                     avatarObj.SetActive(true);
                     Image img = FindConponent.FindObj<Image>(avatarObj.transform, "Item_Img");
                     img.sprite = avatarList[i];

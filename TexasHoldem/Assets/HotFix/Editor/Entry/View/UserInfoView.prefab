@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 5444541905199554319}
   - component: {fileID: 7111649123923978251}
   m_Layer: 5
-  m_Name: AvatarListMask_Tr
+  m_Name: AvatarList_Tr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,18 +147,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 880878904650524800}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3384618686058826851}
-  m_Father: {fileID: 6008797328958381361}
-  m_RootOrder: 1
+  m_Father: {fileID: 6823805346091072871}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -34.359802, y: -183.56003}
-  m_SizeDelta: {x: 189.9769, y: 134.1635}
+  m_AnchoredPosition: {x: 2.1401978, y: -217.70493}
+  m_SizeDelta: {x: 159.241, y: 139.223}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4232277404679601759
 CanvasRenderer:
@@ -1010,6 +1010,7 @@ RectTransform:
   - {fileID: 2632533978257138550}
   - {fileID: 1795428220078878694}
   - {fileID: 6008797328958381361}
+  - {fileID: 8453207582948990986}
   m_Father: {fileID: 3756513120321586196}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1454,7 +1455,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3786803870072914112}
-  - {fileID: 8453207582948990986}
   m_Father: {fileID: 6823805346091072871}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

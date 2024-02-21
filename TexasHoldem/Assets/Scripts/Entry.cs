@@ -31,6 +31,8 @@ public class Entry : UnitySingleton<Entry>
         await UIManager.Instance.CreateToolsView();
         await UIManager.Instance.ShowView(ViewType.LoginView);
 
+        await Task.Delay(1000);
+
         GameObject audioManaager = new GameObject();
         audioManaager.name = "AudioManager";
         audioManaager.AddComponent<AudioManager>();

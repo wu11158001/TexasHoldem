@@ -107,6 +107,7 @@ namespace HotFix_Project
         /// <param name="isdownload"></param>
         private static void SwitchDownloadObj(bool isdownload)
         {
+            Holdem_Btn.enabled = true;
             Download_Tr.gameObject.SetActive(!isdownload);
         }
 
@@ -122,7 +123,7 @@ namespace HotFix_Project
             UIManager.Instance.ShowConfirmView(() =>
             {
                 Debug.Log($"開始下載資源 holdem");
-
+                Holdem_Btn.enabled = false;
                 Download_Tr.gameObject.SetActive(false);
                 DownLoadProgress_Tr.gameObject.SetActive(true);
                 Progress_Img.fillAmount = 0;

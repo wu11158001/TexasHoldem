@@ -299,7 +299,9 @@ namespace TexasHoldemServer.Servers
 
                 for (int i = 0; i < clientList.Count; i++)
                 {
-                    if (clientList[i].UserInfo.NickName == poker.Key &&  clientList[i].UserInfo.GameState != UserGameState.StateNone)
+                    if (clientList[i].UserInfo.NickName == poker.Key &&  
+                        clientList[i].UserInfo.GameState != UserGameState.StateNone &&
+                        clientList[i].UserInfo.GameState != UserGameState.Abort)
                     {
                         gameProcessPack.HandPoker.Add(poker.Key, intList);
                         break;
@@ -314,6 +316,7 @@ namespace TexasHoldemServer.Servers
 
             foreach (var user in clientList)
             {
+                gameProcessPack.UserStates.Add(user.UserInfo.NickName, user.UserInfo.GameState);
                 if (user.UserInfo.GameState != UserGameState.StateNone)
                 {
                     gameProcessPack.BetShips.Add(user.UserInfo.NickName, user.UserInfo.BetChips);
@@ -376,7 +379,10 @@ namespace TexasHoldemServer.Servers
             foreach (var poker in roomState.handPoker)
             {
                 shapeNum = PokerShape.Instance.GetCardShape(poker.Value, poolResult);
-                roomState.pokerShape.Add(poker.Key, shapeNum);
+                if (!roomState.pokerShape.ContainsKey(poker.Key))
+                {
+                    roomState.pokerShape.Add(poker.Key, shapeNum);
+                }                
             }
         }
 
@@ -694,11 +700,24 @@ namespace TexasHoldemServer.Servers
             string subtractCash = (Math.Abs(Convert.ToInt32( Utils.StringSubtract(betValue, client.UserInfo.BetChips)))).ToString();
 
             Dictionary<string, string> dataDic = client.GetMySql.GetData(client.GetMySqlConnection,
-                                                                         "userdata", "account",
+                                                                         "userdata", 
+                                                                         "account",
                                                                          client.UserInfo.Account,
                                                                          new string[] { "cash" });
 
-            string cash = Utils.StringSubtract(dataDic["cash"], subtractCash);
+            if (dataDic != null)
+            {
+                string cash = Utils.StringSubtract(dataDic["cash"], subtractCash);
+
+                //扣除金幣
+                bool result = client.GetMySql.ReviseData(client.GetMySqlConnection,
+                                                         "userdata",
+                                                         "account",
+                                                         client.UserInfo.Account,
+                                                         new string[] { "cash" },
+                                                         new string[] { cash }
+                                                         );
+            }            
 
             client.UserInfo.Chips = Utils.StringSubtract(client.UserInfo.Chips, subtractCash);
             client.UserInfo.BetChips = betValue;
@@ -708,15 +727,6 @@ namespace TexasHoldemServer.Servers
             roomState.isFirstActioner = false;
             roomState.currBet = Convert.ToInt32(betValue) < Convert.ToInt32(roomState.bigBlindValue) ? roomState.bigBlindValue : betValue;
             roomState.totalBetChips = Utils.StringAddition(roomState.totalBetChips, subtractCash);
-
-            //扣除金幣
-            bool result = client.GetMySql.ReviseData(client.GetMySqlConnection,
-                                                     "userdata",
-                                                     "account",
-                                                     client.UserInfo.Account,
-                                                     new string[] { "cash" },
-                                                     new string[] { cash }
-                                                     );
 
             pack.GameProcessPack = GetGameProcessPack();
             pack.ComputerPack = GetComputerPack();

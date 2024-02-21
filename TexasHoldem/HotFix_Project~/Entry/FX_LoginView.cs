@@ -14,9 +14,9 @@ namespace HotFix_Project
         private static FX_BaseView thisView;
 
         private static Text Title_Txt, Send_Txt, Switch_Txt;
-        private static InputField Acc_IF, Psw_IF;
-        private static Button Send_Btn, Switch_Btn, Eye_Btn, Setting_Btn;
-        private static Image Eye_Img;
+        private static InputField Acc_IF, Psw_IF, Psw2_IF;
+        private static Button Send_Btn, Switch_Btn, Setting_Btn, Eye1_Btn, Eye2_Btn;
+        private static Image Eye1_Img, Eye2_Img;
         private static Transform Tip_Tr;
 
         private static Sprite[] eyeList;
@@ -43,11 +43,14 @@ namespace HotFix_Project
             Switch_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Switch_Txt");
             Acc_IF = FindConponent.FindObj<InputField>(thisView.view.transform, "Acc_IF");
             Psw_IF = FindConponent.FindObj<InputField>(thisView.view.transform, "Psw_IF");
+            Psw2_IF = FindConponent.FindObj<InputField>(thisView.view.transform, "Psw2_IF");
             Send_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Send_Btn");
             Switch_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Switch_Btn");
-            Eye_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Eye_Btn");
+            Eye1_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Eye1_Btn");
+            Eye2_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Eye2_Btn");
             Setting_Btn = FindConponent.FindObj<Button>(thisView.view.transform, "Setting_Btn");
-            Eye_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Eye_Btn");
+            Eye1_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Eye1_Btn");
+            Eye2_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Eye2_Btn");
             Tip_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "Tip_Tr");
 
             ABManager.Instance.LoadSprite("entry", "Eyes", (eyes) =>
@@ -79,7 +82,7 @@ namespace HotFix_Project
             });
 
             //顯示/影藏密碼
-            Eye_Btn.onClick.AddListener(() =>
+            Eye1_Btn.onClick.AddListener(() =>
             {
                 Psw_IF.contentType = Psw_IF.contentType == InputField.ContentType.Password ?
                                      InputField.ContentType.Standard :
@@ -89,7 +92,22 @@ namespace HotFix_Project
                 Psw_IF.text = temp;
 
 
-                Eye_Img.sprite = Psw_IF.contentType == InputField.ContentType.Password ?
+                Eye1_Img.sprite = Psw_IF.contentType == InputField.ContentType.Password ?
+                                 eyeList[0] :
+                                 eyeList[1];
+            });
+
+            Eye2_Btn.onClick.AddListener(() =>
+            {
+                Psw2_IF.contentType = Psw2_IF.contentType == InputField.ContentType.Password ?
+                                     InputField.ContentType.Standard :
+                                     InputField.ContentType.Password;
+                string temp = Psw2_IF.text;
+                Psw2_IF.text = "";
+                Psw2_IF.text = temp;
+
+
+                Eye2_Img.sprite = Psw2_IF.contentType == InputField.ContentType.Password ?
                                  eyeList[0] :
                                  eyeList[1];
             });
@@ -110,7 +128,25 @@ namespace HotFix_Project
         {
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                Psw_IF.Select();
+                if (Acc_IF.isFocused)
+                {
+                    Psw_IF.Select();
+                }
+                else if (Psw_IF.isFocused)
+                {
+                    if (currentMode == ModeType.logon)
+                    {
+                        Psw2_IF.Select();
+                    }
+                    else
+                    {
+                        Acc_IF.Select();
+                    }
+                }
+                else
+                {
+                    Acc_IF.Select();
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
@@ -139,6 +175,15 @@ namespace HotFix_Project
                 return;
             }
 
+            if (currentMode == ModeType.logon)
+            {
+                if (Psw_IF.text != Psw2_IF.text)
+                {
+                    UIManager.Instance.ShowTip("密碼輸入不相同。");
+                    return;
+                }
+            }
+
             UIManager.Instance.WaitViewSwitch(true);
 
             MainPack pack = new MainPack();
@@ -163,9 +208,12 @@ namespace HotFix_Project
             Acc_IF.text = "";
             Psw_IF.text = "";
             Psw_IF.contentType = InputField.ContentType.Password;
+            Psw2_IF.contentType = InputField.ContentType.Password;
+            Psw2_IF.gameObject.SetActive(modeType == ModeType.logon);
             if (eyeList != null && eyeList.Length > 0)
             {
-                Eye_Img.sprite = eyeList[0];
+                Eye1_Img.sprite = eyeList[0];
+                Eye2_Img.sprite = eyeList[0];
             }
 
             Tip_Tr.gameObject.SetActive(modeType == ModeType.logon);

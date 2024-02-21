@@ -98,24 +98,33 @@ namespace TexasHoldemServer.SqlData
 
             cmd.Parameters.AddWithValue($"@{searchName}", searchNameValue);
 
-            // 使用 MySqlDataReader 來獲取完整的結果集
-            using (MySqlDataReader reader = cmd.ExecuteReader())
+            try
             {
-                if (reader.Read())
+                // 使用 MySqlDataReader 來獲取完整的結果集
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    Dictionary<string, string> dic = new Dictionary<string, string>();
-                    for (int i = 0; i < dataNames.Length; i++)
+                    if (reader.Read())
                     {
-                        dic.Add(dataNames[i], reader[dataNames[i]].ToString());
+                        Dictionary<string, string> dic = new Dictionary<string, string>();
+                        for (int i = 0; i < dataNames.Length; i++)
+                        {
+                            dic.Add(dataNames[i], reader[dataNames[i]].ToString());
+                        }
+                        return dic;
                     }
-                    return dic;
-                }
-                else
-                {
-                    Console.WriteLine($"獲取資料錯誤!!!");
-                    return null;
+                    else
+                    {
+                        Console.WriteLine($"獲取資料錯誤!!!");
+                        return null;
+                    }
                 }
             }
+            catch (Exception)
+            {
+                Console.WriteLine($"獲取資料錯誤!!!");
+                return null;
+            }
+            
         }
 
         /// <summary>
