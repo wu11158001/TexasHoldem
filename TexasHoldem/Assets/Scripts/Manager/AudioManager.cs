@@ -9,21 +9,19 @@ public class AudioManager : UnitySingleton<AudioManager>
 {
     private AudioSource audioSource;
 
-    private List<string> loadedABName = new List<string>();
+    [SerializeField]
     private List<AudioClip> clipList = new List<AudioClip>();
 
     private string localMusic = "Holdem_MusicVolume";
     public float TempMusic { get; set; }
-    private float musicVolume;
     public float MusicVolume 
     {
         get
         { 
-            return musicVolume;
+            return audioSource.volume;
         }
         set
         {
-            musicVolume = value;
             audioSource.volume = value;
             PlayerPrefs.SetFloat(localMusic, value);
         }
@@ -48,12 +46,12 @@ public class AudioManager : UnitySingleton<AudioManager>
     public override void Awake()
     {
         base.Awake();
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-
         //載入本地音量       
         if (PlayerPrefs.HasKey(localMusic))
         {
@@ -77,24 +75,31 @@ public class AudioManager : UnitySingleton<AudioManager>
     }
 
     /// <summary>
-    /// 添加音效資源
+    /// 獲取音效
     /// </summary>
     /// <param name="abName"></param>
     /// <param name="ab"></param>
-    public void AddClip(string abName, AssetBundle ab)
+    public void GetClips()
     {
-        if (loadedABName.Contains(abName)) return;
+        clipList.Clear();
 
-        loadedABName.Add(abName);
-        List<AudioClip> downloadClips = ab.LoadAllAssets<AudioClip>().ToList();
+        Dictionary<string, AssetBundle> abDic = ABManager.Instance.GetABDic;
 
-        foreach (var clip in downloadClips)
+        foreach (var ab in abDic)
         {
-            if (!clipList.Contains(clip))
+            List<AudioClip> downloadClips = ab.Value.LoadAllAssets<AudioClip>().ToList();
+
+            foreach (var clip in downloadClips)
             {
-                clipList.Add(clip);
+                if (!clipList.Contains(clip))
+                {
+                    clipList.Add(clip);
+                }
             }
         }
+        
+
+        Debug.Log($"音效添加完成。");
     }
 
     /// <summary>
@@ -112,7 +117,7 @@ public class AudioManager : UnitySingleton<AudioManager>
     {
         for (int i = 0; i < clipList.Count; i++)
         {
-            if (clipList[i].name == "BGM")
+            if (clipList[i] != null && clipList[i].name == "BGM")
             {
                 audioSource.clip = clipList[i];
                 audioSource.Play();
@@ -136,7 +141,7 @@ public class AudioManager : UnitySingleton<AudioManager>
 
         for (int i = 0; i < clipList.Count; i++)
         {
-            if (clipList[i].name == clipName)
+            if (clipList[i] != null && clipList[i].name == clipName)
             {
                 GameObject obj = new GameObject();
                 obj.transform.SetParent(gameObject.transform);

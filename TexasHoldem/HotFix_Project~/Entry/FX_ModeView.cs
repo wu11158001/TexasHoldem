@@ -18,6 +18,7 @@ namespace HotFix_Project
         private static Button Logout_Btn, Holdem_Btn, Setting_Btn;
         private static Transform Download_Tr, DownLoadProgress_Tr;
         private static Image Progress_Img;
+        private static Text Progress_Txt;
 
         private static float currProccess;
 
@@ -31,6 +32,7 @@ namespace HotFix_Project
             DownLoadProgress_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "DownLoadProgress_Tr");            
             Download_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "Download_Tr");            
             Progress_Img = FindConponent.FindObj<Image>(thisView.view.transform, "Progress_Img");
+            Progress_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Progress_Txt");
 
             DownLoadProgress_Tr.gameObject.SetActive(false);
 
@@ -73,6 +75,7 @@ namespace HotFix_Project
                 {
                     Progress_Img.fillAmount += 1 * Time.deltaTime;
                 }
+                Progress_Txt.text = $"{(Progress_Img.fillAmount * 100).ToString("F0")}%";
 
                 if (Progress_Img.fillAmount == 1)
                 {

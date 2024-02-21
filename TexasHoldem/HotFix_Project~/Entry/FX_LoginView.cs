@@ -185,7 +185,7 @@ namespace HotFix_Project
 
             if (!string.IsNullOrEmpty(acc) && !string.IsNullOrEmpty(psw))
             {
-                Debug.Log($"自動登入: Account:{acc} / 密碼:{psw}");
+                Debug.Log($"帳號:{acc} / 密碼:{psw} 自動登入!");
                 UIManager.Instance.WaitViewSwitch(true);
 
                 MainPack pack = new MainPack();
@@ -207,7 +207,7 @@ namespace HotFix_Project
         /// <param name="pack"></param>
         private static void SaveLoginData(MainPack pack)
         {
-            Debug.Log($"本地儲存登入資料: 帳號:{pack.LoginPack.Account} / 密碼:{pack.LoginPack.Password}");
+            Debug.Log($"本地儲存登入資料。");
 
             PlayerPrefs.SetString(localSaveAcc, pack.LoginPack.Account);
             PlayerPrefs.SetString(localSavePsw, pack.LoginPack.Password);

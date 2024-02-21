@@ -117,13 +117,13 @@ namespace HotFix_Project
             {
                 if (avatarTempSize.x < avatarTargetSize.x)
                 {
-                    avatarTempSize.x += 10;
+                    avatarTempSize.x += 15;
                 }
                 else
                 {
                     if (avatarTempSize.y < avatarTargetSize.y)
                     {
-                        avatarTempSize.y += 5;
+                        avatarTempSize.y += 10;
                     }
                 }        
                 AvatarListMask_Tr.sizeDelta = new Vector2(avatarTempSize.x, avatarTempSize.y);
@@ -133,13 +133,13 @@ namespace HotFix_Project
             {
                 if (AvatarListMask_Tr.sizeDelta.y > initAvatarListHeight)
                 {                    
-                    avatarTempSize.y -= 5; 
+                    avatarTempSize.y -= 10; 
                 }
                 else
                 {
                     if (AvatarListMask_Tr.sizeDelta.x > 0)
                     {
-                        avatarTempSize.x -= 10;
+                        avatarTempSize.x -= 15;
                     }
                     else
                     {
@@ -253,7 +253,7 @@ namespace HotFix_Project
                         switch (pack.ReviseUserInfoPack.ReviseName)
                         {
                             case "avatar":
-                                AvatarListMask_Tr.gameObject.SetActive(false);
+                                AvatarListSwitch = false;
                                 Avatar_Img.sprite = avatarList[Convert.ToInt32(reviseValue)];
                                 break;
 

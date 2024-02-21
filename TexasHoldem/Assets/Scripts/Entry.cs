@@ -10,10 +10,7 @@ public class Entry : UnitySingleton<Entry>
     public override void Awake()
     {
         base.Awake();
-
-        GameObject audioManaager = new GameObject();
-        audioManaager.name = "AudioManager";
-        audioManaager.AddComponent<AudioManager>();
+   
         gameObject.AddComponent<ViewABName>();
         gameObject.AddComponent<ILRuntimeManager>();
         gameObject.AddComponent<ABManager>();
@@ -34,12 +31,10 @@ public class Entry : UnitySingleton<Entry>
         await UIManager.Instance.CreateToolsView();
         await UIManager.Instance.ShowView(ViewType.LoginView);
 
+        GameObject audioManaager = new GameObject();
+        audioManaager.name = "AudioManager";
+        audioManaager.AddComponent<AudioManager>();
+        AudioManager.Instance.GetClips();
         AudioManager.Instance.PlayBGM();
-    }
-
-    private void OnDestroy()
-    {
-        AssetBundle.UnloadAllAssetBundles(false);
-        Debug.Log("移除AB資源");
     }
 }

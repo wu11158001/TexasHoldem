@@ -19,6 +19,11 @@ public class ABManager : UnitySingleton<ABManager>
     private Dictionary<string, AssetBundle> abDic = new Dictionary<string, AssetBundle>();
     private Dictionary<string, SemaphoreSlim> downloadLocks = new Dictionary<string, SemaphoreSlim>();
 
+    /// <summary>
+    /// 獲取AB資源字典
+    /// </summary>
+    public Dictionary<string, AssetBundle> GetABDic { get { return abDic; } }
+    
     public override void Awake()
     {
         base.Awake();
@@ -50,7 +55,6 @@ public class ABManager : UnitySingleton<ABManager>
                 if (ab != null)
                 {
                     abDic.Add(abName, ab);
-                    AudioManager.Instance.AddClip(abName, ab);
                 }
                 else
                 {
@@ -111,6 +115,7 @@ public class ABManager : UnitySingleton<ABManager>
     /// <returns></returns>
     async public Task<byte[]> DownloadAB(string abName, UnityAction<float> progressCallBack = null, string savePath = "AB", string url = downloadUrl)
     {
+        Debug.Log($"下載AB資源到本地{abName}");
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url + abName))
         {
             var asyncOperation = webRequest.SendWebRequest();
@@ -323,6 +328,13 @@ public class ABManager : UnitySingleton<ABManager>
             }
             else
             {
+                if (abDic.ContainsKey(abName))
+                {
+                    Debug.Log($"移除本地舊的AB資源:{abName}");
+                    abDic[abName].Unload(true);
+                    abDic.Remove(abName);
+                }
+
                 await DownloadAB(abName);
                 await LoadLoaclAB<T>(abName, resName, callBack);
             }
@@ -381,6 +393,7 @@ public class ABManager : UnitySingleton<ABManager>
     /// </summary>
     private async Task LoadLoaclAB<T>(string abName, string resName, UnityAction<T> callBack) where T : Object
     {
+        Debug.Log($"載入本地資源;{abName}");
         string fullPath = Path.Combine(Application.streamingAssetsPath, "AB", abName);
 
         TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
@@ -403,7 +416,6 @@ public class ABManager : UnitySingleton<ABManager>
             if (!abDic.ContainsKey(abName))
             {
                 abDic.Add(abName, ab);
-                AudioManager.Instance.AddClip(abName, ab);
             }
         }
         else
