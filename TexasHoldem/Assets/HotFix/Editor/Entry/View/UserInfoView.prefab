@@ -831,6 +831,7 @@ GameObject:
   - component: {fileID: 2211030354727296344}
   - component: {fileID: 6623313703689733497}
   - component: {fileID: 7455378410935412911}
+  - component: {fileID: 2044309895684948111}
   m_Layer: 5
   m_Name: Chips_Txt
   m_TagString: Untagged
@@ -888,7 +889,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 675a99585288d6c4fab4907913d28524, type: 3}
     m_FontSize: 50
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 5
     m_MaxSize: 50
@@ -899,6 +900,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 100000
+--- !u!114 &2044309895684948111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3261420880488715711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &3845634339360988610
 GameObject:
   m_ObjectHideFlags: 0
@@ -1007,8 +1023,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2632533978257138550}
   - {fileID: 1795428220078878694}
+  - {fileID: 2632533978257138550}
   - {fileID: 6008797328958381361}
   - {fileID: 8453207582948990986}
   m_Father: {fileID: 3756513120321586196}
@@ -1284,7 +1300,7 @@ RectTransform:
   m_Children:
   - {fileID: 2211030354727296344}
   m_Father: {fileID: 6823805346091072871}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1388,7 +1404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5495546, g: 0.85882354, b: 0.24705881, a: 1}
+  m_Color: {r: 1, g: 0.8247725, b: 0.0037735105, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1421,7 +1437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.24528301, g: 0.23001067, b: 0.23001067, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
 --- !u!1 &7061186158858514353
@@ -1910,7 +1926,7 @@ RectTransform:
   m_Children:
   - {fileID: 8230041907418512462}
   m_Father: {fileID: 6823805346091072871}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

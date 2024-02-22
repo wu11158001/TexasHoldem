@@ -55,6 +55,7 @@ public class ABManager : UnitySingleton<ABManager>
                 if (ab != null)
                 {
                     abDic.Add(abName, ab);
+                    AudioManager.Instance.GetClips();
                 }
                 else
                 {
@@ -416,6 +417,7 @@ public class ABManager : UnitySingleton<ABManager>
             if (!abDic.ContainsKey(abName))
             {
                 abDic.Add(abName, ab);
+                AudioManager.Instance.GetClips();
             }
         }
         else

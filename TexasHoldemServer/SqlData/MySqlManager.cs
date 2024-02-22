@@ -114,14 +114,22 @@ namespace TexasHoldemServer.SqlData
                     }
                     else
                     {
-                        Console.WriteLine($"獲取資料錯誤!!!");
+                        foreach (var data in dataNames)
+                        {
+                            Console.WriteLine($"{searchNameValue}:獲取 {data} 資料錯誤!!!");
+                        }
+
                         return null;
                     }
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine($"獲取資料錯誤!!!");
+                foreach (var data in dataNames)
+                {
+                    Console.WriteLine($"{searchNameValue}:獲取 {data} 資料錯誤!!!");
+                }
+                
                 return null;
             }
             

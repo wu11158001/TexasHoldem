@@ -35,8 +35,7 @@ public class Entry : UnitySingleton<Entry>
 
         GameObject audioManaager = new GameObject();
         audioManaager.name = "AudioManager";
-        audioManaager.AddComponent<AudioManager>();
-        AudioManager.Instance.GetClips();
+        audioManaager.AddComponent<AudioManager>();        
         AudioManager.Instance.PlayBGM();
     }
 }

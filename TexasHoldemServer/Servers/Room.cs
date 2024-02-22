@@ -17,6 +17,11 @@ namespace TexasHoldemServer.Servers
         //房間內所有客戶端
         private List<Client> clientList;
 
+        //回合結束行動者
+        private string roundEndPlayer;
+        //回合行動玩家次數
+        private int actionCount;
+
         private const string computerName = "-1";
         private readonly string[] shapeNames = new string[]
         {
@@ -31,7 +36,6 @@ namespace TexasHoldemServer.Servers
             "一對",
             "高牌"
         };
-        private int actionCount = 0;
 
         CancellationTokenSource cts;
         CancellationToken token;
@@ -160,6 +164,8 @@ namespace TexasHoldemServer.Servers
         /// <param name="client"></param>
         public void Exit(Server server, Client client)
         {
+            Console.WriteLine($"{client.UserInfo.NickName}:離開房間");
+
             //處於當前回合
             if (roomState.actionUser == client.UserInfo.NickName)
             {
@@ -173,16 +179,17 @@ namespace TexasHoldemServer.Servers
             }
 
             clientList.Remove(client);
-            client.GetRoom = null;
 
             //關閉房間
             if (clientList.Count == 0)
             {
+                Console.WriteLine("關閉房間!");
                 cts?.Cancel();
-                client.GetRoom = null;
                 server.RemoveRoom(this);
                 return;
             }
+
+            client.GetRoom = null;
 
             MainPack pack = new MainPack();
             pack.ActionCode = ActionCode.OtherUserExitRoom;
@@ -363,7 +370,7 @@ namespace TexasHoldemServer.Servers
             BroadcastGameStage();
 
             await Task.Delay(2000);
-            SetNextActionUser();
+            SetNextActionUser(true);
         }
 
         /// <summary>
@@ -392,12 +399,12 @@ namespace TexasHoldemServer.Servers
         private void SetBlinder()
         {
             //初始化
+            actionCount = 2;
             ComputerInfo.BetChips = "0";
             foreach (var user in clientList)
             {
                 user.UserInfo.BetChips = "0";
             }
-            actionCount = 2;
             roomState.gameProcess = GameProcess.SetBlind;
             roomState.currBet = "0";
             roomState.winChips = "0";
@@ -534,14 +541,13 @@ namespace TexasHoldemServer.Servers
         /// <summary>
         /// 設定下位行動玩家
         /// </summary>
-        async private void SetNextActionUser()
+        /// <param name="isSetStartAction">是否設置該回合起始玩家</param>
+        async private void SetNextActionUser(bool isSetStartAction = false)
         {
             if (clientList.Count <= 0)
             {
                 return;
             }
-
-            actionCount++;
 
             List<Client> playingList = GetPlayingUser();
             if (playingList.Count == 0)
@@ -555,17 +561,25 @@ namespace TexasHoldemServer.Servers
             //設定行動玩家
             if (roomState.actionUser == computerName)
             {
-                roomState.actionUser = playingList[0].UserInfo.NickName;
+                if (!IsPeekNext(-1, isSetStartAction))
+                {
+                    return;
+                }
             }
             else
             {                
-                int currUser = playingList.Select((v, i) => (v, i))
-                                          .Where(name => name.v.UserInfo.NickName == roomState.actionUser)
-                                          .FirstOrDefault()
-                                          .i;
-                roomState.actionUser = currUser + 1 >= playingList.Count ? computerName : playingList[currUser + 1].UserInfo.NickName;
-            }
-            Console.WriteLine($"當前行動玩家:{roomState.actionUser}");
+                int currUserIndex = clientList.Select((v, i) => (v, i))
+                                              .Where(name => name.v.UserInfo.NickName == roomState.actionUser)
+                                              .FirstOrDefault()
+                                              .i;
+
+                Console.WriteLine($"前位行動玩家編號{currUserIndex}");
+
+                if (!IsPeekNext(currUserIndex, isSetStartAction))
+                {
+                    return;
+                }
+            }            
 
             SendActioner();
 
@@ -573,6 +587,8 @@ namespace TexasHoldemServer.Servers
             if (roomState.actionUser == computerName)
             {
                 await Task.Delay(3000);
+
+                actionCount++;
 
                 MainPack pack = new MainPack();
                 pack.ActionCode = ActionCode.ShowUserAction;
@@ -615,17 +631,64 @@ namespace TexasHoldemServer.Servers
                 pack.GameActionPack = gameActionPack;
                 pack.GameProcessPack = GetGameProcessPack();
                 pack.ComputerPack = GetComputerPack();
+
+                Console.WriteLine($"電腦行動:{gameActionPack.UserGameState}");
                 Broadcast(null, pack);
 
                 cts?.Cancel();
                 await Task.Delay(1000);
 
-                if (await IsNextRound() == false)
-                {
-                    SetNextActionUser();
-                    SendActioner();
-                }
+                SetNextActionUser();
             }
+        }
+
+        /// <summary>
+        /// 是否有下位行動者
+        /// </summary>
+        /// <param name="currUserIndex"></param>
+        /// <param name="isSetStartAction"></param>
+        private bool IsPeekNext(int currUserIndex, bool isSetStartAction = false)
+        {
+            string actioner = "";
+            if (currUserIndex + 1 >= clientList.Count)
+            {
+                actioner = computerName;
+            }
+            else
+            {
+                if (clientList[currUserIndex + 1].UserInfo.GameState == UserGameState.StateNone ||
+                    clientList[currUserIndex + 1].UserInfo.GameState == UserGameState.Abort)
+                {                    
+                    return IsPeekNext(currUserIndex + 1);
+                }
+
+                actioner = clientList[currUserIndex + 1].UserInfo.NickName;
+            }
+
+            Console.WriteLine("當前行動者:" + roomState.actionUser + "/起始者:" + roundEndPlayer + "/行動數:" + actionCount);
+            if (roomState.actionUser == roundEndPlayer)
+            {
+                if (actionCount >= GetPlayingUser().Count() + 1)
+                {
+                    bool isSameBet = GetPlayingUser().All(user => user.UserInfo.BetChips == ComputerInfo.BetChips);
+                    if (isSameBet)
+                    {
+                        NextRound();
+                        return false;
+                    }
+                }
+
+                actionCount = 0;
+            }
+
+            if (isSetStartAction)
+            {
+                roundEndPlayer = actioner;
+            }
+
+            roomState.actionUser = actioner;
+            Console.WriteLine($"當前行動玩家:{roomState.actionUser}");
+            return true;
         }
 
         /// <summary>
@@ -634,7 +697,7 @@ namespace TexasHoldemServer.Servers
         /// <returns></returns>
         private void SendActioner()
         {
-            if (clientList.Count <= 0)
+            if (clientList.Count <= 0 )
             {
                 return;
             }
@@ -696,6 +759,7 @@ namespace TexasHoldemServer.Servers
         {
             cts?.Cancel();
 
+            actionCount++;
             string betValue = pack.GameActionPack.BetValue;
             string subtractCash = (Math.Abs(Convert.ToInt32( Utils.StringSubtract(betValue, client.UserInfo.BetChips)))).ToString();
 
@@ -724,9 +788,21 @@ namespace TexasHoldemServer.Servers
             client.UserInfo.GameState = pack.GameActionPack.UserGameState;
             Console.WriteLine($"{client.UserInfo.NickName} 行動:{client.UserInfo.GameState}");
 
+            if (client.UserInfo.GameState == UserGameState.Abort)
+            {
+                int currUserIndex = clientList.Select((v, i) => (v, i))
+                                              .Where(name => name.v.UserInfo.NickName == roomState.actionUser)
+                                              .FirstOrDefault()
+                                              .i;
+               roundEndPlayer = PeekEndUser(currUserIndex);
+            }
+            else
+            {
+                roomState.currBet = Convert.ToInt32(betValue) < Convert.ToInt32(roomState.bigBlindValue) ? roomState.bigBlindValue : betValue;
+                roomState.totalBetChips = Utils.StringAddition(roomState.totalBetChips, subtractCash);
+            }
             roomState.isFirstActioner = false;
-            roomState.currBet = Convert.ToInt32(betValue) < Convert.ToInt32(roomState.bigBlindValue) ? roomState.bigBlindValue : betValue;
-            roomState.totalBetChips = Utils.StringAddition(roomState.totalBetChips, subtractCash);
+            
 
             pack.GameProcessPack = GetGameProcessPack();
             pack.ComputerPack = GetComputerPack();
@@ -745,12 +821,34 @@ namespace TexasHoldemServer.Servers
                 return;
             }
 
-            if (await IsNextRound() == false)
-            {
-                SetNextActionUser();
-                SendActioner();
-            }
+            SetNextActionUser();
         }       
+
+        /// <summary>
+        /// 尋找結束回合玩家
+        /// </summary>
+        /// <param name="currUserIndex"></param>
+        /// <returns></returns>
+        private string PeekEndUser(int currUserIndex)
+        {
+            string endPlayer = "";
+            if (currUserIndex + 1 >= clientList.Count)
+            {
+                endPlayer = computerName;
+            }
+            else
+            {
+                if (clientList[currUserIndex + 1].UserInfo.GameState == UserGameState.StateNone ||
+                    clientList[currUserIndex + 1].UserInfo.GameState == UserGameState.Abort)
+                {
+                    return PeekEndUser(currUserIndex + 1);
+                }
+
+                endPlayer = clientList[currUserIndex + 1].UserInfo.NickName;
+            }
+
+            return endPlayer;
+        }
 
         /// <summary>
         /// 獲取遊戲中玩家
@@ -772,20 +870,14 @@ namespace TexasHoldemServer.Servers
         }
 
         /// <summary>
-        /// 判斷是否進入下一階段
+        /// 進入下一階段
         /// </summary>
         /// <returns></returns>
-        async private Task<bool> IsNextRound()
-        {          
-            Console.WriteLine($"已行動人數:{actionCount}");
-            if (actionCount < clientList.Count + 1)
-            {
-                return false;
-            }
-
+        async private void NextRound()
+        {
             string compareBet = ComputerInfo.BetChips;
             bool isNext = GetPlayingUser().All(user => user.UserInfo.BetChips == compareBet);
-            Console.WriteLine($"進入下階段:{isNext} : 當前:{roomState.gameProcess}");
+            Console.WriteLine($"當前:{roomState.gameProcess}:進入下階段");
 
             if (isNext)
             {
@@ -803,7 +895,7 @@ namespace TexasHoldemServer.Servers
 
                         await Task.Delay(2000);
 
-                        SetNextActionUser();
+                        SetNextActionUser(true);
                         SendActioner();
                         break;
 
@@ -815,7 +907,7 @@ namespace TexasHoldemServer.Servers
 
                         await Task.Delay(2000);
 
-                        SetNextActionUser();
+                        SetNextActionUser(true);
                         SendActioner();
                         break;
 
@@ -827,7 +919,7 @@ namespace TexasHoldemServer.Servers
 
                         await Task.Delay(2000);
 
-                        SetNextActionUser();
+                        SetNextActionUser(true);
                         SendActioner();
                         break;
 
@@ -839,8 +931,6 @@ namespace TexasHoldemServer.Servers
                         break;
                 }
             }
-
-            return isNext;
         }
 
         /// <summary>

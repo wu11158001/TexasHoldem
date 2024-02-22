@@ -101,7 +101,7 @@ namespace TexasHoldemServer.Servers
         /// <param name="pack"></param>
         public void Send(MainPack pack)
         {
-            Console.WriteLine($"{this.UserInfo.Account}: 發送消息:{pack.ActionCode}");
+            //Console.WriteLine($"給 {this.UserInfo.Account}: 發送消息:{pack.ActionCode}");
 
             socket.Send(Message.PackData(pack));
         }
