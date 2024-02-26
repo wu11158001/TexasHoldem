@@ -136,6 +136,15 @@ public class ILRuntimeManager : UnitySingleton<ILRuntimeManager>
 
         appdomain.DelegateManager.RegisterFunctionDelegate<System.Int32, System.Boolean>();
         appdomain.DelegateManager.RegisterFunctionDelegate<System.Int32, System.Int32>();
+
+        appdomain.DelegateManager.RegisterMethodDelegate<System.String, System.Int32>();
+        appdomain.DelegateManager.RegisterDelegateConvertor<UnityEngine.Events.UnityAction<System.String, System.Int32>>((act) =>
+        {
+            return new UnityEngine.Events.UnityAction<System.String, System.Int32>((arg0, arg1) =>
+            {
+                ((System.Action<System.String, System.Int32>)act)(arg0, arg1);
+            });
+        });
     }
 
     private void OnDestroy()

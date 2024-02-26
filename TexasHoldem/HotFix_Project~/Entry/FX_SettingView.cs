@@ -78,7 +78,7 @@ namespace HotFix_Project
             {
                 if (AudioManager.Instance.SoundVolume > 0)
                 {
-                    AudioManager.Instance.TempMusic = AudioManager.Instance.SoundVolume;
+                    AudioManager.Instance.TempSound = AudioManager.Instance.SoundVolume;
                     AudioManager.Instance.SoundVolume = 0;
                     Sound_Img.sprite = soundList[3];
                 }

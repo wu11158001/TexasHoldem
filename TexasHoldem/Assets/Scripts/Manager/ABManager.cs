@@ -117,6 +117,14 @@ public class ABManager : UnitySingleton<ABManager>
     async public Task<byte[]> DownloadAB(string abName, UnityAction<float> progressCallBack = null, string savePath = "AB", string url = downloadUrl)
     {
         Debug.Log($"下載AB資源到本地{abName}");
+
+        if (abDic.ContainsKey(abName))
+        {
+            Debug.Log($"移除本地舊的AB資源:{abName}");
+            abDic[abName].Unload(true);
+            abDic.Remove(abName);
+        }
+
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url + abName))
         {
             var asyncOperation = webRequest.SendWebRequest();

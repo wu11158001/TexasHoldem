@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class LobbyView : BaseView
 {
+    [SerializeField]
+    private UserInfoView userInfoView;
+
     public override void Awake()
     {
         base.Awake();

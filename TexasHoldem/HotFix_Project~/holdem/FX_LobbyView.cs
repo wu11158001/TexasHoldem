@@ -14,6 +14,8 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
+        private static UserInfoView userInfoView;
+
         private static Button Back_Btn, QuickStart_Btn, CreateRoom_Btn, BlindCancel_Btn, BlindConfirm_Btn, Setting_Btn;
         private static Transform RoomList_Tr, RoomListSample_Tr, CreateRoom_Tr;
         private static Dropdown SelectBlind_Dd;
@@ -43,6 +45,7 @@ namespace HotFix_Project
 
         private static void OnEnable()
         {
+            userInfoView = FindConponent.FindObj<Transform>(thisView.view.transform, "UserInfoView").gameObject.AddComponent<UserInfoView>();
             updateRoomTimer = new Timer(SendUpdateRoom, null, 0, 5000);
         }
 
@@ -120,6 +123,7 @@ namespace HotFix_Project
 
         private static void OnDisable()
         {
+            UnityEngine.Object.Destroy(userInfoView);
             updateRoomTimer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 

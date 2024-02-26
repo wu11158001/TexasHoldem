@@ -1,21 +1,61 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
-using System.Linq;
+using UnityEngine.UI;
+using UnityEngine.Events;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.IO;
 
-
-public static class Utils
+public class Utils
 {
+    private static Utils instance;
+    public static Utils Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new Utils();
+            }
+            return instance;
+        }
+    }
+
+    private Utils() { }
+
+    /// <summary>
+    /// 設定籌碼數字
+    /// </summary>
+    /// <param name="chips"></param>
+    /// <returns></returns>
+    public string SetChipsStr(string chips)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        int count = 0;
+        for (int i = chips.Length - 1; i >= 0; i--)
+        {
+            sb.Insert(0, chips[i]);
+
+            count++;
+            if (count == 3 && i != 0)
+            {
+                sb.Insert(0, ",");
+                count = 0;
+            }
+        }
+
+        return sb.ToString();
+    }
+
     /// <summary>
     /// 判斷是否為數字或英文字母
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static bool IsAlphaNumeric(string str)
+    public bool IsAlphaNumeric(string str)
     {
         Regex regex = new Regex("^[a-zA-Z0-9]+$");
         return regex.IsMatch(str);
@@ -27,7 +67,7 @@ public static class Utils
     /// <param name="v1"></param>
     /// <param name="v2"></param>
     /// <returns></returns>
-    public static string StringAddition(string v1, string v2)
+    public string StringAddition(string v1, string v2)
     {
         StringBuilder sb = new StringBuilder();
         Sum(v1.Length - 1, v2.Length - 1, false);
@@ -58,7 +98,7 @@ public static class Utils
     /// <param name="v1"></param>
     /// <param name="v2"></param>
     /// <returns></returns>
-    public static string StringSubtract(string v1, string v2)
+    public string StringSubtract(string v1, string v2)
     {
         StringBuilder sb = new StringBuilder();
 
@@ -111,7 +151,7 @@ public static class Utils
     /// <param name="v1"></param>
     /// <param name="v2"></param>
     /// <returns></returns>
-    public static string StringMultiplication(string v1, string v2)
+    public string StringMultiplication(string v1, string v2)
     {
         if (string.IsNullOrEmpty(v1) || string.IsNullOrEmpty(v2))
         {
@@ -153,5 +193,33 @@ public static class Utils
         }
 
         return sb.ToString().Substring(startIndex);
+    }
+
+    /// <summary>
+    /// 籌碼變化效果
+    /// </summary>
+    /// <param name="txtOnj"></param>
+    /// <param name="targetNumStr"></param>
+    async public void ChipsChangeEffect(Text txtOnj, string targetNumStr)
+    {
+        float during = 0.5f;
+
+        DateTime startTime = DateTime.Now;
+        float initNum = txtOnj.text == "" ? 0 : float.Parse(txtOnj.text.Replace(",", ""));
+        float targetNum = float.Parse(targetNumStr);
+        int num = int.MinValue;
+
+        while (num != targetNum)
+        {
+            float progress = (float)(DateTime.Now - startTime).TotalSeconds / during;
+            num = (int)Mathf.Lerp(initNum, targetNum, progress);
+
+            if (txtOnj != null)
+            {
+                txtOnj.text = $"{SetChipsStr(num.ToString())}";
+            }            
+
+            await Task.Yield();
+        }
     }
 }

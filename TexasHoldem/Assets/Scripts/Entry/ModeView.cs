@@ -5,9 +5,17 @@ using TexasHoldemProtobuf;
 
 public class ModeView : BaseView
 {
+    [SerializeField]
+    private UserInfoView userInfoView;
+
     public override void Awake()
     {
         base.Awake();
+    }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
     }
 
     public override void Start()
@@ -18,6 +26,11 @@ public class ModeView : BaseView
     public override void Update()
     {
         base.Update();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
     }
 
     public override void SendRequest(MainPack pack)

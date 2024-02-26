@@ -10,7 +10,7 @@ public class BaseView :MonoBehaviour
 
     protected AppDomain appdomain { get { return ILRuntimeManager.Instance.appdomain; } }
     protected MainPack pack;
-    protected Queue<MainPack> coradcastPackList = new Queue<MainPack>();
+    protected Queue<MainPack> boradcastPackList = new Queue<MainPack>();
 
     public virtual void Init(BaseView baseView, GameObject obj)
     {
@@ -45,9 +45,9 @@ public class BaseView :MonoBehaviour
             pack = null;
         }
 
-        if (coradcastPackList.Count != 0)
+        if (boradcastPackList.Count != 0)
         {
-            HandleBroadcast(coradcastPackList.Dequeue());
+            HandleBroadcast(boradcastPackList.Dequeue());
         }
     }
 
@@ -94,7 +94,7 @@ public class BaseView :MonoBehaviour
     /// <param name="pack"></param>
     public virtual void ReciveBroadcast(MainPack pack)
     {
-        coradcastPackList.Enqueue(pack);
+        boradcastPackList.Enqueue(pack);
     }
 
     /// <summary>

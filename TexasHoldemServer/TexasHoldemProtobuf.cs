@@ -50,7 +50,7 @@ namespace TexasHoldemProtobuf {
             "KAUSEQoJQ3VyckNvdW50GAQgASgFIogBCgxDb21wdXRlclBhY2sSEAoIbmlj",
             "a05hbWUYASABKAkSDgoGYXZhdGFyGAIgASgJEhAKCGJldENoaXBzGAMgASgJ",
             "Eg0KBWNoaXBzGAQgASgJEjUKCWdhbWVTdGF0ZRgFIAEoDjIiLlRleGFzSG9s",
-            "ZGVtUHJvdG9idWYuVXNlckdhbWVTdGF0ZSKfBwoPR2FtZVByb2Nlc3NQYWNr",
+            "ZGVtUHJvdG9idWYuVXNlckdhbWVTdGF0ZSK0BwoPR2FtZVByb2Nlc3NQYWNr",
             "EjUKC2dhbWVQcm9jZXNzGAEgASgOMiAuVGV4YXNIb2xkZW1Qcm90b2J1Zi5H",
             "YW1lUHJvY2VzcxISCgphY3Rpb25Vc2VyGAIgASgJEhQKDHNtYWxsQmxpbmRl",
             "chgDIAEoCRISCgpiaWdCbGluZGVyGAQgASgJEhUKDWJpZ0JsaW5kVmFsdWUY",
@@ -63,35 +63,36 @@ namespace TexasHoldemProtobuf {
             "cGUYCyADKAsyNC5UZXhhc0hvbGRlbVByb3RvYnVmLkdhbWVQcm9jZXNzUGFj",
             "ay5Qb2tlclNoYXBlRW50cnkSSAoKdXNlclN0YXRlcxgMIAMoCzI0LlRleGFz",
             "SG9sZGVtUHJvdG9idWYuR2FtZVByb2Nlc3NQYWNrLlVzZXJTdGF0ZXNFbnRy",
-            "eRIPCgdjdXJyQmV0GA0gASgJEg8KB3dpbm5lcnMYDiADKAkSEAoId2luQ2hp",
-            "cHMYDyABKAkaTgoOSGFuZFBva2VyRW50cnkSCwoDa2V5GAEgASgJEisKBXZh",
-            "bHVlGAIgASgLMhwuVGV4YXNIb2xkZW1Qcm90b2J1Zi5JbnRMaXN0OgI4ARov",
-            "Cg1CZXRTaGlwc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToC",
-            "OAEaMAoOVXNlckNoaXBzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIg",
-            "ASgJOgI4ARoxCg9Qb2tlclNoYXBlRW50cnkSCwoDa2V5GAEgASgJEg0KBXZh",
-            "bHVlGAIgASgJOgI4ARpVCg9Vc2VyU3RhdGVzRW50cnkSCwoDa2V5GAEgASgJ",
-            "EjEKBXZhbHVlGAIgASgOMiIuVGV4YXNIb2xkZW1Qcm90b2J1Zi5Vc2VyR2Ft",
-            "ZVN0YXRlOgI4ASJ1Cg5HYW1lQWN0aW9uUGFjaxIWCg5hY3Rpb25OaWNrTmFt",
-            "ZRgBIAEoCRI5Cg11c2VyR2FtZVN0YXRlGAIgASgOMiIuVGV4YXNIb2xkZW1Q",
-            "cm90b2J1Zi5Vc2VyR2FtZVN0YXRlEhAKCGJldFZhbHVlGAMgASgJIkwKDEFj",
-            "dGlvbmVyUGFjaxIQCghhY3Rpb25lchgBIAEoCRIRCgljb3VudGRvd24YAiAB",
-            "KAISFwoPaXNGaXJzdEFjdGlvbmVyGAMgASgIIhkKB0ludExpc3QSDgoGdmFs",
-            "dWVzGAEgAygFKjwKC1JlcXVlc3RDb2RlEg8KC1JlcXVlc3ROb25lEAASCAoE",
-            "VXNlchABEggKBFJvb20QAhIICgRHYW1lEAMqpgIKCkFjdGlvbkNvZGUSDgoK",
-            "QWN0aW9uTm9uZRAAEgkKBUxvZ29uEAESCQoFTG9naW4QAhIKCgZMb2dvdXQQ",
-            "AxIPCgtHZXRVc2VySW5mbxAEEg4KCkNyZWF0ZVJvb20QBRIMCghKb2luUm9v",
-            "bRAGEhEKDVF1aWNrSm9pblJvb20QBxIWChJVcGRhdGVSb29tVXNlckluZm8Q",
-            "CBIOCgpVcGRhdGVSb29tEAkSFQoRT3RoZXJVc2VyRXhpdFJvb20QChIMCghF",
-            "eGl0Um9vbRALEhIKDlJldmlzZVVzZXJJbmZvEAwSDQoJU3RhcnRHYW1lEA0S",
-            "DQoJR2FtZVN0YWdlEA4SEgoOU2hvd1VzZXJBY3Rpb24QDxIRCg1BY3Rpb25l",
-            "ck9yZGVyEBAqYQoKUmV0dXJuQ29kZRIOCgpSZXR1cm5Ob25lEAASCwoHU3Vj",
-            "Y2VlZBABEggKBEZhaWwQAhIOCgpEdXBsaWNhdGVkEAMSCwoHTm90Um9vbRAE",
-            "Eg8KC1dyb25nRm9ybWF0EAUqLwoMU2VuZE1vZGVDb2RlEgwKCE1vZGVOb25l",
-            "EAASEQoNUm9vbUJyb2FkY2FzdBABKmgKC0dhbWVQcm9jZXNzEg8KC1Byb2Nl",
-            "c3NOb25lEAASDAoIU2V0QmxpbmQQARILCgdQcmVmbG9wEAISCAoERmxvcBAD",
-            "EggKBFR1cm4QBBIJCgVSaXZlchAFEg4KCkdhbWVSZXN1bHQQBipVCg1Vc2Vy",
-            "R2FtZVN0YXRlEg0KCVN0YXRlTm9uZRAAEgsKB1BsYXlpbmcQARIJCgVBYm9y",
-            "dBACEggKBFBhc3MQAxIKCgZGb2xsb3cQBBIHCgNBZGQQBWIGcHJvdG8z"));
+            "eRITCgttaW5CZXRWYWx1ZRgNIAEoCRIPCgdjdXJyQmV0GA4gASgJEg8KB3dp",
+            "bm5lcnMYDyADKAkSEAoId2luQ2hpcHMYECABKAkaTgoOSGFuZFBva2VyRW50",
+            "cnkSCwoDa2V5GAEgASgJEisKBXZhbHVlGAIgASgLMhwuVGV4YXNIb2xkZW1Q",
+            "cm90b2J1Zi5JbnRMaXN0OgI4ARovCg1CZXRTaGlwc0VudHJ5EgsKA2tleRgB",
+            "IAEoCRINCgV2YWx1ZRgCIAEoCToCOAEaMAoOVXNlckNoaXBzRW50cnkSCwoD",
+            "a2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ARoxCg9Qb2tlclNoYXBlRW50",
+            "cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ARpVCg9Vc2VyU3Rh",
+            "dGVzRW50cnkSCwoDa2V5GAEgASgJEjEKBXZhbHVlGAIgASgOMiIuVGV4YXNI",
+            "b2xkZW1Qcm90b2J1Zi5Vc2VyR2FtZVN0YXRlOgI4ASJ1Cg5HYW1lQWN0aW9u",
+            "UGFjaxIWCg5hY3Rpb25OaWNrTmFtZRgBIAEoCRI5Cg11c2VyR2FtZVN0YXRl",
+            "GAIgASgOMiIuVGV4YXNIb2xkZW1Qcm90b2J1Zi5Vc2VyR2FtZVN0YXRlEhAK",
+            "CGJldFZhbHVlGAMgASgJIjMKDEFjdGlvbmVyUGFjaxIQCghhY3Rpb25lchgB",
+            "IAEoCRIRCgljb3VudGRvd24YAiABKAIiGQoHSW50TGlzdBIOCgZ2YWx1ZXMY",
+            "ASADKAUqPAoLUmVxdWVzdENvZGUSDwoLUmVxdWVzdE5vbmUQABIICgRVc2Vy",
+            "EAESCAoEUm9vbRACEggKBEdhbWUQAyq2AgoKQWN0aW9uQ29kZRIOCgpBY3Rp",
+            "b25Ob25lEAASCQoFTG9nb24QARIJCgVMb2dpbhACEgoKBkxvZ291dBADEg8K",
+            "C0dldFVzZXJJbmZvEAQSDgoKQ3JlYXRlUm9vbRAFEgwKCEpvaW5Sb29tEAYS",
+            "EQoNUXVpY2tKb2luUm9vbRAHEhYKElVwZGF0ZVJvb21Vc2VySW5mbxAIEg4K",
+            "ClVwZGF0ZVJvb20QCRIVChFPdGhlclVzZXJFeGl0Um9vbRAKEgwKCEV4aXRS",
+            "b29tEAsSEgoOUmV2aXNlVXNlckluZm8QDBINCglTdGFydEdhbWUQDRINCglH",
+            "YW1lU3RhZ2UQDhISCg5TaG93VXNlckFjdGlvbhAPEhEKDUFjdGlvbmVyT3Jk",
+            "ZXIQEBIOCgpGb3JjZWRFeGl0EBEqYQoKUmV0dXJuQ29kZRIOCgpSZXR1cm5O",
+            "b25lEAASCwoHU3VjY2VlZBABEggKBEZhaWwQAhIOCgpEdXBsaWNhdGVkEAMS",
+            "CwoHTm90Um9vbRAEEg8KC1dyb25nRm9ybWF0EAUqLwoMU2VuZE1vZGVDb2Rl",
+            "EgwKCE1vZGVOb25lEAASEQoNUm9vbUJyb2FkY2FzdBABKmgKC0dhbWVQcm9j",
+            "ZXNzEg8KC1Byb2Nlc3NOb25lEAASDAoIU2V0QmxpbmQQARILCgdQcmVmbG9w",
+            "EAISCAoERmxvcBADEggKBFR1cm4QBBIJCgVSaXZlchAFEg4KCkdhbWVSZXN1",
+            "bHQQBipgCg1Vc2VyR2FtZVN0YXRlEg0KCVN0YXRlTm9uZRAAEgsKB1BsYXlp",
+            "bmcQARIJCgVBYm9ydBACEggKBFBhc3MQAxIKCgZGb2xsb3cQBBIHCgNBZGQQ",
+            "BRIJCgVBbGxJbhAGYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::TexasHoldemProtobuf.RequestCode), typeof(global::TexasHoldemProtobuf.ActionCode), typeof(global::TexasHoldemProtobuf.ReturnCode), typeof(global::TexasHoldemProtobuf.SendModeCode), typeof(global::TexasHoldemProtobuf.GameProcess), typeof(global::TexasHoldemProtobuf.UserGameState), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -101,9 +102,9 @@ namespace TexasHoldemProtobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ReviseUserInfoPack), global::TexasHoldemProtobuf.ReviseUserInfoPack.Parser, new[]{ "ReviseName", "ReviseValue" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.RoomPack), global::TexasHoldemProtobuf.RoomPack.Parser, new[]{ "RoomName", "RoomBigBlind", "MaxCount", "CurrCount" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ComputerPack), global::TexasHoldemProtobuf.ComputerPack.Parser, new[]{ "NickName", "Avatar", "BetChips", "Chips", "GameState" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameProcessPack), global::TexasHoldemProtobuf.GameProcessPack.Parser, new[]{ "GameProcess", "ActionUser", "SmallBlinder", "BigBlinder", "BigBlindValue", "TotalBetChips", "Result", "HandPoker", "BetShips", "UserChips", "PokerShape", "UserStates", "CurrBet", "Winners", "WinChips" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, null, null, null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameProcessPack), global::TexasHoldemProtobuf.GameProcessPack.Parser, new[]{ "GameProcess", "ActionUser", "SmallBlinder", "BigBlinder", "BigBlindValue", "TotalBetChips", "Result", "HandPoker", "BetShips", "UserChips", "PokerShape", "UserStates", "MinBetValue", "CurrBet", "Winners", "WinChips" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, null, null, null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.GameActionPack), global::TexasHoldemProtobuf.GameActionPack.Parser, new[]{ "ActionNickName", "UserGameState", "BetValue" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ActionerPack), global::TexasHoldemProtobuf.ActionerPack.Parser, new[]{ "Actioner", "Countdown", "IsFirstActioner" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.ActionerPack), global::TexasHoldemProtobuf.ActionerPack.Parser, new[]{ "Actioner", "Countdown" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::TexasHoldemProtobuf.IntList), global::TexasHoldemProtobuf.IntList.Parser, new[]{ "Values" }, null, null, null, null)
           }));
     }
@@ -196,6 +197,10 @@ namespace TexasHoldemProtobuf {
     ///行動者指令
     /// </summary>
     [pbr::OriginalName("ActionerOrder")] ActionerOrder = 16,
+    /// <summary>
+    ///強制退出
+    /// </summary>
+    [pbr::OriginalName("ForcedExit")] ForcedExit = 17,
   }
 
   public enum ReturnCode {
@@ -286,9 +291,13 @@ namespace TexasHoldemProtobuf {
     /// </summary>
     [pbr::OriginalName("Follow")] Follow = 4,
     /// <summary>
-    ///加注	
+    ///加注
     /// </summary>
     [pbr::OriginalName("Add")] Add = 5,
+    /// <summary>
+    ///All In
+    /// </summary>
+    [pbr::OriginalName("AllIn")] AllIn = 6,
   }
 
   #endregion
@@ -1900,6 +1909,7 @@ namespace TexasHoldemProtobuf {
       userChips_ = other.userChips_.Clone();
       pokerShape_ = other.pokerShape_.Clone();
       userStates_ = other.userStates_.Clone();
+      minBetValue_ = other.minBetValue_;
       currBet_ = other.currBet_;
       winners_ = other.winners_.Clone();
       winChips_ = other.winChips_;
@@ -2073,8 +2083,22 @@ namespace TexasHoldemProtobuf {
       get { return userStates_; }
     }
 
+    /// <summary>Field number for the "minBetValue" field.</summary>
+    public const int MinBetValueFieldNumber = 13;
+    private string minBetValue_ = "";
+    /// <summary>
+    ///最小下注籌碼
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string MinBetValue {
+      get { return minBetValue_; }
+      set {
+        minBetValue_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "currBet" field.</summary>
-    public const int CurrBetFieldNumber = 13;
+    public const int CurrBetFieldNumber = 14;
     private string currBet_ = "";
     /// <summary>
     ///當輪下注籌碼
@@ -2088,9 +2112,9 @@ namespace TexasHoldemProtobuf {
     }
 
     /// <summary>Field number for the "winners" field.</summary>
-    public const int WinnersFieldNumber = 14;
+    public const int WinnersFieldNumber = 15;
     private static readonly pb::FieldCodec<string> _repeated_winners_codec
-        = pb::FieldCodec.ForString(114);
+        = pb::FieldCodec.ForString(122);
     private readonly pbc::RepeatedField<string> winners_ = new pbc::RepeatedField<string>();
     /// <summary>
     ///贏家
@@ -2101,7 +2125,7 @@ namespace TexasHoldemProtobuf {
     }
 
     /// <summary>Field number for the "winChips" field.</summary>
-    public const int WinChipsFieldNumber = 15;
+    public const int WinChipsFieldNumber = 16;
     private string winChips_ = "";
     /// <summary>
     ///贏得籌碼值
@@ -2139,6 +2163,7 @@ namespace TexasHoldemProtobuf {
       if (!UserChips.Equals(other.UserChips)) return false;
       if (!PokerShape.Equals(other.PokerShape)) return false;
       if (!UserStates.Equals(other.UserStates)) return false;
+      if (MinBetValue != other.MinBetValue) return false;
       if (CurrBet != other.CurrBet) return false;
       if(!winners_.Equals(other.winners_)) return false;
       if (WinChips != other.WinChips) return false;
@@ -2160,6 +2185,7 @@ namespace TexasHoldemProtobuf {
       hash ^= UserChips.GetHashCode();
       hash ^= PokerShape.GetHashCode();
       hash ^= UserStates.GetHashCode();
+      if (MinBetValue.Length != 0) hash ^= MinBetValue.GetHashCode();
       if (CurrBet.Length != 0) hash ^= CurrBet.GetHashCode();
       hash ^= winners_.GetHashCode();
       if (WinChips.Length != 0) hash ^= WinChips.GetHashCode();
@@ -2206,13 +2232,17 @@ namespace TexasHoldemProtobuf {
       userChips_.WriteTo(output, _map_userChips_codec);
       pokerShape_.WriteTo(output, _map_pokerShape_codec);
       userStates_.WriteTo(output, _map_userStates_codec);
-      if (CurrBet.Length != 0) {
+      if (MinBetValue.Length != 0) {
         output.WriteRawTag(106);
+        output.WriteString(MinBetValue);
+      }
+      if (CurrBet.Length != 0) {
+        output.WriteRawTag(114);
         output.WriteString(CurrBet);
       }
       winners_.WriteTo(output, _repeated_winners_codec);
       if (WinChips.Length != 0) {
-        output.WriteRawTag(122);
+        output.WriteRawTag(130, 1);
         output.WriteString(WinChips);
       }
       if (_unknownFields != null) {
@@ -2247,12 +2277,15 @@ namespace TexasHoldemProtobuf {
       size += userChips_.CalculateSize(_map_userChips_codec);
       size += pokerShape_.CalculateSize(_map_pokerShape_codec);
       size += userStates_.CalculateSize(_map_userStates_codec);
+      if (MinBetValue.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(MinBetValue);
+      }
       if (CurrBet.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(CurrBet);
       }
       size += winners_.CalculateSize(_repeated_winners_codec);
       if (WinChips.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(WinChips);
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(WinChips);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2289,6 +2322,9 @@ namespace TexasHoldemProtobuf {
       userChips_.Add(other.userChips_);
       pokerShape_.Add(other.pokerShape_);
       userStates_.Add(other.userStates_);
+      if (other.MinBetValue.Length != 0) {
+        MinBetValue = other.MinBetValue;
+      }
       if (other.CurrBet.Length != 0) {
         CurrBet = other.CurrBet;
       }
@@ -2357,14 +2393,18 @@ namespace TexasHoldemProtobuf {
             break;
           }
           case 106: {
-            CurrBet = input.ReadString();
+            MinBetValue = input.ReadString();
             break;
           }
           case 114: {
-            winners_.AddEntriesFrom(input, _repeated_winners_codec);
+            CurrBet = input.ReadString();
             break;
           }
           case 122: {
+            winners_.AddEntriesFrom(input, _repeated_winners_codec);
+            break;
+          }
+          case 130: {
             WinChips = input.ReadString();
             break;
           }
@@ -2601,7 +2641,6 @@ namespace TexasHoldemProtobuf {
     public ActionerPack(ActionerPack other) : this() {
       actioner_ = other.actioner_;
       countdown_ = other.countdown_;
-      isFirstActioner_ = other.isFirstActioner_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2638,20 +2677,6 @@ namespace TexasHoldemProtobuf {
       }
     }
 
-    /// <summary>Field number for the "isFirstActioner" field.</summary>
-    public const int IsFirstActionerFieldNumber = 3;
-    private bool isFirstActioner_;
-    /// <summary>
-    ///首位行動者
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool IsFirstActioner {
-      get { return isFirstActioner_; }
-      set {
-        isFirstActioner_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as ActionerPack);
@@ -2667,7 +2692,6 @@ namespace TexasHoldemProtobuf {
       }
       if (Actioner != other.Actioner) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Countdown, other.Countdown)) return false;
-      if (IsFirstActioner != other.IsFirstActioner) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2676,7 +2700,6 @@ namespace TexasHoldemProtobuf {
       int hash = 1;
       if (Actioner.Length != 0) hash ^= Actioner.GetHashCode();
       if (Countdown != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Countdown);
-      if (IsFirstActioner != false) hash ^= IsFirstActioner.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2698,10 +2721,6 @@ namespace TexasHoldemProtobuf {
         output.WriteRawTag(21);
         output.WriteFloat(Countdown);
       }
-      if (IsFirstActioner != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(IsFirstActioner);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2715,9 +2734,6 @@ namespace TexasHoldemProtobuf {
       }
       if (Countdown != 0F) {
         size += 1 + 4;
-      }
-      if (IsFirstActioner != false) {
-        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2736,9 +2752,6 @@ namespace TexasHoldemProtobuf {
       if (other.Countdown != 0F) {
         Countdown = other.Countdown;
       }
-      if (other.IsFirstActioner != false) {
-        IsFirstActioner = other.IsFirstActioner;
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -2756,10 +2769,6 @@ namespace TexasHoldemProtobuf {
           }
           case 21: {
             Countdown = input.ReadFloat();
-            break;
-          }
-          case 24: {
-            IsFirstActioner = input.ReadBool();
             break;
           }
         }

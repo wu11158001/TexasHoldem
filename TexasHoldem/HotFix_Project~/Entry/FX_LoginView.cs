@@ -169,7 +169,7 @@ namespace HotFix_Project
 
             if (Acc_IF.text.Length < 6 || Acc_IF.text.Length > 12 ||
                 Psw_IF.text.Length < 6 || Psw_IF.text.Length > 12 ||
-                !Utils.IsAlphaNumeric(Acc_IF.text) || !Utils.IsAlphaNumeric(Psw_IF.text))
+                !Utils.Instance.IsAlphaNumeric(Acc_IF.text) || !Utils.Instance.IsAlphaNumeric(Psw_IF.text))
             {
                 UIManager.Instance.ShowTip("帳號/密碼需為6~12位數字或英文字母");
                 return;

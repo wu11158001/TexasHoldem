@@ -25,6 +25,11 @@ public class UserInfoView : BaseView
         base.Update();
     }
 
+    public void SendGetUserInfo()
+    {
+        appdomain.Invoke($"{hotFixPath}", "SendGetUserInfo", null, null);
+    }
+
     public override void SendRequest(MainPack pack)
     {
         base.SendRequest(pack);

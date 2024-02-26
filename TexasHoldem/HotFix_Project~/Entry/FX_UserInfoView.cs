@@ -52,17 +52,6 @@ namespace HotFix_Project
             LoadAvatar();   
         }
 
-        private static void OnEnable()
-        {
-            ReviseNickName_Tr.gameObject.SetActive(false);
-            AvatarList_Tr.gameObject.SetActive(false);
-
-            MainPack pack = new MainPack();
-            pack.RequestCode = RequestCode.User;
-            pack.ActionCode = ActionCode.GetUserInfo;
-            thisView.view.SendRequest(pack);
-        }
-
         private static void Start()
         {
             NickName_Btn.onClick.AddListener(() =>
@@ -98,6 +87,14 @@ namespace HotFix_Project
                     avatarTempSize = new Vector2(0, initAvatarListHeight);                    
                 }                
             });
+
+            ReviseNickName_Tr.gameObject.SetActive(false);
+            AvatarList_Tr.gameObject.SetActive(false);
+
+            MainPack pack = new MainPack();
+            pack.RequestCode = RequestCode.User;
+            pack.ActionCode = ActionCode.GetUserInfo;
+            thisView.view.SendRequest(pack);
         }
 
         private static void Update()
@@ -242,7 +239,7 @@ namespace HotFix_Project
                 //更新用戶訊息
                 case ActionCode.GetUserInfo:
                     NickName_Txt.text = pack.UserInfoPack[0].NickName;
-                    Chips_Txt.text = FX_Utils.Instance.SetChipsStr(pack.UserInfoPack[0].Cash);
+                    Chips_Txt.text = Utils.Instance.SetChipsStr(pack.UserInfoPack[0].Cash);
                     Avatar_Img.sprite = avatarList[Convert.ToInt32(pack.UserInfoPack[0].Avatar)];
                     break;
 

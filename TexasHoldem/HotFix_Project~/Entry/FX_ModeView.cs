@@ -15,6 +15,8 @@ namespace HotFix_Project
     {
         private static FX_BaseView thisView;
 
+        private static UserInfoView userInfoView;
+
         private static Button Logout_Btn, Holdem_Btn, Setting_Btn;
         private static Transform Download_Tr, DownLoadProgress_Tr;
         private static Image Progress_Img;
@@ -37,6 +39,11 @@ namespace HotFix_Project
             DownLoadProgress_Tr.gameObject.SetActive(false);
 
             ABManager.Instance.CheckAB("holdem", SwitchDownloadObj);
+        }
+
+        private static void OnEnable()
+        {
+            userInfoView = FindConponent.FindObj<Transform>(thisView.view.transform, "UserInfoView").gameObject.AddComponent<UserInfoView>();
         }
 
         private static void Start()
@@ -83,6 +90,11 @@ namespace HotFix_Project
                     DownLoadProgress_Tr.gameObject.SetActive(false);
                 }
             }
+        }
+
+        private static void OnDisable()
+        {
+            UnityEngine.Object.Destroy(userInfoView);
         }
 
         /// <summary>

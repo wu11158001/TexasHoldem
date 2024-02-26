@@ -40,10 +40,20 @@ namespace TexasHoldemServer.Controller
         /// <returns></returns>
         public MainPack GetUserInfo(Server servers, Client client, MainPack pack)
         {
+            Dictionary<string, string> dataDic = client.GetMySql.GetData(client.GetMySqlConnection,
+                                                            "userdata",
+                                                            "account",
+                                                            client.UserInfo.Account,
+                                                            new string[] { "cash", "nickname", "avatar" });
+
+            client.UserInfo.NickName = dataDic["nickname"];
+            client.UserInfo.Avatar = dataDic["avatar"];
+            client.UserInfo.Cash = dataDic["cash"];
+
             UserInfoPack userInfoPack = new UserInfoPack();
-            userInfoPack.NickName = client.UserInfo.NickName;
-            userInfoPack.Avatar = client.UserInfo.Avatar;
-            userInfoPack.Cash = client.UserInfo.Cash;
+            userInfoPack.NickName = dataDic["nickname"];
+            userInfoPack.Avatar = dataDic["avatar"];
+            userInfoPack.Cash = dataDic["cash"];
 
             pack.UserInfoPack.Add(userInfoPack);
 

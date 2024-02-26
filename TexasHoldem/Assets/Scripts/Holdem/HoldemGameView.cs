@@ -19,6 +19,9 @@ public class HoldemGameView : BaseView
     public override void OnEnable()
     {
         base.OnEnable();
+
+        RequestManager.Instance.RegisterRequest(ActionCode.ForcedExit, ReciveRequest);
+        RequestManager.Instance.RegisterRequest(ActionCode.ExitRoom, ReciveRequest);
     }
 
     public override void Start()

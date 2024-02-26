@@ -247,6 +247,8 @@ namespace TexasHoldemServer.Servers
         /// <returns></returns>
         public MainPack ExitRoom(Client client, MainPack pack)
         {
+            if (client == null) return null;
+
             if (client.GetRoom == null)
             {
                 pack.ReturnCode = ReturnCode.Fail;

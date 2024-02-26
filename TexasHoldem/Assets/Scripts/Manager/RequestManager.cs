@@ -10,6 +10,19 @@ public class RequestManager : UnitySingleton<RequestManager>
     private Dictionary<ActionCode, UnityAction<MainPack>> broadcastDic = new Dictionary<ActionCode, UnityAction<MainPack>>();
 
     /// <summary>
+    /// 註冊聆聽事件
+    /// </summary>
+    /// <param name="actionCode"></param>
+    /// <param name="callback"></param>
+    public void RegisterRequest(ActionCode actionCode, UnityAction<MainPack> callback)
+    {
+        if (!requsetDic.ContainsKey(actionCode))
+        {
+            requsetDic.Add(actionCode, callback);
+        }        
+    }
+
+    /// <summary>
     /// 註冊廣播事件
     /// </summary>
     /// <param name="actionCode"></param>
@@ -73,23 +86,5 @@ public class RequestManager : UnitySingleton<RequestManager>
                 Debug.LogWarning("沒有相關協議:" + pack.ActionCode);
             }
         }        
-    }
-
-    /// <summary>
-    /// 註冊處理
-    /// </summary>
-    /// <param name=""></param>
-    public void LogonHandle(MainPack pack)
-    {
-        Debug.Log("註冊處理:" + pack.ReturnCode);
-    }
-
-    /// <summary>
-    /// 登入處理
-    /// </summary>
-    /// <param name="pack"></param>
-    public void LoginHandle(MainPack pack)
-    {
-        Debug.Log("登入處理:" + pack.ReturnCode);
     }
 }
