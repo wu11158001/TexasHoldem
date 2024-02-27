@@ -14,8 +14,8 @@ namespace HotFix_Project
         private static FX_BaseView thisView;
 
         private static Button Exit_Btn, Abort_Btn, Pass_Btn, Follow_Btn, Add_Btn, Setting_Btn, AllIn_Btn;
-        private static Transform Seat_Tr, BetChips_Tr, BetChipsSample, PointTarget, OperateButton_Tr, AddBetValue_Tr;
-        private static Text TotalBetChips_Txt, AddChips_Txt, Add_Txt, Tip_Txt, Follow_Txt;
+        private static Transform Seat_Tr, BetChips_Tr, BetChipsSample, PointTarget, OperateButton_Tr, AddBetValue_Tr, SidePot_Tr;
+        private static Text TotalBetChips_Txt, AddChips_Txt, Add_Txt, Tip_Txt, Follow_Txt, SidePot_Txt, SideBackSample_Txt;
         private static Slider Add_Sl;
         private static Image[] pokersPool = new Image[5];
         private static Button[] betPercentButtons = new Button[4];
@@ -75,7 +75,10 @@ namespace HotFix_Project
             Add_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Add_Txt");
             Tip_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Tip_Txt");
             Follow_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "Follow_Txt");
+            SidePot_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "SidePot_Txt");
+            SideBackSample_Txt = FindConponent.FindObj<Text>(thisView.view.transform, "SideBackSample_Txt");
             Seat_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "Seat_Tr");
+            SidePot_Tr = FindConponent.FindObj<Transform>(thisView.view.transform, "SidePot_Tr");
 
             //下注百分比按鈕
             betPercentButtons[0] =FindConponent.FindObj<Button>(thisView.view.transform, "100Percent_Btn");
@@ -131,6 +134,7 @@ namespace HotFix_Project
             Tip_Txt.text = "等待下一局...";
             TotalBetChips_Txt.text = "0";
             isGetUserInfo = false;
+
             foreach (var user in userInfoDic)
             {
                 user.Value.Item1.gameObject.SetActive(false);
@@ -243,7 +247,11 @@ namespace HotFix_Project
         {
             isAbort = false;
             BetChipsSample.gameObject.SetActive(false);
+            SideBackSample_Txt.gameObject.SetActive(false);
             OperateButton_Tr.gameObject.SetActive(false);
+            SidePot_Tr.gameObject.SetActive(false);
+            SidePot_Txt.text = "";
+
             foreach (var item in handPokerDic.Values)
             {
                 item.Item1.gameObject.SetActive(false);
@@ -569,7 +577,7 @@ namespace HotFix_Project
                     }
                     foreach (var winner in pack.GameProcessPack.Winners)
                     {
-                        Debug.Log($"獲勝:{winner}/{pack.GameProcessPack.Winners.Count()}");
+                        Debug.Log($"獲勝:{winner}/獲勝人數:{pack.GameProcessPack.Winners.Count()}人");
                         userInfoDic[seatDic[winner]].Item7.gameObject.SetActive(true);
                         CreateBetShips(seatDic[winner], pack.GameProcessPack.WinChips, false);
                     }
@@ -768,7 +776,15 @@ namespace HotFix_Project
                     if (actionUser == localUserName)
                     {
                         Tip_Txt.text = "";
-                    } 
+                    }
+
+                    //邊池
+                    if (pack.GameProcessPack.SidePotValue != "" && 
+                        pack.GameProcessPack.SidePotValue != "0")
+                    {
+                        SidePot_Tr.gameObject.SetActive(true);
+                        Utils.Instance.ChipsChangeEffect(SidePot_Txt, pack.GameProcessPack.SidePotValue);
+                    }
 
                     UpdateBetShips(pack);
                     UpdateComputer(pack.ComputerPack);
@@ -823,6 +839,45 @@ namespace HotFix_Project
                         userInfoDic[seatDic[localUserName]].Item5.text = "";
                         userInfoDic[seatDic[localUserName]].Item6.text = "棄牌";
                     }
+                    break;
+
+                //邊池結果
+                case ActionCode.SidePotResult:
+                    Utils.Instance.ChipsChangeEffect(SidePot_Txt, "0");
+
+                    //更新擁有籌碼
+                    foreach (var chips in pack.GameProcessPack.UserChips)
+                    {
+                        seat = chips.Key == computerName ? computerSeat : seatDic[chips.Key];
+                        Utils.Instance.ChipsChangeEffect(userInfoDic[seat].Item3, chips.Value);
+                    }
+                    Utils.Instance.ChipsChangeEffect(betShipsDic[computerSeat].Item2, pack.ComputerPack.BetChips);
+
+                    foreach (var winner in pack.SideWinPack.SideWinner)
+                    {
+                        if (Convert.ToInt32(winner.Value) > 0)
+                        {
+                            Debug.Log($"邊池獲勝者:{winner.Key}/{winner.Value}");
+                            CreateBetShips(seatDic[winner.Key], winner.Value, false);
+                        }                        
+                    }
+
+                    foreach (var back in pack.SideWinPack.SideBackChips)
+                    {
+                        if (Convert.ToInt32(back.Value) > 0)
+                        {
+                            Debug.Log($"邊池退回:{back.Key}/{back.Value}");
+
+                            Transform obj = GameObject.Instantiate(SideBackSample_Txt.transform);
+                            obj.SetParent(BetChips_Tr);
+                            obj.localScale = new Vector3(1, 1, 1);
+                            obj.GetComponent<RectTransform>().eulerAngles = Vector3.zero;
+                            obj.gameObject.SetActive(true);
+                            obj.localPosition = Seat_Tr.GetChild(seatDic[back.Key]).localPosition;
+                            obj.GetComponent<SideBackAction>().SetSideBackInfo(back.Value);
+                        }                        
+                    }
+
                     break;
             }
         }

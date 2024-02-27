@@ -20,7 +20,9 @@ namespace HotFix_Project
         private static float distanceX = 400;
         private static float distanceY = 210;
 
-        //紀錄移動物件(物件, (移除時間, 移動時間, 文字物件))
+        /// <summary>
+        /// 紀錄移動物件(物件, (移除時間, 移動時間, 文字物件))
+        /// </summary>
         private static Dictionary<Transform, (DateTime, float, Transform)> moveDic = new Dictionary<Transform, (DateTime, float, Transform)>();
 
         private static void Init(BaseView baseView, GameObject viewObj)

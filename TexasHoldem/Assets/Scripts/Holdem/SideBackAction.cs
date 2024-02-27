@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BetChipsAction : BaseView
+public class SideBackAction : BaseView
 {
     public override void Awake()
     {
@@ -15,11 +15,11 @@ public class BetChipsAction : BaseView
     }
 
     /// <summary>
-    /// 設定籌碼值
+    /// 設定退回邊池訊息
     /// </summary>
     /// <param name="value"></param>
-    public void SetChipsValue(string value, Transform pointTarget)
+    public void SetSideBackInfo(string value)
     {
-        appdomain.Invoke($"{hotFixPath}", "SetChipsValue", null, value, pointTarget);
+        appdomain.Invoke($"{hotFixPath}", "SetSideBackInfo", null, value);
     }
 }
