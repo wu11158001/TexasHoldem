@@ -20,6 +20,7 @@ namespace HotFix_Project
         private static RectTransform AvatarList_Rt, AvatarList_Tr;
         private static Image Avatar_Img;
 
+        private static bool isGetAvatar;
         private static bool AvatarListSwitch;
         private static GridLayoutGroup avatarGridLayout;
         private static int avatarWidthCound = 5;
@@ -147,11 +148,24 @@ namespace HotFix_Project
             }
         }
 
+        private static void OnDisable()
+        {
+            NickName_Btn.onClick.RemoveAllListeners();
+            Cancel_Btn.onClick.RemoveAllListeners();
+            Confirm_Btn.onClick.RemoveAllListeners();
+            Avatar_Btn.onClick.RemoveAllListeners();
+        }
+
         /// <summary>
         /// 頭像載入
         /// </summary>
         private static void LoadAvatar()
         {
+            for (int i = 1; i < AvatarList_Rt.childCount; i++)
+            {
+                GameObject.Destroy(AvatarList_Rt.GetChild(i).gameObject);
+            }
+
             HorizontalLayoutGroup group = AvatarList_Rt.GetComponent<HorizontalLayoutGroup>();
             avatarItemSize = AvatarSample_Btn.GetComponent<RectTransform>().rect.size;
             AvatarList_Rt.sizeDelta = new Vector2(0, avatarItemSize.y);

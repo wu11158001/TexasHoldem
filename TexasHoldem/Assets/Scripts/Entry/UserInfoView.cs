@@ -25,6 +25,11 @@ public class UserInfoView : BaseView
         base.Update();
     }
 
+    public override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
     public void SendGetUserInfo()
     {
         appdomain.Invoke($"{hotFixPath}", "SendGetUserInfo", null, null);

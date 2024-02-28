@@ -2025,7 +2025,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3756513120321586196}
   - component: {fileID: 8930462091635929947}
-  - component: {fileID: 9057629263958094116}
   m_Layer: 5
   m_Name: UserInfoView
   m_TagString: Untagged
@@ -2062,15 +2061,3 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9048835742397420812}
   m_CullTransparentMesh: 1
---- !u!114 &9057629263958094116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9048835742397420812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d42c35bb205bb844b9dd0ed051a7203, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

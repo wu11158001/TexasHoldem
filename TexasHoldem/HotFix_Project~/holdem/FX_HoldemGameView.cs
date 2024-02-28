@@ -405,6 +405,23 @@ namespace HotFix_Project
         }
 
         /// <summary>
+        /// 產生邊池結果
+        /// </summary>
+        /// <param name="nickName"></param>
+        /// <param name="result"></param>
+        private static void CreateSideResult(string nickName, string result)
+        {
+            Transform obj = GameObject.Instantiate(SideBackSample_Txt.transform);
+            obj.SetParent(BetChips_Tr);
+            obj.localScale = new Vector3(1, 1, 1);
+            RectTransform rt = obj.GetComponent<RectTransform>();
+            rt.eulerAngles = Vector3.zero;
+            obj.gameObject.SetActive(true);
+            obj.localPosition = Seat_Tr.GetChild(seatDic[nickName]).localPosition;
+            obj.GetComponent<SideBackAction>().SetSideBackInfo(result);
+        }
+
+        /// <summary>
         /// 設定牌池撲克
         /// </summary>
         /// <param name="result"></param>
@@ -579,6 +596,7 @@ namespace HotFix_Project
                     {
                         Debug.Log($"獲勝:{winner}/獲勝人數:{pack.GameProcessPack.Winners.Count()}人");
                         userInfoDic[seatDic[winner]].Item7.gameObject.SetActive(true);
+                        userInfoDic[seatDic[winner]].Item7.text = "獲勝";
                         CreateBetShips(seatDic[winner], pack.GameProcessPack.WinChips, false);
                     }
                     //顯示手牌
@@ -851,13 +869,15 @@ namespace HotFix_Project
                         seat = chips.Key == computerName ? computerSeat : seatDic[chips.Key];
                         Utils.Instance.ChipsChangeEffect(userInfoDic[seat].Item3, chips.Value);
                     }
-                    Utils.Instance.ChipsChangeEffect(betShipsDic[computerSeat].Item2, pack.ComputerPack.BetChips);
+                    Utils.Instance.ChipsChangeEffect(userInfoDic[computerSeat].Item3, pack.ComputerPack.Chips);
 
                     foreach (var winner in pack.SideWinPack.SideWinner)
                     {
                         if (Convert.ToInt32(winner.Value) > 0)
                         {
                             Debug.Log($"邊池獲勝者:{winner.Key}/{winner.Value}");
+                            userInfoDic[seatDic[winner.Key]].Item7.gameObject.SetActive(true);
+                            userInfoDic[seatDic[winner.Key]].Item7.text = "獲得邊池";
                             CreateBetShips(seatDic[winner.Key], winner.Value, false);
                         }                        
                     }
@@ -868,13 +888,7 @@ namespace HotFix_Project
                         {
                             Debug.Log($"邊池退回:{back.Key}/{back.Value}");
 
-                            Transform obj = GameObject.Instantiate(SideBackSample_Txt.transform);
-                            obj.SetParent(BetChips_Tr);
-                            obj.localScale = new Vector3(1, 1, 1);
-                            obj.GetComponent<RectTransform>().eulerAngles = Vector3.zero;
-                            obj.gameObject.SetActive(true);
-                            obj.localPosition = Seat_Tr.GetChild(seatDic[back.Key]).localPosition;
-                            obj.GetComponent<SideBackAction>().SetSideBackInfo(back.Value);
+                            CreateSideResult(back.Key, back.Value);
                         }                        
                     }
 
