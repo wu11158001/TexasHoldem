@@ -745,8 +745,12 @@ namespace HotFix_Project
                 case ActionCode.ShowUserAction:
                     if (!isGetUserInfo) return;
 
-                    currBetValue = pack.GameProcessPack.CurrBet;                    
+                    foreach (var user in userInfoDic)
+                    {
+                        user.Value.Item5.text = "";
+                    }
 
+                    currBetValue = pack.GameProcessPack.CurrBet;
                     string betValue = pack.GameActionPack.BetValue;
                     string actionUser = pack.GameActionPack.ActionNickName;
                     string showActionStr = "";
@@ -788,8 +792,7 @@ namespace HotFix_Project
                             break;
                     }
                     Debug.Log($"{actionUser}:{showActionStr}");
-
-                    userInfoDic[seatDic[actionUser]].Item5.text = "";
+                    
                     userInfoDic[seatDic[actionUser]].Item6.text = showActionStr;
                     if (actionUser == localUserName)
                     {
@@ -850,6 +853,7 @@ namespace HotFix_Project
                     {
                         Tip_Txt.text = "倒數結束棄牌!";
                     }
+
                     if (OperateButton_Tr.gameObject.activeSelf && pack.ActionerPack.Countdown <= 0)
                     {
                         OperateButton_Tr.gameObject.SetActive(false);
@@ -891,7 +895,6 @@ namespace HotFix_Project
                             CreateSideResult(back.Key, back.Value);
                         }                        
                     }
-
                     break;
             }
         }
